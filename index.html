@@ -10,56 +10,136 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&family=Pacifico&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --sat: env(safe-area-inset-top, 0px);
+      --sab: env(safe-area-inset-bottom, 0px);
+      --sal: env(safe-area-inset-left, 0px);
+      --sar: env(safe-area-inset-right, 0px);
+    }
     * {
       user-select: none;
       -webkit-user-select: none;
       -webkit-touch-callout: none;
-      touch-action: manipulation;
+      box-sizing: border-box;
     }
-    body, html {
+    html, body {
       margin: 0;
       padding: 0;
-      overflow: hidden;
       width: 100%;
       height: 100%;
+      height: 100dvh;
+      min-height: -webkit-fill-available;
+      overflow: hidden;
       background-color: #000000;
       font-family: 'Outfit', sans-serif;
+      touch-action: none;
     }
     .font-script {
       font-family: 'Pacifico', cursive;
+    }
+
+    /* Safe Area Padding Utilities */
+    .pad-safe-top {
+      padding-top: max(10px, var(--sat));
+    }
+    .pad-safe-bottom {
+      padding-bottom: max(14px, var(--sab));
+    }
+    .pad-safe-left {
+      padding-left: max(14px, var(--sal));
+    }
+    .pad-safe-right {
+      padding-right: max(14px, var(--sar));
+    }
+
+    /* Tactile button animations */
+    .touch-btn {
+      touch-action: manipulation;
+      transition: transform 0.08s ease, filter 0.08s ease, background-color 0.1s ease;
     }
     .touch-btn:active {
       transform: scale(0.92);
       filter: brightness(1.25);
     }
-    /* Animated meter scanline */
-    @keyframes scan {
-      0% { top: 0%; }
-      100% { top: 100%; }
+
+    /* Rotate Phone Animation */
+    @keyframes phone-spin {
+      0%, 15% { transform: rotate(0deg); }
+      50%, 85% { transform: rotate(-90deg); }
+      100% { transform: rotate(0deg); }
     }
-    .scanline {
-      animation: scan 2s linear infinite;
+    .animate-phone-rotate {
+      animation: phone-spin 3.2s ease-in-out infinite;
+    }
+
+    /* Hide landscape blocker if screen is landscape or broad enough (e.g. tablet / desktop) */
+    @media (orientation: landscape) {
+      #orient-blocker {
+        display: none !important;
+      }
+    }
+    @media (min-width: 900px) and (min-height: 600px) {
+      #orient-blocker {
+        display: none !important;
+      }
     }
   </style>
 </head>
-<body class="relative w-screen h-screen bg-black flex flex-col justify-center items-center select-none overflow-hidden">
+<body class="relative w-full h-[100dvh] bg-black text-white flex flex-col justify-between overflow-hidden select-none">
 
-  <!-- TOP PERSISTENT NAV & MODE TOGGLE -->
-  <header class="absolute top-0 left-0 right-0 z-40 px-3 py-2 md:px-6 md:py-3 flex items-center justify-between pointer-events-none bg-gradient-to-b from-black/90 via-black/40 to-transparent">
+  <!-- ======================================================== -->
+  <!-- ORIENTATION GUARD: PROMPT LANDSCAPE ON MOBILE PORTRAIT   -->
+  <!-- ======================================================== -->
+  <div id="orient-blocker" class="fixed inset-0 z-50 bg-black/95 flex flex-col items-center justify-center p-6 text-center backdrop-blur-xl">
+    <div class="w-24 h-24 mb-6 rounded-3xl bg-neutral-900 border-2 border-lime-400/50 flex items-center justify-center shadow-[0_0_35px_rgba(163,230,53,0.2)]">
+      <svg class="w-14 h-14 text-lime-400 animate-phone-rotate" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="5" y="2" width="14" height="20" rx="3" ry="3"></rect>
+        <line x1="12" y1="18" x2="12" y2="18.01"></line>
+      </svg>
+    </div>
+    <h2 class="font-script text-3xl md:text-4xl text-white mb-2">Temporary Greens</h2>
+    <h3 class="text-lg font-black uppercase tracking-wider text-lime-400 mb-2">Rotate to Landscape</h3>
+    <p class="text-xs text-neutral-300 max-w-xs mb-6 leading-relaxed">
+      Both the cart-path skate run and 3D driving range require landscape mode for the best view and touch controls.
+    </p>
+    <div class="flex flex-col gap-2.5 w-full max-w-xs">
+      <button id="btn-force-fullscreen" class="w-full py-3.5 px-4 rounded-2xl bg-lime-400 hover:bg-lime-300 text-black font-black uppercase text-xs tracking-wider shadow-lg active:scale-95 transition">
+        Enter Fullscreen & Play
+      </button>
+      <button id="btn-dismiss-orient" class="w-full py-2.5 px-4 rounded-xl bg-neutral-800 text-neutral-400 font-bold uppercase text-[10px] tracking-wider hover:text-white transition">
+        Continue in Portrait anyway
+      </button>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- TOP PERSISTENT NAV & MODE / FULLSCREEN BAR               -->
+  <!-- ======================================================== -->
+  <header class="absolute top-0 left-0 right-0 z-40 pad-safe-top pad-safe-left pad-safe-right flex items-center justify-between pointer-events-none bg-gradient-to-b from-black/90 via-black/40 to-transparent pb-3">
+    <!-- Brand / Title -->
     <div class="flex items-center gap-2 pointer-events-auto">
-      <span class="font-script text-xl md:text-2xl text-white tracking-wide drop-shadow-lg">Temporary Greens</span>
-      <span class="text-[10px] md:text-xs font-black uppercase px-2 py-0.5 rounded-full bg-white/10 text-neutral-300 border border-white/20">Alpha</span>
+      <span class="font-script text-lg sm:text-2xl text-white tracking-wide drop-shadow-md">Temporary Greens</span>
+      <span class="hidden sm:inline-block text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-white/10 text-neutral-300 border border-white/20">v2.0</span>
     </div>
 
-    <!-- Mode Selector Bar -->
-    <div class="flex items-center gap-1.5 bg-neutral-900/90 border border-white/20 p-1 rounded-2xl pointer-events-auto backdrop-blur-md shadow-2xl">
-      <button id="nav-mode-skate" class="px-3 py-1.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all bg-white text-black shadow">
-        🛹 Skate Run
+    <!-- Mode Selector & Audio & Fullscreen Buttons -->
+    <div class="flex items-center gap-1.5 bg-neutral-900/95 border border-white/20 p-1 rounded-2xl pointer-events-auto backdrop-blur-md shadow-2xl">
+      <button id="nav-mode-skate" class="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl text-[10px] sm:text-xs font-black uppercase tracking-wider transition-all bg-white text-black shadow">
+        🛹 Skate
       </button>
-      <button id="nav-mode-range" class="px-3 py-1.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all text-neutral-400 hover:text-white">
-        ⛳️ Driving Range
+      <button id="nav-mode-range" class="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl text-[10px] sm:text-xs font-black uppercase tracking-wider transition-all text-neutral-400 hover:text-white">
+        ⛳️ Range
       </button>
-      <button id="btn-sound-toggle" aria-label="Audio" class="p-1.5 rounded-xl text-white/80 hover:text-white hover:bg-white/10 transition">
+
+      <!-- Fullscreen / Expand Button -->
+      <button id="btn-toggle-fullscreen" aria-label="Fullscreen" class="p-1 sm:p-1.5 rounded-xl text-neutral-300 hover:text-white hover:bg-white/10 transition">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0 0l-5-5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+        </svg>
+      </button>
+
+      <!-- Sound Toggle -->
+      <button id="btn-sound-toggle" aria-label="Audio" class="p-1 sm:p-1.5 rounded-xl text-white/80 hover:text-white hover:bg-white/10 transition">
         <svg id="sound-icon-on" class="w-4 h-4 text-lime-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
         </svg>
@@ -70,75 +150,82 @@
     </div>
   </header>
 
-  <!-- ========================================== -->
-  <!-- PHASE 1: 2D SKATE RUN CONTAINER            -->
-  <!-- ========================================== -->
+  <!-- ======================================================== -->
+  <!-- PHASE 1: 2D CART-PATH SKATE RUN CONTAINER                -->
+  <!-- ======================================================== -->
   <div id="container-skate" class="relative w-full h-full block">
     <canvas id="canvas-skate" class="w-full h-full block"></canvas>
 
-    <!-- Phase 1 HUD -->
-    <div id="hud-skate" class="absolute top-14 left-4 right-4 md:top-16 md:left-6 md:right-6 flex justify-between items-start pointer-events-none z-10">
-      <div class="bg-black/75 backdrop-blur-md border border-white/15 px-3 py-2 rounded-2xl flex flex-col gap-1 shadow-2xl">
-        <div class="flex items-center justify-between gap-3 text-xs uppercase tracking-widest text-emerald-400 font-bold">
+    <!-- Phase 1 Top HUD (Distance & Speed) -->
+    <div id="hud-skate" class="absolute top-14 sm:top-16 pad-safe-left pad-safe-right inset-x-0 flex justify-between items-center pointer-events-none z-20">
+      <div class="bg-black/85 backdrop-blur-md border border-white/20 px-3 py-1.5 rounded-2xl flex flex-col gap-1 shadow-2xl">
+        <div class="flex items-center justify-between gap-3 text-[10px] sm:text-xs uppercase tracking-widest text-emerald-400 font-bold">
           <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>To Driving Range</span>
-          <span id="skate-dist-text" class="text-white font-black text-sm">1,000 yd</span>
+          <span id="skate-dist-text" class="text-white font-black text-xs sm:text-sm">1,000 yd</span>
         </div>
-        <div class="w-36 md:w-52 h-1.5 bg-neutral-800 rounded-full overflow-hidden">
+        <div class="w-32 sm:w-48 h-1.5 bg-neutral-800 rounded-full overflow-hidden">
           <div id="skate-progress-bar" class="h-full bg-gradient-to-r from-emerald-500 to-lime-400 transition-all duration-75" style="width: 0%;"></div>
         </div>
       </div>
 
-      <div class="flex items-center gap-2">
-        <div class="bg-black/75 backdrop-blur-md border border-white/15 px-3 py-1.5 rounded-2xl flex flex-col items-end">
-          <span class="text-[9px] uppercase font-bold text-neutral-400">Pavement Speed</span>
-          <span id="skate-speed-text" class="text-sm font-black text-lime-400">18 MPH</span>
-        </div>
+      <div class="bg-black/85 backdrop-blur-md border border-white/20 px-3 py-1.5 rounded-2xl flex flex-col items-end shadow-2xl">
+        <span class="text-[9px] uppercase font-bold text-neutral-400">Pavement Speed</span>
+        <span id="skate-speed-text" class="text-xs sm:text-sm font-black text-lime-400">18 MPH</span>
       </div>
     </div>
 
-    <!-- Phase 1 Mobile Touch Controls -->
-    <div id="skate-touch-bar" class="absolute inset-x-0 bottom-3 px-4 pb-safe flex justify-between items-end pointer-events-none z-20 md:hidden">
-      <button id="touch-duck" class="touch-btn pointer-events-auto w-20 h-20 rounded-3xl bg-neutral-900/90 border-2 border-white/20 backdrop-blur-md flex flex-col items-center justify-center text-white active:bg-amber-600/40">
-        <svg class="w-7 h-7 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
-        <span class="text-[10px] font-black uppercase tracking-wider text-neutral-300">Duck</span>
-      </button>
+    <!-- Phase 1 Mobile Touch Controls (Safely positioned above Android navigation bars) -->
+    <div id="skate-touch-bar" class="absolute inset-x-0 bottom-0 pad-safe-bottom pad-safe-left pad-safe-right flex justify-between items-end pointer-events-none z-30">
+      <!-- LEFT THUMB: DUCK BUTTON (HOLD TO TUCK) -->
+      <div class="pointer-events-auto pb-1">
+        <button id="touch-duck" class="touch-btn w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-neutral-900/90 border-2 border-amber-500/70 shadow-[0_0_20px_rgba(245,158,11,0.25)] backdrop-blur-md flex flex-col items-center justify-center text-white active:bg-amber-600/50">
+          <svg class="w-9 h-9 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
+          <span class="text-xs font-black uppercase tracking-wider text-amber-200 mt-1">DUCK</span>
+          <span class="text-[8px] text-neutral-400 uppercase font-semibold">Hold Low</span>
+        </button>
+      </div>
 
-      <button id="touch-push" class="touch-btn pointer-events-auto w-16 h-16 rounded-2xl bg-neutral-900/90 border-2 border-white/20 backdrop-blur-md flex flex-col items-center justify-center text-white active:bg-blue-600/40 mb-1">
-        <svg class="w-6 h-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 5l7 7-7 7M5 5l7 7-7 7" /></svg>
-        <span class="text-[9px] font-black uppercase text-neutral-300">Push</span>
-      </button>
+      <!-- RIGHT THUMB: PUSH & OLLIE BUTTONS -->
+      <div class="pointer-events-auto flex items-end gap-3 pb-1">
+        <!-- PUSH -->
+        <button id="touch-push" class="touch-btn w-18 h-18 sm:w-20 sm:h-20 rounded-2xl bg-neutral-900/90 border-2 border-blue-500/70 shadow-[0_0_15px_rgba(59,130,246,0.25)] backdrop-blur-md flex flex-col items-center justify-center text-white active:bg-blue-600/50">
+          <svg class="w-6 h-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 5l7 7-7 7M5 5l7 7-7 7" /></svg>
+          <span class="text-[10px] font-black uppercase tracking-wider text-blue-200 mt-0.5">PUSH</span>
+        </button>
 
-      <button id="touch-ollie" class="touch-btn pointer-events-auto w-20 h-20 rounded-3xl bg-neutral-900/90 border-2 border-white/20 backdrop-blur-md flex flex-col items-center justify-center text-white active:bg-emerald-600/40">
-        <svg class="w-7 h-7 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
-        <span class="text-[10px] font-black uppercase tracking-wider text-neutral-300">Ollie</span>
-      </button>
+        <!-- OLLIE (PRIMARY ACTION) -->
+        <button id="touch-ollie" class="touch-btn w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-neutral-900/90 border-2 border-lime-400 shadow-[0_0_25px_rgba(163,230,53,0.35)] backdrop-blur-md flex flex-col items-center justify-center text-white active:bg-lime-500/50">
+          <svg class="w-9 h-9 text-lime-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.8" d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
+          <span class="text-xs font-black uppercase tracking-wider text-lime-300 mt-1">OLLIE</span>
+          <span class="text-[8px] text-neutral-400 uppercase font-semibold">Jump</span>
+        </button>
+      </div>
     </div>
 
     <!-- Skate Start Overlay -->
-    <div id="skate-overlay-start" class="absolute inset-0 bg-black/85 backdrop-blur-sm z-30 flex flex-col items-center justify-center p-6 text-center">
-      <div class="max-w-md w-full bg-neutral-900/95 border-2 border-white/20 rounded-3xl p-6 shadow-2xl flex flex-col items-center">
-        <!-- Exact Character Preview Canvas -->
-        <canvas id="preview-character-canvas" width="220" height="180" class="mb-2"></canvas>
-        <h1 class="font-script text-4xl text-white mb-1">Temporary Greens</h1>
-        <p class="text-xs uppercase font-bold text-neutral-400 tracking-wider mb-4">Phase 1: Commute to the Driving Range</p>
+    <div id="skate-overlay-start" class="absolute inset-0 bg-black/85 backdrop-blur-sm z-40 flex flex-col items-center justify-center p-4 text-center">
+      <div class="max-w-md w-full bg-neutral-900/95 border-2 border-white/20 rounded-3xl p-5 shadow-2xl flex flex-col items-center">
+        <canvas id="preview-character-canvas" width="200" height="150" class="mb-1"></canvas>
+        <h1 class="font-script text-3xl sm:text-4xl text-white mb-0.5">Temporary Greens</h1>
+        <p class="text-[11px] uppercase font-bold text-lime-400 tracking-wider mb-3">Phase 1: Commute to the Driving Range</p>
 
-        <div class="w-full bg-black/60 rounded-xl p-3 border border-white/10 text-xs text-neutral-300 text-left space-y-1.5 mb-5 font-medium">
-          <div class="flex justify-between"><span><strong>SPACE / Tap Ollie:</strong> Jump over ball baskets & curbs</span></div>
-          <div class="flex justify-between"><span><strong>S / ↓ / Tap Duck:</strong> Duck low under course ropes & signs</span></div>
-          <div class="flex justify-between"><span><strong>D / → / Tap Push:</strong> Kick for extra pavement speed</span></div>
+        <div class="w-full bg-black/60 rounded-xl p-2.5 border border-white/10 text-xs text-neutral-300 text-left space-y-1 mb-4 font-medium">
+          <div class="flex justify-between"><span><strong>OLLIE / Space:</strong> Jump over ball baskets & curbs</span></div>
+          <div class="flex justify-between"><span><strong>DUCK / S / Down:</strong> Duck low under course ropes & signs</span></div>
+          <div class="flex justify-between"><span><strong>PUSH / D / Right:</strong> Kick for pavement speed</span></div>
         </div>
 
-        <button id="btn-start-skate" class="w-full py-3.5 bg-white hover:bg-neutral-200 text-black font-black uppercase tracking-wider rounded-2xl shadow-xl transition active:scale-95 text-sm">
+        <button id="btn-start-skate" class="w-full py-3 bg-white hover:bg-neutral-200 text-black font-black uppercase tracking-wider rounded-xl shadow-xl transition active:scale-95 text-xs sm:text-sm">
           Drop In & Cruise
         </button>
       </div>
     </div>
 
     <!-- Skate Crash Modal -->
-    <div id="skate-overlay-crash" class="hidden absolute inset-0 bg-black/90 backdrop-blur-md z-30 flex flex-col items-center justify-center p-6 text-center">
-      <div class="max-w-xs w-full bg-neutral-900 border-2 border-red-500/50 rounded-3xl p-6 flex flex-col items-center shadow-2xl">
-        <div class="text-5xl mb-2">💥</div>
-        <h2 class="text-2xl font-black text-red-400 uppercase tracking-tight mb-1">Bailed Hard!</h2>
+    <div id="skate-overlay-crash" class="hidden absolute inset-0 bg-black/90 backdrop-blur-md z-40 flex flex-col items-center justify-center p-4 text-center">
+      <div class="max-w-xs w-full bg-neutral-900 border-2 border-red-500/50 rounded-3xl p-5 flex flex-col items-center shadow-2xl">
+        <div class="text-4xl mb-1">💥</div>
+        <h2 class="text-xl font-black text-red-400 uppercase tracking-tight mb-1">Bailed Hard!</h2>
         <p id="crash-reason-text" class="text-xs text-neutral-400 mb-4 font-medium">You wiped out on the cart path.</p>
         <button id="btn-skate-retry" class="w-full py-3 bg-white text-black font-black uppercase text-xs rounded-xl shadow-lg hover:bg-neutral-200 active:scale-95 transition mb-2">
           Try Run Again
@@ -150,92 +237,90 @@
     </div>
   </div>
 
-  <!-- ========================================== -->
-  <!-- PHASE 2: 3D DRIVING RANGE SIMULATION       -->
-  <!-- ========================================== -->
+  <!-- ======================================================== -->
+  <!-- PHASE 2: 3D DRIVING RANGE SIMULATION                     -->
+  <!-- ======================================================== -->
   <div id="container-range" class="relative w-full h-full hidden">
-    <!-- 3D WebGL Canvas Layer -->
+    <!-- Three.js Canvas Layer -->
     <div id="threejs-canvas-host" class="w-full h-full block"></div>
 
     <!-- 2D Driving Range Character Stand Overlay (Left Bay) -->
-    <canvas id="range-golfer-canvas" class="absolute bottom-6 left-2 pointer-events-none z-10 hidden md:block" width="220" height="220"></canvas>
+    <canvas id="range-golfer-canvas" class="absolute bottom-16 left-4 pointer-events-none z-10 hidden lg:block" width="220" height="220"></canvas>
 
-    <!-- Range HUD: Wind & Club Selection -->
-    <div class="absolute top-14 left-3 right-3 md:top-16 md:left-6 md:right-6 flex justify-between items-start pointer-events-none z-20">
-      <!-- Wind Condition Indicator -->
-      <div class="bg-black/85 backdrop-blur-md border border-white/20 p-2.5 rounded-2xl flex items-center gap-3 shadow-2xl">
-        <div class="relative w-10 h-10 rounded-full border border-white/20 bg-neutral-900 flex items-center justify-center">
-          <!-- Compass Arrow -->
-          <div id="range-wind-compass" class="w-8 h-8 flex items-center justify-center transition-transform duration-500" style="transform: rotate(45deg);">
-            <svg class="w-6 h-6 text-cyan-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L4 19l8-4 8 4-8-17z"/></svg>
+    <!-- Range Top HUD: Wind, Club Bar, and Score -->
+    <div class="absolute top-12 sm:top-14 pad-safe-left pad-safe-right inset-x-0 flex justify-between items-start pointer-events-none z-20 gap-2">
+      <!-- Wind Indicator -->
+      <div class="bg-black/85 backdrop-blur-md border border-white/20 p-1.5 sm:p-2 rounded-2xl flex items-center gap-2 shadow-2xl pointer-events-auto">
+        <div class="relative w-8 h-8 rounded-full border border-white/20 bg-neutral-900 flex items-center justify-center">
+          <div id="range-wind-compass" class="w-6 h-6 flex items-center justify-center transition-transform duration-500" style="transform: rotate(45deg);">
+            <svg class="w-5 h-5 text-cyan-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L4 19l8-4 8 4-8-17z"/></svg>
           </div>
         </div>
         <div class="flex flex-col">
-          <span class="text-[9px] uppercase font-bold text-neutral-400 tracking-wider">Wind Conditions</span>
-          <span id="range-wind-label" class="text-xs font-black text-white">8 mph Headwind</span>
+          <span class="text-[8px] sm:text-[9px] uppercase font-bold text-neutral-400">Wind</span>
+          <span id="range-wind-label" class="text-[10px] sm:text-xs font-black text-white">8 mph Headwind</span>
         </div>
       </div>
 
-      <!-- Range Score & Balls Left -->
-      <div class="bg-black/85 backdrop-blur-md border border-white/20 px-4 py-2 rounded-2xl flex items-center gap-4 shadow-2xl">
+      <!-- Club Selection Pills (Top-Center for easy tap without blocking fairway) -->
+      <div class="bg-black/90 backdrop-blur-md border border-white/20 p-1 rounded-2xl flex items-center gap-1 pointer-events-auto shadow-2xl overflow-x-auto max-w-[55vw] sm:max-w-none">
+        <button data-club="1W" class="club-btn px-2 sm:px-2.5 py-1 rounded-xl text-[10px] sm:text-xs font-black transition bg-lime-400 text-black">1W</button>
+        <button data-club="3W" class="club-btn px-2 sm:px-2.5 py-1 rounded-xl text-[10px] sm:text-xs font-black transition text-neutral-300 hover:text-white">3W</button>
+        <button data-club="5I" class="club-btn px-2 sm:px-2.5 py-1 rounded-xl text-[10px] sm:text-xs font-black transition text-neutral-300 hover:text-white">5I</button>
+        <button data-club="7I" class="club-btn px-2 sm:px-2.5 py-1 rounded-xl text-[10px] sm:text-xs font-black transition text-neutral-300 hover:text-white">7I</button>
+        <button data-club="9I" class="club-btn px-2 sm:px-2.5 py-1 rounded-xl text-[10px] sm:text-xs font-black transition text-neutral-300 hover:text-white">9I</button>
+        <button data-club="PW" class="club-btn px-2 sm:px-2.5 py-1 rounded-xl text-[10px] sm:text-xs font-black transition text-neutral-300 hover:text-white">PW</button>
+      </div>
+
+      <!-- Range Score & Shots -->
+      <div class="bg-black/85 backdrop-blur-md border border-white/20 px-3 py-1.5 rounded-2xl flex items-center gap-3 shadow-2xl pointer-events-auto">
         <div class="flex flex-col items-end">
-          <span class="text-[9px] uppercase font-bold text-neutral-400">Total Score</span>
-          <span id="range-score-text" class="text-base font-black text-lime-400">0 PTS</span>
+          <span class="text-[8px] uppercase font-bold text-neutral-400">Score</span>
+          <span id="range-score-text" class="text-xs sm:text-sm font-black text-lime-400">0 PTS</span>
         </div>
-        <div class="w-px h-6 bg-white/20"></div>
+        <div class="w-px h-5 bg-white/20"></div>
         <div class="flex flex-col items-end">
-          <span class="text-[9px] uppercase font-bold text-neutral-400">Shot #</span>
-          <span id="range-shot-count" class="text-base font-black text-white">1</span>
+          <span class="text-[8px] uppercase font-bold text-neutral-400">Shot</span>
+          <span id="range-shot-count" class="text-xs sm:text-sm font-black text-white">1</span>
         </div>
       </div>
     </div>
 
-    <!-- Shot Distance & Stat Callout (Appears mid-flight / landing) -->
-    <div id="shot-stats-banner" class="absolute top-28 inset-x-0 mx-auto max-w-sm bg-neutral-900/90 border-2 border-lime-400/80 rounded-2xl p-3 text-center shadow-2xl backdrop-blur-md z-20 hidden">
+    <!-- Shot Distance & Stat Callout Banner -->
+    <div id="shot-stats-banner" class="absolute top-24 inset-x-0 mx-auto max-w-xs sm:max-w-sm bg-neutral-900/95 border-2 border-lime-400 rounded-2xl p-2.5 text-center shadow-2xl backdrop-blur-md z-30 hidden">
       <div class="text-[10px] font-black uppercase tracking-widest text-lime-400" id="shot-quality-text">GREAT STRIKE!</div>
-      <div class="text-3xl font-black text-white my-0.5" id="shot-dist-text">248 YDS</div>
+      <div class="text-2xl sm:text-3xl font-black text-white my-0.5" id="shot-dist-text">248 YDS</div>
       <div class="flex justify-center gap-4 text-xs font-bold text-neutral-300">
         <span id="shot-carry-text">Carry: 236y</span>
         <span id="shot-target-text">Target Green: +100 pts!</span>
       </div>
     </div>
 
-    <!-- Bottom Control Bar: Club Selection & Swing Gauge -->
-    <div class="absolute inset-x-0 bottom-4 px-3 md:px-8 flex flex-col md:flex-row items-center justify-between gap-3 z-30 pointer-events-none">
-      <!-- Club Selector -->
-      <div class="bg-black/90 backdrop-blur-md border border-white/20 p-1.5 rounded-2xl flex items-center gap-1 pointer-events-auto shadow-2xl overflow-x-auto max-w-full">
-        <button data-club="1W" class="club-btn px-2.5 py-1.5 rounded-xl text-xs font-black transition bg-lime-400 text-black">1W</button>
-        <button data-club="3W" class="club-btn px-2.5 py-1.5 rounded-xl text-xs font-black transition text-neutral-300 hover:text-white">3W</button>
-        <button data-club="5I" class="club-btn px-2.5 py-1.5 rounded-xl text-xs font-black transition text-neutral-300 hover:text-white">5I</button>
-        <button data-club="7I" class="club-btn px-2.5 py-1.5 rounded-xl text-xs font-black transition text-neutral-300 hover:text-white">7I</button>
-        <button data-club="9I" class="club-btn px-2.5 py-1.5 rounded-xl text-xs font-black transition text-neutral-300 hover:text-white">9I</button>
-        <button data-club="PW" class="club-btn px-2.5 py-1.5 rounded-xl text-xs font-black transition text-neutral-300 hover:text-white">PW</button>
-      </div>
-
-      <!-- 3-Click Swing Meter & Hit Button -->
-      <div class="flex items-center gap-3 bg-black/90 backdrop-blur-md border border-white/20 p-2 rounded-2xl pointer-events-auto shadow-2xl">
+    <!-- Phase 2 Ergonomic Swing Zone (Safely positioned in Lower Right) -->
+    <div class="absolute bottom-0 right-0 pad-safe-bottom pad-safe-right p-3 z-30 pointer-events-none">
+      <div class="bg-black/90 backdrop-blur-md border-2 border-white/20 p-2.5 rounded-3xl flex items-center gap-3 pointer-events-auto shadow-[0_0_30px_rgba(0,0,0,0.8)]">
         <!-- Power & Accuracy Bar -->
-        <div class="flex flex-col gap-1 w-48 md:w-64">
-          <div class="flex justify-between text-[9px] uppercase font-bold text-neutral-400">
-            <span>Hook / Slice</span>
-            <span id="meter-status-text" class="text-lime-400">Ready to Swing</span>
-            <span>Power</span>
+        <div class="flex flex-col gap-1 w-36 sm:w-56">
+          <div class="flex justify-between text-[9px] uppercase font-black text-neutral-400">
+            <span>Hook</span>
+            <span id="meter-status-text" class="text-lime-400 font-extrabold">Ready</span>
+            <span>Slice</span>
           </div>
 
-          <!-- Gauge graphic -->
-          <div class="relative w-full h-7 bg-neutral-900 border border-white/30 rounded-xl overflow-hidden flex items-center">
-            <!-- Sweet spot center marker for accuracy -->
-            <div class="absolute left-1/2 -translate-x-1/2 w-4 h-full bg-lime-500/40 border-x border-lime-400/80 z-0"></div>
-            <!-- Power fill -->
+          <div class="relative w-full h-8 bg-neutral-900 border border-white/30 rounded-xl overflow-hidden flex items-center">
+            <!-- Center sweet spot -->
+            <div class="absolute left-1/2 -translate-x-1/2 w-4 h-full bg-lime-500/40 border-x border-lime-400 z-0"></div>
+            <!-- Power meter fill -->
             <div id="meter-power-fill" class="h-full bg-gradient-to-r from-blue-500 via-lime-400 to-red-500 transition-all duration-75 z-0" style="width: 0%;"></div>
-            <!-- Accuracy Cursor Indicator -->
-            <div id="meter-accuracy-needle" class="absolute top-0 bottom-0 w-1.5 bg-white shadow-[0_0_8px_white] z-10 hidden" style="left: 50%;"></div>
+            <!-- Accuracy Cursor needle -->
+            <div id="meter-accuracy-needle" class="absolute top-0 bottom-0 w-2 bg-white shadow-[0_0_10px_white] z-10 hidden" style="left: 50%;"></div>
           </div>
         </div>
 
-        <!-- Swing Action Button -->
-        <button id="btn-swing-action" class="touch-btn px-5 py-3 rounded-xl bg-lime-400 hover:bg-lime-300 text-black font-black uppercase tracking-wider text-xs shadow-xl active:scale-95 transition">
-          Hit Ball
+        <!-- Large Swing Action Trigger Button -->
+        <button id="btn-swing-action" class="touch-btn h-14 sm:h-16 px-5 sm:px-7 rounded-2xl bg-lime-400 hover:bg-lime-300 text-black font-black uppercase tracking-wider text-xs sm:text-sm shadow-xl active:scale-95 transition flex flex-col items-center justify-center">
+          <span id="swing-btn-label">HIT BALL</span>
+          <span class="text-[8px] font-bold text-neutral-800 uppercase">Tap 3x</span>
         </button>
       </div>
     </div>
@@ -243,12 +328,53 @@
 
   <script>
     /**
-     * TEMPORARY GREENS - COMBINED ENGINE
-     * 1. 2D Faithful Rubber-Hose Skater Renderer & Obstacle Commute Runner
-     * 2. 3D Cel-Shaded Driving Range Ball Physics Simulation (Three.js)
+     * TEMPORARY GREENS - COMPLETE ENGINE
+     * - Vector Character Rigging matching Reference Image
+     * - 2D Side-Scroller Skate Run
+     * - 3D Cel-Shaded Driving Range with Realistic Ball Physics (Three.js)
+     * - Mobile Safe-Area & Landscape Handling
      */
 
-    // --- SYNTHESIZED SOUND EFFECTS ENGINE ---
+    // --- FULLSCREEN & ORIENTATION SYSTEM ---
+    const orientBlocker = document.getElementById('orient-blocker');
+    const btnFullscreen = document.getElementById('btn-force-fullscreen');
+    const btnDismissOrient = document.getElementById('btn-dismiss-orient');
+    const btnNavFullscreen = document.getElementById('btn-toggle-fullscreen');
+
+    async function requestDeviceLandscape() {
+      try {
+        if (!document.fullscreenElement) {
+          if (document.documentElement.requestFullscreen) {
+            await document.documentElement.requestFullscreen();
+          } else if (document.documentElement.webkitRequestFullscreen) {
+            await document.documentElement.webkitRequestFullscreen();
+          }
+        }
+        if (screen.orientation && screen.orientation.lock) {
+          await screen.orientation.lock('landscape').catch(() => {});
+        }
+      } catch (err) {
+        // Fallback for browsers that restrict orientation lock without user gesture
+      }
+      orientBlocker.style.display = 'none';
+      setTimeout(() => {
+        if (app && app.skateGame) app.skateGame.resize();
+      }, 300);
+    }
+
+    btnFullscreen.addEventListener('click', requestDeviceLandscape);
+    btnDismissOrient.addEventListener('click', () => {
+      orientBlocker.style.display = 'none';
+    });
+    btnNavFullscreen.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        requestDeviceLandscape();
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+      }
+    });
+
+    // --- SYNTHESIZED SOUND FX (ZERO ASSETS REQUIRED) ---
     class SoundFX {
       constructor() {
         this.ctx = null;
@@ -300,7 +426,7 @@
         osc.type = 'triangle';
         osc.frequency.setValueAtTime(140, this.ctx.currentTime);
         osc.frequency.exponentialRampToValueAtTime(45, this.ctx.currentTime + 0.1);
-        g.gain.setValueAtTime(0.2, this.ctx.currentTime);
+        g.gain.setValueAtTime(0.25, this.ctx.currentTime);
         g.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.1);
         osc.connect(g);
         g.connect(this.ctx.destination);
@@ -309,7 +435,6 @@
       }
       playGolfStrike(isDriver) {
         if (this.muted || !this.ctx) return;
-        // Crisp "CRACK" of modern metalwood / forged iron
         const dur = isDriver ? 0.35 : 0.22;
         const buf = this.ctx.createBuffer(1, this.ctx.sampleRate * dur, this.ctx.sampleRate);
         const d = buf.getChannelData(0);
@@ -320,8 +445,8 @@
         noise.buffer = buf;
         const tone = this.ctx.createOscillator();
         tone.type = 'sine';
-        tone.frequency.setValueAtTime(isDriver ? 900 : 1400, this.ctx.currentTime);
-        tone.frequency.exponentialRampToValueAtTime(200, this.ctx.currentTime + dur);
+        tone.frequency.setValueAtTime(isDriver ? 880 : 1350, this.ctx.currentTime);
+        tone.frequency.exponentialRampToValueAtTime(180, this.ctx.currentTime + dur);
 
         const g = this.ctx.createGain();
         g.gain.setValueAtTime(0.4, this.ctx.currentTime);
@@ -341,7 +466,7 @@
           const g = this.ctx.createGain();
           osc.type = 'triangle';
           osc.frequency.value = freq;
-          g.gain.setValueAtTime(0.15, this.ctx.currentTime + idx * 0.08);
+          g.gain.setValueAtTime(0.18, this.ctx.currentTime + idx * 0.08);
           g.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + idx * 0.08 + 0.3);
           osc.connect(g);
           g.connect(this.ctx.destination);
@@ -353,7 +478,7 @@
         if (this.muted || !this.ctx) return;
         const osc = this.ctx.createOscillator();
         const g = this.ctx.createGain();
-        osc.frequency.setValueAtTime(70, this.ctx.currentTime);
+        osc.frequency.setValueAtTime(75, this.ctx.currentTime);
         osc.frequency.linearRampToValueAtTime(20, this.ctx.currentTime + 0.1);
         g.gain.setValueAtTime(0.2, this.ctx.currentTime);
         g.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.1);
@@ -366,9 +491,6 @@
     const sound = new SoundFX();
 
     // --- RE-CREATING THE EXACT CHARACTER ARTWORK (VECTOR TRACE) ---
-    // Faithfully matches the photo:
-    // Low crouching rubber legs, ripped knee jeans, backwards baseball hat with protruding brim,
-    // head sip pose with drink can, iron shaft diagonally slung across the back, curved board with wheels.
     function drawExactSkater(ctx, x, y, scale = 1.0, state = 'cruise', animTimer = 0, pushPhase = 0) {
       ctx.save();
       ctx.translate(x, y);
@@ -387,7 +509,6 @@
       // --- 1. SKATEBOARD DECK & TRUCKS ---
       const deckY = -6;
       ctx.beginPath();
-      // Upward kicktail at left, camber, upward nose at right
       ctx.moveTo(-52, deckY - 9);
       ctx.quadraticCurveTo(-45, deckY, -30, deckY);
       ctx.lineTo(32, deckY);
@@ -412,39 +533,33 @@
 
       if (isDuck) {
         // --- DUCK STATE (Low tucked compression) ---
-        // Back leg tucked
         ctx.beginPath();
         ctx.moveTo(-22, deckY - 2);
         ctx.lineTo(-34, -18);
         ctx.lineTo(-10, -22);
         ctx.stroke();
 
-        // Front leg tucked flat
         ctx.beginPath();
         ctx.moveTo(18, deckY - 2);
         ctx.lineTo(8, -20);
         ctx.lineTo(-10, -22);
         ctx.stroke();
 
-        // Torso slung flat along board
         ctx.beginPath();
         ctx.moveTo(-10, -22);
         ctx.quadraticCurveTo(10, -28, 26, -26);
         ctx.stroke();
 
-        // Head & backwards cap
         ctx.beginPath();
         ctx.arc(36, -27, 9, 0, Math.PI * 2);
         ctx.fill();
         ctx.beginPath();
         ctx.moveTo(34, -34);
-        ctx.lineTo(20, -32); // backwards bill
+        ctx.lineTo(20, -32);
         ctx.stroke();
 
-        // Can
         ctx.strokeRect(45, -28, 7, 11);
 
-        // Club angled along body
         ctx.beginPath();
         ctx.moveTo(36, -26);
         ctx.lineTo(-44, -30);
@@ -457,7 +572,7 @@
         return;
       }
 
-      // --- CRUISE / OLLIE / PUSH POSE (FAITHFUL TO PHOTO) ---
+      // --- CRUISE / OLLIE / PUSH POSE ---
       const hipX = -12;
       const hipY = -54 + bob;
       const shoulderX = 14;
@@ -465,13 +580,11 @@
       const headX = 32;
       const headY = -76 + bob;
 
-      // --- A. GOLF CLUB SLUNG ON BACK ---
-      // Steel iron shaft angled from under armpit high over back
+      // Golf Club slung on back
       ctx.beginPath();
       ctx.moveTo(shoulderX + 6, shoulderY + 8);
-      ctx.lineTo(-28, -104 + bob); // Shaft tip high back
+      ctx.lineTo(-28, -104 + bob);
       ctx.stroke();
-      // Club grip wrap
       ctx.save();
       ctx.lineWidth = 4.5;
       ctx.beginPath();
@@ -479,24 +592,22 @@
       ctx.lineTo(shoulderX - 4, shoulderY - 3);
       ctx.stroke();
       ctx.restore();
-      // Clubhead at rear
       ctx.beginPath();
       ctx.moveTo(-28, -104 + bob);
       ctx.lineTo(-34, -110 + bob);
       ctx.lineTo(-28, -114 + bob);
       ctx.stroke();
 
-      // --- B. FRONT LEG (BRACED FORWARD WITH KNEE TEARS) ---
+      // Front leg with ripped knee
       ctx.beginPath();
       ctx.moveTo(hipX + 3, hipY);
-      // Sweeping knee bent forward
       ctx.quadraticCurveTo(8, -32, 2, deckY - 4);
       ctx.stroke();
-      // Knee tear / hole in fabric
       ctx.beginPath();
       ctx.arc(6, -30, 2.5, 0, Math.PI * 2);
       ctx.stroke();
-      // Sneaker
+
+      // Front sneaker
       ctx.beginPath();
       ctx.moveTo(-6, deckY - 4);
       ctx.lineTo(14, deckY - 4);
@@ -505,7 +616,7 @@
       ctx.closePath();
       ctx.stroke();
 
-      // --- C. REAR TRAILING LEG (THE ICONIC EXTENDED HOSE) ---
+      // Rear trailing leg
       if (isPush) {
         const kickX = -10 - (pushPhase * 28);
         ctx.beginPath();
@@ -514,17 +625,15 @@
         ctx.stroke();
         ctx.strokeRect(kickX - 8, deckY - 4, 12, 5);
       } else {
-        // High arched leg as seen in reference photo
         ctx.beginPath();
         ctx.moveTo(hipX, hipY);
         ctx.quadraticCurveTo(-42, -50 + bob, -44, -76 + bob);
         ctx.lineTo(-46, -88 + bob);
         ctx.stroke();
-        // Knee tear on back leg
         ctx.beginPath();
         ctx.arc(-42, -58 + bob, 2.5, 0, Math.PI * 2);
         ctx.stroke();
-        // Sneaker laces & contour
+
         ctx.save();
         ctx.translate(-46, -88 + bob);
         ctx.rotate(-0.35);
@@ -532,7 +641,7 @@
         ctx.restore();
       }
 
-      // --- D. TORSO (CURVED RUBBER-HOSE HUNCH) ---
+      // Torso
       ctx.beginPath();
       ctx.moveTo(hipX, hipY);
       ctx.quadraticCurveTo(-4, -68 + bob, shoulderX, shoulderY);
@@ -540,45 +649,38 @@
       ctx.stroke();
       ctx.lineWidth = 3.2;
 
-      // --- E. REAR ARM ---
+      // Rear arm
       ctx.beginPath();
       ctx.moveTo(shoulderX - 4, shoulderY + 2);
       ctx.quadraticCurveTo(-2, -46 + bob, -4, -38 + bob);
       ctx.stroke();
 
-      // --- F. HEAD & BACKWARDS BASEBALL CAP ---
-      // Head
+      // Head & backwards cap
       ctx.beginPath();
       ctx.arc(headX, headY, 10, 0, Math.PI * 2);
       ctx.fill();
 
-      // Backwards Cap crown
       ctx.beginPath();
       ctx.arc(headX - 1, headY - 2, 10.5, Math.PI * 0.95, 0, false);
       ctx.stroke();
-      // Cap Brim pointing backward
       ctx.beginPath();
       ctx.moveTo(headX + 5, headY - 6);
       ctx.quadraticCurveTo(headX + 16, headY - 8, headX + 19, headY - 3);
       ctx.stroke();
-      // Hair tuft puffing under the cap
       ctx.beginPath();
       ctx.arc(headX + 4, headY + 5, 3.5, 0, Math.PI * 2);
       ctx.fill();
 
-      // --- G. LEAD ARM & DRINK CAN (SIP POSE) ---
+      // Lead arm & drink can sip pose
       ctx.beginPath();
       ctx.moveTo(shoulderX + 2, shoulderY + 2);
       ctx.quadraticCurveTo(36, -50 + bob, headX + 13, headY + 4);
       ctx.stroke();
 
-      // Hand holding drink can up to mouth
       ctx.save();
       ctx.translate(headX + 13, headY + 3);
       ctx.rotate(-0.15);
-      // Can body
       ctx.strokeRect(-2, -6, 8, 12);
-      // Top tab / lip
       ctx.beginPath();
       ctx.arc(2, -6, 3, Math.PI, 0);
       ctx.stroke();
@@ -598,7 +700,7 @@
 
         this.width = window.innerWidth;
         this.height = window.innerHeight;
-        this.groundY = Math.floor(this.height * 0.74);
+        this.groundY = Math.floor(this.height * 0.72);
 
         this.skaterX = 140;
         this.skaterY = this.groundY;
@@ -606,7 +708,7 @@
         this.gravity = 0.58;
         this.jumpForce = -14.0;
         this.isGrounded = true;
-        this.state = 'cruise'; // cruise, push, duck, ollie
+        this.state = 'cruise';
 
         this.targetDistance = 1000;
         this.distanceCovered = 0;
@@ -621,6 +723,7 @@
 
         this.resize();
         window.addEventListener('resize', () => this.resize());
+        window.addEventListener('orientationchange', () => setTimeout(() => this.resize(), 200));
       }
 
       resize() {
@@ -628,7 +731,10 @@
         this.height = window.innerHeight;
         this.canvas.width = this.width;
         this.canvas.height = this.height;
-        this.groundY = Math.floor(this.height * 0.74);
+
+        // Ground sits reliably in lower third, giving plenty of jump room above
+        this.groundY = Math.floor(this.height * 0.72);
+        this.skaterX = Math.max(120, Math.floor(this.width * 0.18));
         if (this.isGrounded) this.skaterY = this.groundY;
       }
 
@@ -682,7 +788,6 @@
           }
         }
 
-        // Push timer
         if (this.pushTimer > 0) {
           this.pushTimer -= dt;
           if (this.pushTimer <= 0 && this.state === 'push') {
@@ -699,7 +804,6 @@
         this.progBar.style.width = `${pct}%`;
         this.speedText.innerText = `${Math.floor(this.speed * 1.5)} MPH`;
 
-        // Check Victory -> Switch to Range
         if (this.distanceCovered >= this.targetDistance) {
           this.isRunning = false;
           sound.playTargetChime();
@@ -707,13 +811,13 @@
           return;
         }
 
-        // Obstacles
+        // Obstacle Spawning
         this.spawnTimer -= dt;
         if (this.spawnTimer <= 0) {
           const types = ['basket', 'sign', 'cart', 'cone'];
           const t = types[Math.floor(Math.random() * types.length)];
           this.obstacles.push({
-            x: this.width + 50,
+            x: this.width + 60,
             type: t,
             w: t === 'cart' ? 70 : 36,
             h: t === 'sign' ? 38 : 34,
@@ -740,7 +844,6 @@
             h: obs.h
           };
 
-          // Collision
           if (skaterBox.x < obsBox.x + obsBox.w &&
               skaterBox.x + skaterBox.w > obsBox.x &&
               skaterBox.y < obsBox.y + obsBox.h &&
@@ -756,9 +859,9 @@
       triggerCrash(type) {
         this.isRunning = false;
         sound.playThud();
-        let reason = 'You hit an obstacle on the fairway path!';
-        if (type === 'sign') reason = 'You got clocked by the wooden "Cart Path Only" sign! Press DUCK next time!';
-        if (type === 'cart') reason = 'Slammed into the golf cart!';
+        let reason = 'You wiped out on the cart path!';
+        if (type === 'sign') reason = 'Clocked by the wooden sign! Hold DUCK to slide under.';
+        if (type === 'cart') reason = 'Slammed into the runaway golf cart! OLLIE over next time.';
         if (type === 'basket') reason = 'Tripped right over the ball basket!';
         document.getElementById('crash-reason-text').innerText = reason;
         document.getElementById('skate-overlay-crash').classList.remove('hidden');
@@ -772,8 +875,8 @@
         this.ctx.fillStyle = '#112219';
         this.ctx.beginPath();
         this.ctx.moveTo(0, this.groundY);
-        for (let x = 0; x <= this.width + 100; x += 120) {
-          this.ctx.quadraticCurveTo(x + 60, this.groundY - 100, x + 120, this.groundY - 30);
+        for (let x = 0; x <= this.width + 120; x += 120) {
+          this.ctx.quadraticCurveTo(x + 60, this.groundY - 90, x + 120, this.groundY - 20);
         }
         this.ctx.lineTo(this.width, this.groundY);
         this.ctx.fill();
@@ -788,7 +891,7 @@
         this.ctx.fillStyle = '#facc1533';
         const offset = (this.distanceCovered * 10) % 80;
         for (let x = -80; x < this.width + 80; x += 80) {
-          this.ctx.fillRect(x - offset, this.groundY + 36, 40, 3);
+          this.ctx.fillRect(x - offset, this.groundY + 32, 40, 3);
         }
 
         // Draw Obstacles
@@ -836,7 +939,6 @@
             this.ctx.arc(48, 34, 6, 0, Math.PI * 2);
             this.ctx.stroke();
           } else {
-            // Cone
             this.ctx.beginPath();
             this.ctx.moveTo(4, 28); this.ctx.lineTo(24, 28);
             this.ctx.lineTo(16, 2); this.ctx.lineTo(12, 2);
@@ -846,12 +948,11 @@
           this.ctx.restore();
         });
 
-        // Draw character
         drawExactSkater(this.ctx, this.skaterX, this.skaterY, 1.0, this.state, this.animTimer, (0.4 - this.pushTimer) / 0.4);
       }
     }
 
-    // --- PHASE 2: 3D THREE.JS DRIVING RANGE ENGINE ---
+    // --- PHASE 2: 3D THREE.JS DRIVING RANGE SIMULATION ---
     class DrivingRangeSim {
       constructor() {
         this.container = document.getElementById('threejs-canvas-host');
@@ -863,36 +964,34 @@
         this.meterNeedle = document.getElementById('meter-accuracy-needle');
         this.meterStatus = document.getElementById('meter-status-text');
         this.swingBtn = document.getElementById('btn-swing-action');
+        this.swingBtnLabel = document.getElementById('swing-btn-label');
 
         this.shotStats = document.getElementById('shot-stats-banner');
         this.shotDistText = document.getElementById('shot-dist-text');
         this.shotCarryText = document.getElementById('shot-carry-text');
         this.shotTargetText = document.getElementById('shot-target-text');
 
-        // Clubs specification: loft angle, ball speed (mph), backspin (rpm), drag factor
         this.clubs = {
-          '1W': { name: 'Driver', loft: 10.5, speed: 160, spin: 2600, maxDist: 280 },
-          '3W': { name: '3-Wood', loft: 15.0, speed: 145, spin: 3600, maxDist: 240 },
-          '5I': { name: '5-Iron', loft: 24.0, speed: 125, spin: 5200, maxDist: 195 },
-          '7I': { name: '7-Iron', loft: 32.0, speed: 110, spin: 6800, maxDist: 165 },
-          '9I': { name: '9-Iron', loft: 41.0, speed: 95, spin: 8500, maxDist: 135 },
-          'PW': { name: 'Pitching Wedge', loft: 46.0, speed: 85, spin: 9800, maxDist: 110 }
+          '1W': { name: 'Driver', loft: 10.5, speed: 160, spin: 2600 },
+          '3W': { name: '3-Wood', loft: 15.0, speed: 145, spin: 3600 },
+          '5I': { name: '5-Iron', loft: 24.0, speed: 125, spin: 5200 },
+          '7I': { name: '7-Iron', loft: 32.0, speed: 110, spin: 6800 },
+          '9I': { name: '9-Iron', loft: 41.0, speed: 95, spin: 8500 },
+          'PW': { name: 'Pitching Wedge', loft: 46.0, speed: 85, spin: 9800 }
         };
         this.selectedClubKey = '1W';
 
-        // Swing meter state: 0 = idle, 1 = power winding up, 2 = accuracy snap, 3 = ball flight
         this.meterState = 0;
-        this.powerVal = 0; // 0 to 1
-        this.accuracyVal = 0; // -1 (hook) to +1 (slice)
+        this.powerVal = 0;
+        this.accuracyVal = 0;
         this.powerDir = 1;
         this.accuracyDir = 1;
 
         this.score = 0;
         this.shotsFired = 0;
 
-        // Dynamic Wind: speed in mph, angle in radians
         this.windSpeed = 9;
-        this.windAngle = Math.PI * 0.25; // 45 degrees
+        this.windAngle = Math.PI * 0.25;
 
         this.initThree();
         this.buildFairwayAndTargets();
@@ -914,7 +1013,6 @@
         this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         this.container.appendChild(this.renderer.domElement);
 
-        // Lighting
         const hemiLight = new THREE.HemisphereLight(0xffffff, 0x112211, 0.85);
         this.scene.add(hemiLight);
 
@@ -929,46 +1027,40 @@
         this.ballMesh.position.set(0, 0.22, 0);
         this.scene.add(this.ballMesh);
 
-        // Tracer line
         this.tracerPoints = [];
         this.tracerGeo = new THREE.BufferGeometry();
         this.tracerMat = new THREE.LineBasicMaterial({ color: 0xa3e635, linewidth: 2 });
         this.tracerLine = new THREE.Line(this.tracerGeo, this.tracerMat);
         this.scene.add(this.tracerLine);
 
-        // Ball physical states
         this.isBallInFlight = false;
         this.ballPos = new THREE.Vector3(0, 0.22, 0);
         this.ballVel = new THREE.Vector3(0, 0, 0);
         this.ballCarry = 0;
 
-        window.addEventListener('resize', () => {
+        const onResize = () => {
           this.camera.aspect = window.innerWidth / window.innerHeight;
           this.camera.updateProjectionMatrix();
           this.renderer.setSize(window.innerWidth, window.innerHeight);
-        });
+        };
+        window.addEventListener('resize', onResize);
+        window.addEventListener('orientationchange', () => setTimeout(onResize, 200));
       }
 
       buildFairwayAndTargets() {
-        // Cel-shaded Fairway Turf Plane
         const groundGeo = new THREE.PlaneGeometry(350, 800, 30, 50);
-        const groundMat = new THREE.MeshLambertMaterial({
-          color: 0x143423,
-          wireframe: false
-        });
+        const groundMat = new THREE.MeshLambertMaterial({ color: 0x143423 });
         const ground = new THREE.Mesh(groundGeo, groundMat);
         ground.rotation.x = -Math.PI / 2;
         ground.position.set(0, 0, 350);
         this.scene.add(ground);
 
-        // Fairway Distance Boundary Lines & Distance Markers
         const distances = [50, 100, 150, 200, 250, 300];
         this.targetGreens = [];
 
         distances.forEach((dist) => {
-          const zPos = dist * 2.0; // scale: 1 yard = 2.0 Three.js units
+          const zPos = dist * 2.0;
 
-          // Concentric target green rings
           const ringGeo = new THREE.RingGeometry(4, 18, 24);
           const ringMat = new THREE.MeshBasicMaterial({
             color: dist % 100 === 0 ? 0x22c55e : 0x15803d,
@@ -979,7 +1071,6 @@
           ring.position.set((Math.sin(dist) * 12), 0.05, zPos);
           this.scene.add(ring);
 
-          // Center bulls-eye
           const bullGeo = new THREE.CircleGeometry(4, 20);
           const bullMat = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
           const bull = new THREE.Mesh(bullGeo, bullMat);
@@ -987,14 +1078,12 @@
           bull.position.set(ring.position.x, 0.08, zPos);
           this.scene.add(bull);
 
-          // Target Flag Pole
           const poleGeo = new THREE.CylinderGeometry(0.1, 0.1, 5, 8);
           const poleMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
           const pole = new THREE.Mesh(poleGeo, poleMat);
           pole.position.set(ring.position.x, 2.5, zPos);
           this.scene.add(pole);
 
-          // Flag Banner
           const flagGeo = new THREE.PlaneGeometry(2.2, 1.4);
           const flagMat = new THREE.MeshBasicMaterial({ color: 0xef4444, side: THREE.DoubleSide });
           const flag = new THREE.Mesh(flagGeo, flagMat);
@@ -1009,15 +1098,14 @@
           });
         });
 
-        // ANIMATED BALL PICKER CART
+        // Animated Ball Picker Cart
         const cartGeo = new THREE.BoxGeometry(4.5, 3.2, 7);
         const cartMat = new THREE.MeshLambertMaterial({ color: 0xfacc15 });
         this.pickerCart = new THREE.Mesh(cartGeo, cartMat);
-        this.pickerCart.position.set(-60, 1.6, 280); // Patrols 140-yard range
+        this.pickerCart.position.set(-60, 1.6, 280);
         this.scene.add(this.pickerCart);
         this.pickerDir = 1;
 
-        // Protective Cage Wireframe over Picker Cart
         const cageGeo = new THREE.WireframeGeometry(cartGeo);
         const cageLine = new THREE.LineSegments(cageGeo);
         cageLine.material.color.setHex(0x000000);
@@ -1031,7 +1119,6 @@
         const deg = Math.floor(this.windAngle * (180 / Math.PI));
         this.windCompass.style.transform = `rotate(${deg}deg)`;
 
-        // Determine wind label direction
         let label = `${this.windSpeed} mph `;
         const cos = Math.cos(this.windAngle);
         const sin = Math.sin(this.windAngle);
@@ -1040,14 +1127,13 @@
         else if (cos < -0.4) label += 'Headwind';
         else label += 'Crosswind';
 
-        if (sin > 0.4) label += ' → Right';
-        else if (sin < -0.4) label += ' ← Left';
+        if (sin > 0.4) label += ' → R';
+        else if (sin < -0.4) label += ' ← L';
 
         this.windLabel.innerText = label;
       }
 
       bindEvents() {
-        // Club Selection buttons
         document.querySelectorAll('.club-btn').forEach(btn => {
           btn.addEventListener('click', (e) => {
             document.querySelectorAll('.club-btn').forEach(b => {
@@ -1060,7 +1146,6 @@
           });
         });
 
-        // 3-Click Swing Action
         this.swingBtn.addEventListener('click', () => this.handleSwingClick());
         window.addEventListener('keydown', (e) => {
           if (app.currentMode === 'range' && e.code === 'Space') {
@@ -1074,26 +1159,23 @@
         if (this.isBallInFlight) return;
 
         if (this.meterState === 0) {
-          // Click 1: Start power gauge
           this.meterState = 1;
           this.powerVal = 0;
           this.powerDir = 1;
           this.meterNeedle.classList.add('hidden');
           this.meterStatus.innerText = 'Lock Power';
-          this.swingBtn.innerText = 'Set Power';
+          this.swingBtnLabel.innerText = 'SET POWER';
         } else if (this.meterState === 1) {
-          // Click 2: Lock power, start accuracy needle
           this.meterState = 2;
           this.accuracyVal = -1;
           this.accuracyDir = 1;
           this.meterNeedle.classList.remove('hidden');
           this.meterStatus.innerText = 'Snap Center';
-          this.swingBtn.innerText = 'Snap Strike';
+          this.swingBtnLabel.innerText = 'SNAP!';
         } else if (this.meterState === 2) {
-          // Click 3: Lock accuracy and launch ball!
           this.meterState = 3;
-          this.meterStatus.innerText = 'Ball In Flight';
-          this.swingBtn.innerText = 'Flying...';
+          this.meterStatus.innerText = 'In Flight';
+          this.swingBtnLabel.innerText = 'FLYING...';
           this.launchBall();
         }
       }
@@ -1103,15 +1185,11 @@
         this.shotsFired++;
         this.shotCountText.innerText = this.shotsFired;
 
-        // Play crack sound
         sound.playGolfStrike(this.selectedClubKey === '1W');
 
-        // Physics Calculation: Launch Angle, Velocity, and Spin Vector
         const powerFactor = Math.max(0.25, this.powerVal);
-        const launchSpeed = (club.speed * 0.44704) * powerFactor * 1.05; // convert mph to m/s
+        const launchSpeed = (club.speed * 0.44704) * powerFactor * 1.05;
         const launchAngleRad = (club.loft * (Math.PI / 180)) * 0.92;
-
-        // Accuracy snap: 0 = straight, negative = hook/draw, positive = slice/fade
         const sideCurve = this.accuracyVal * 0.16;
 
         this.ballPos.set(0, 0.22, 0);
@@ -1128,7 +1206,6 @@
       }
 
       update(dt) {
-        // Meter Scan Animation
         if (this.meterState === 1) {
           this.powerVal += this.powerDir * dt * 1.5;
           if (this.powerVal >= 1) { this.powerVal = 1; this.powerDir = -1; }
@@ -1142,23 +1219,18 @@
           this.meterNeedle.style.left = `${needlePercent}%`;
         }
 
-        // Animated Ball Picker Cart Patrol
         if (this.pickerCart) {
           this.pickerCart.position.x += this.pickerDir * dt * 16;
           if (this.pickerCart.position.x > 65) this.pickerDir = -1;
           if (this.pickerCart.position.x < -65) this.pickerDir = 1;
         }
 
-        // Ball Flight Dynamics (Euler integration with aerodynamic wind & Magnus backspin lift)
         if (this.isBallInFlight) {
-          const gravity = 9.81 * 0.95; // adjusted for yard scale feel
+          const gravity = 9.81 * 0.95;
           const windX = Math.sin(this.windAngle) * (this.windSpeed * 0.22);
           const windZ = Math.cos(this.windAngle) * (this.windSpeed * 0.22);
-
-          // Magnus backspin creates vertical lift slowing descent
           const liftForce = (this.ballVel.z > 0) ? 2.4 : 0;
 
-          // Apply forces
           this.ballVel.x += (windX - this.ballVel.x * 0.015) * dt;
           this.ballVel.y += (-gravity + liftForce) * dt;
           this.ballVel.z += (windZ - this.ballVel.z * 0.012) * dt;
@@ -1169,38 +1241,33 @@
 
           this.ballMesh.position.copy(this.ballPos);
 
-          // Update tracer trail
           if (this.tracerPoints.length < 80) {
             this.tracerPoints.push(this.ballPos.clone());
             this.tracerGeo.setFromPoints(this.tracerPoints);
           }
 
-          // Dynamic Follow Camera
+          // Follow Camera
           this.camera.position.x += (this.ballPos.x * 0.5 - this.camera.position.x) * 0.12;
           this.camera.position.y += ((this.ballPos.y + 4.5) - this.camera.position.y) * 0.12;
           this.camera.position.z += ((this.ballPos.z - 12) - this.camera.position.z) * 0.12;
           this.camera.lookAt(this.ballPos.x, this.ballPos.y + 1, this.ballPos.z + 18);
 
-          // Ground Impact
           if (this.ballPos.y <= 0.22) {
             this.ballPos.y = 0.22;
             if (this.ballCarry === 0) {
               this.ballCarry = Math.floor(this.ballPos.z / 2.0);
             }
 
-            // Bounce and roll
             this.ballVel.y = -this.ballVel.y * 0.35;
             this.ballVel.z = this.ballVel.z * 0.65;
             this.ballVel.x = this.ballVel.x * 0.65;
 
-            // Rest condition
             if (Math.abs(this.ballVel.z) < 1.0) {
               this.isBallInFlight = false;
               this.completeShot();
             }
           }
 
-          // Check direct hit with Range Picker Cart!
           if (this.pickerCart) {
             const distToCart = this.ballPos.distanceTo(this.pickerCart.position);
             if (distToCart < 4.5) {
@@ -1221,7 +1288,6 @@
         let bonus = 0;
         let quality = 'NICE SHOT!';
 
-        // Check if landed in any target rings
         this.targetGreens.forEach(tg => {
           const d = this.ballPos.distanceTo(tg.pos);
           if (d <= tg.innerRadius) {
@@ -1239,7 +1305,6 @@
         this.scoreText.innerText = `${this.score} PTS`;
         this.showShotResults(quality, bonus, totalYards);
 
-        // Reset swing meter ready for next shot
         setTimeout(() => {
           this.resetForNextShot();
         }, 3200);
@@ -1257,15 +1322,13 @@
         this.meterState = 0;
         this.meterPower.style.width = '0%';
         this.meterNeedle.classList.add('hidden');
-        this.meterStatus.innerText = 'Ready to Swing';
-        this.swingBtn.innerText = 'Hit Ball';
+        this.meterStatus.innerText = 'Ready';
+        this.swingBtnLabel.innerText = 'HIT BALL';
         this.shotStats.classList.add('hidden');
 
-        // Reset Camera
         this.camera.position.set(0, 3.8, -7.5);
         this.camera.lookAt(0, 2.5, 45);
 
-        // Reset Ball
         this.ballPos.set(0, 0.22, 0);
         this.ballMesh.position.copy(this.ballPos);
         this.tracerPoints = [];
@@ -1278,7 +1341,7 @@
     // --- OVERALL APP / MODE CONTROLLER ---
     class AppController {
       constructor() {
-        this.currentMode = 'skate'; // 'skate' or 'range'
+        this.currentMode = 'skate';
         this.skateGame = new SkateRunnerGame();
         this.rangeGame = new DrivingRangeSim();
 
@@ -1312,17 +1375,17 @@
           this.switchMode('range');
         });
 
-        // Touch buttons for Phase 1
+        // Touch buttons for Phase 1 with touchstart/touchend
         const touchOllie = document.getElementById('touch-ollie');
         const touchDuck = document.getElementById('touch-duck');
         const touchPush = document.getElementById('touch-push');
 
-        touchOllie.addEventListener('touchstart', (e) => { e.preventDefault(); this.skateGame.ollie(); });
-        touchDuck.addEventListener('touchstart', (e) => { e.preventDefault(); this.skateGame.duck(true); });
-        touchDuck.addEventListener('touchend', (e) => { e.preventDefault(); this.skateGame.duck(false); });
-        touchPush.addEventListener('touchstart', (e) => { e.preventDefault(); this.skateGame.push(); });
+        touchOllie.addEventListener('touchstart', (e) => { e.preventDefault(); this.skateGame.ollie(); }, { passive: false });
+        touchDuck.addEventListener('touchstart', (e) => { e.preventDefault(); this.skateGame.duck(true); }, { passive: false });
+        touchDuck.addEventListener('touchend', (e) => { e.preventDefault(); this.skateGame.duck(false); }, { passive: false });
+        touchPush.addEventListener('touchstart', (e) => { e.preventDefault(); this.skateGame.push(); }, { passive: false });
 
-        // Keyboard Controls
+        // Desktop keyboard controls
         window.addEventListener('keydown', (e) => {
           if (this.currentMode === 'skate') {
             if (e.code === 'Space' || e.code === 'ArrowUp' || e.code === 'KeyW') {
@@ -1346,7 +1409,7 @@
           }
         });
 
-        // Sound Mute
+        // Audio Toggle
         document.getElementById('btn-sound-toggle').addEventListener('click', () => {
           sound.init();
           const isMuted = sound.toggle();
@@ -1381,16 +1444,14 @@
         }
       }
 
-      // Exact Vector Character rendering on Title Dialog
       drawTitleCharacterPreview() {
         const cvs = document.getElementById('preview-character-canvas');
         if (!cvs) return;
         const ctx = cvs.getContext('2d');
         ctx.clearRect(0, 0, cvs.width, cvs.height);
-        drawExactSkater(ctx, cvs.width / 2 + 10, cvs.height - 35, 1.35, 'cruise', 0, 0);
+        drawExactSkater(ctx, cvs.width / 2 + 10, cvs.height - 25, 1.25, 'cruise', 0, 0);
       }
 
-      // Exact Vector Character standing at Driving Range Tee Bay
       drawBayGolferAvatar() {
         const cvs = document.getElementById('range-golfer-canvas');
         if (!cvs) return;
