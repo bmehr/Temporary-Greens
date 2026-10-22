@@ -1,1486 +1,2229 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Temporary Greens - Skate & Driving Range</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Temporary Greens</title>
+  
+  <!-- Three.js (r128) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&family=Pacifico&display=swap" rel="stylesheet">
+
   <style>
-    :root {
-      --sat: env(safe-area-inset-top, 0px);
-      --sab: env(safe-area-inset-bottom, 0px);
-      --sal: env(safe-area-inset-left, 0px);
-      --sar: env(safe-area-inset-right, 0px);
-    }
     * {
-      user-select: none;
-      -webkit-user-select: none;
-      -webkit-touch-callout: none;
       box-sizing: border-box;
-    }
-    html, body {
+      -webkit-user-select: none;
+      user-select: none;
       margin: 0;
       padding: 0;
+    }
+
+    html, body {
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
-      height: 100dvh;
-      min-height: -webkit-fill-available;
       overflow: hidden;
-      background-color: #000000;
-      font-family: 'Outfit', sans-serif;
-      touch-action: none;
-    }
-    .font-script {
-      font-family: 'Pacifico', cursive;
+      background-color: #030608;
+      color: #ffffff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
-    /* Safe Area Padding Utilities */
-    .pad-safe-top {
-      padding-top: max(10px, var(--sat));
-    }
-    .pad-safe-bottom {
-      padding-bottom: max(14px, var(--sab));
-    }
-    .pad-safe-left {
-      padding-left: max(14px, var(--sal));
-    }
-    .pad-safe-right {
-      padding-right: max(14px, var(--sar));
+    /* Top Universal Header with Mode Switcher */
+    #universal-header {
+      position: absolute;
+      top: 10px;
+      left: 14px;
+      right: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 50;
+      pointer-events: none;
     }
 
-    /* Tactile button animations */
-    .touch-btn {
+    .brand-title {
+      font-weight: 900;
+      font-style: italic;
+      color: #34d399;
+      font-size: 1.05rem;
+      letter-spacing: 0.05em;
+      pointer-events: auto;
+    }
+
+    .mode-switcher {
+      display: flex;
+      background: rgba(10, 15, 20, 0.92);
+      border: 1px solid #27272a;
+      border-radius: 12px;
+      padding: 3px;
+      gap: 4px;
+      pointer-events: auto;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+    }
+
+    .mode-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: #9ca3af;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 0.78rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
       touch-action: manipulation;
-      transition: transform 0.08s ease, filter 0.08s ease, background-color 0.1s ease;
+    }
+    .mode-btn.active {
+      background: #10b981;
+      color: #022c22;
+      border-color: #a7f3d0;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.35);
+    }
+
+    /* ==========================================================================
+       SCENE 1: SKATE COMMUTE CSS
+       ========================================================================== */
+    #scene-skate-container {
+      position: absolute;
+      inset: 0;
+      display: block;
+      z-index: 1;
+    }
+
+    #game-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      background-color: #030608;
+    }
+
+    .hud-box {
+      background: rgba(0, 0, 0, 0.85);
+      border: 1px solid #27272a;
+      padding: 6px 14px;
+      border-radius: 10px;
+      font-family: monospace;
+      font-size: 0.75rem;
+      display: flex;
+      gap: 16px;
+      pointer-events: auto;
+    }
+
+    .modal-screen {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.88);
+      z-index: 60;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .arcade-btn {
+      background: #10b981;
+      color: #064e3b;
+      font-weight: 900;
+      font-size: 1.1rem;
+      padding: 14px 36px;
+      border-radius: 16px;
+      border: 2px solid #a7f3d0;
+      box-shadow: 0 4px 0 #000000;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 20px;
+      touch-action: manipulation;
+    }
+    .arcade-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #000000;
+    }
+
+    #touch-controls {
+      position: absolute;
+      bottom: 14px;
+      left: 14px;
+      right: 14px;
+      display: none;
+      justify-content: space-between;
+      align-items: flex-end;
+      pointer-events: none;
+      z-index: 20;
+    }
+
+    .touch-btn {
+      pointer-events: auto;
+      touch-action: manipulation;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      box-shadow: 0 4px 0 #000000;
+      cursor: pointer;
     }
     .touch-btn:active {
-      transform: scale(0.92);
-      filter: brightness(1.25);
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #000000;
     }
 
-    /* Rotate Phone Animation */
-    @keyframes phone-spin {
-      0%, 15% { transform: rotate(0deg); }
-      50%, 85% { transform: rotate(-90deg); }
-      100% { transform: rotate(0deg); }
-    }
-    .animate-phone-rotate {
-      animation: phone-spin 3.2s ease-in-out infinite;
+    #btn-duck {
+      background: #d97706;
+      color: #451a03;
+      border: 2px solid #fde68a;
+      width: 90px;
+      height: 75px;
+      font-size: 0.95rem;
     }
 
-    /* Hide landscape blocker if screen is landscape or broad enough (e.g. tablet / desktop) */
-    @media (orientation: landscape) {
-      #orient-blocker {
-        display: none !important;
-      }
+    #btn-push {
+      background: #27272a;
+      color: #e4e4e7;
+      border: 2px solid #52525b;
+      width: 78px;
+      height: 75px;
+      font-size: 0.95rem;
     }
-    @media (min-width: 900px) and (min-height: 600px) {
-      #orient-blocker {
-        display: none !important;
-      }
+
+    #btn-ollie {
+      background: #10b981;
+      color: #022c22;
+      border: 2px solid #a7f3d0;
+      width: 96px;
+      height: 75px;
+      font-size: 1rem;
+    }
+
+    .desktop-helper {
+      position: absolute;
+      bottom: 14px;
+      left: 14px;
+      background: rgba(0, 0, 0, 0.75);
+      border: 1px solid #27272a;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-family: monospace;
+      font-size: 0.75rem;
+      color: #a1a1aa;
+      z-index: 10;
+      display: flex;
+      gap: 12px;
+    }
+    .desktop-helper kbd {
+      background: #27272a;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #ffffff;
+      font-weight: bold;
+    }
+
+    /* ==========================================================================
+       SCENE 2: DRIVING RANGE CSS
+       ========================================================================== */
+    #scene-range-container {
+      position: absolute;
+      inset: 0;
+      display: none;
+      z-index: 1;
+    }
+
+    #webgl-canvas-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      z-index: 1;
+    }
+
+    #target-briefing-card {
+      position: absolute;
+      top: 56px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 90%;
+      max-width: 440px;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .glass-card {
+      background: rgba(10, 15, 20, 0.92);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid #27272a;
+      border-radius: 12px;
+      padding: 10px 14px;
+      width: 100%;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    }
+
+    .target-primary {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #1f2937;
+      padding-bottom: 6px;
+      margin-bottom: 6px;
+    }
+
+    .telemetry-row {
+      display: flex;
+      justify-content: space-between;
+      font-family: monospace;
+      font-size: 0.72rem;
+      color: #9ca3af;
+    }
+    .telemetry-val {
+      font-weight: bold;
+      color: #f3f4f6;
+    }
+
+    #shot-result-card {
+      position: absolute;
+      top: 60px;
+      left: 16px;
+      z-index: 10;
+      width: 280px;
+      display: none;
+    }
+
+    .stat-badge-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .stat-hero-number {
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: #ffffff;
+      line-height: 1.1;
+    }
+
+    .stat-breakdown-row {
+      display: flex;
+      gap: 12px;
+      font-family: monospace;
+      font-size: 0.75rem;
+      color: #9ca3af;
+      margin: 4px 0 8px 0;
+    }
+
+    .stat-pin-highlight {
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-family: monospace;
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: #34d399;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #aim-controls {
+      position: absolute;
+      bottom: 24px;
+      left: 16px;
+      display: flex;
+      gap: 8px;
+      z-index: 10;
+    }
+
+    .aim-btn {
+      background: #18181b;
+      color: #e4e4e7;
+      border: 1px solid #3f3f46;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-family: monospace;
+      font-size: 0.8rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 0 #000000;
+      touch-action: manipulation;
+    }
+    .aim-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #000000;
+    }
+
+    #club-strip {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 6px;
+      background: rgba(10, 15, 20, 0.90);
+      backdrop-filter: blur(8px);
+      border: 1px solid #27272a;
+      padding: 6px;
+      border-radius: 14px;
+      z-index: 10;
+      max-width: 90vw;
+      overflow-x: auto;
+    }
+
+    .club-pill {
+      background: #18181b;
+      color: #a1a1aa;
+      border: 1px solid transparent;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 0.8rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.1s ease;
+      touch-action: manipulation;
+    }
+    .club-pill.active {
+      background: #10b981;
+      color: #064e3b;
+      border-color: #6ee7b7;
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+    }
+
+    #swing-system {
+      position: absolute;
+      bottom: 24px;
+      right: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+      z-index: 10;
+    }
+
+    #meter-box {
+      width: 195px;
+      background: rgba(10, 15, 20, 0.92);
+      backdrop-filter: blur(8px);
+      border: 2px solid #27272a;
+      border-radius: 12px;
+      padding: 10px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    }
+
+    .meter-label-row {
+      display: flex;
+      justify-content: space-between;
+      font-family: monospace;
+      font-size: 0.68rem;
+      font-weight: bold;
+      margin-bottom: 3px;
+    }
+
+    .track-power {
+      position: relative;
+      width: 100%;
+      height: 12px;
+      background: #09090b;
+      border-radius: 999px;
+      border: 1px solid #27272a;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+    .track-power-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444);
+    }
+    .sweet-spot-marker {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 78%;
+      right: 6%;
+      background: rgba(245, 158, 11, 0.25);
+      border-left: 1px solid #f59e0b;
+      border-right: 1px solid #f59e0b;
+    }
+
+    .track-snap {
+      position: relative;
+      width: 100%;
+      height: 12px;
+      background: #09090b;
+      border-radius: 999px;
+      border: 1px solid #27272a;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .snap-center-line {
+      position: absolute;
+      width: 2px;
+      height: 100%;
+      background: #ffffff;
+      z-index: 2;
+    }
+    .snap-pure-zone {
+      position: absolute;
+      width: 52px;
+      height: 100%;
+      background: rgba(16, 185, 129, 0.40);
+      border-left: 1px solid #10b981;
+      border-right: 1px solid #10b981;
+    }
+    .snap-needle {
+      position: absolute;
+      width: 8px;
+      height: 100%;
+      background: #38bdf8;
+      border-radius: 2px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+      box-shadow: 0 0 6px #38bdf8;
+    }
+
+    .arcade-action-btn {
+      width: 195px;
+      height: 48px;
+      background: #10b981;
+      color: #064e3b;
+      font-weight: 900;
+      font-size: 0.95rem;
+      border-radius: 12px;
+      border: 2px solid #a7f3d0;
+      box-shadow: 0 4px 0 #000000;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      touch-action: manipulation;
+    }
+    .arcade-action-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #000000;
+    }
+
+    .desktop-key-hint {
+      font-family: monospace;
+      font-size: 0.65rem;
+      color: #9ca3af;
+      margin-top: 2px;
+      text-align: right;
+    }
+    .desktop-key-hint kbd {
+      background: #27272a;
+      padding: 1px 4px;
+      border-radius: 4px;
+      color: #ffffff;
     }
   </style>
 </head>
-<body class="relative w-full h-[100dvh] bg-black text-white flex flex-col justify-between overflow-hidden select-none">
+<body>
 
-  <!-- ======================================================== -->
-  <!-- ORIENTATION GUARD: PROMPT LANDSCAPE ON MOBILE PORTRAIT   -->
-  <!-- ======================================================== -->
-  <div id="orient-blocker" class="fixed inset-0 z-50 bg-black/95 flex flex-col items-center justify-center p-6 text-center backdrop-blur-xl">
-    <div class="w-24 h-24 mb-6 rounded-3xl bg-neutral-900 border-2 border-lime-400/50 flex items-center justify-center shadow-[0_0_35px_rgba(163,230,53,0.2)]">
-      <svg class="w-14 h-14 text-lime-400 animate-phone-rotate" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <rect x="5" y="2" width="14" height="20" rx="3" ry="3"></rect>
-        <line x1="12" y1="18" x2="12" y2="18.01"></line>
-      </svg>
-    </div>
-    <h2 class="font-script text-3xl md:text-4xl text-white mb-2">Temporary Greens</h2>
-    <h3 class="text-lg font-black uppercase tracking-wider text-lime-400 mb-2">Rotate to Landscape</h3>
-    <p class="text-xs text-neutral-300 max-w-xs mb-6 leading-relaxed">
-      Both the cart-path skate run and 3D driving range require landscape mode for the best view and touch controls.
-    </p>
-    <div class="flex flex-col gap-2.5 w-full max-w-xs">
-      <button id="btn-force-fullscreen" class="w-full py-3.5 px-4 rounded-2xl bg-lime-400 hover:bg-lime-300 text-black font-black uppercase text-xs tracking-wider shadow-lg active:scale-95 transition">
-        Enter Fullscreen & Play
-      </button>
-      <button id="btn-dismiss-orient" class="w-full py-2.5 px-4 rounded-xl bg-neutral-800 text-neutral-400 font-bold uppercase text-[10px] tracking-wider hover:text-white transition">
-        Continue in Portrait anyway
-      </button>
-    </div>
-  </div>
-
-  <!-- ======================================================== -->
-  <!-- TOP PERSISTENT NAV & MODE / FULLSCREEN BAR               -->
-  <!-- ======================================================== -->
-  <header class="absolute top-0 left-0 right-0 z-40 pad-safe-top pad-safe-left pad-safe-right flex items-center justify-between pointer-events-none bg-gradient-to-b from-black/90 via-black/40 to-transparent pb-3">
-    <!-- Brand / Title -->
-    <div class="flex items-center gap-2 pointer-events-auto">
-      <span class="font-script text-lg sm:text-2xl text-white tracking-wide drop-shadow-md">Temporary Greens</span>
-      <span class="hidden sm:inline-block text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-white/10 text-neutral-300 border border-white/20">v2.0</span>
-    </div>
-
-    <!-- Mode Selector & Audio & Fullscreen Buttons -->
-    <div class="flex items-center gap-1.5 bg-neutral-900/95 border border-white/20 p-1 rounded-2xl pointer-events-auto backdrop-blur-md shadow-2xl">
-      <button id="nav-mode-skate" class="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl text-[10px] sm:text-xs font-black uppercase tracking-wider transition-all bg-white text-black shadow">
-        🛹 Skate
-      </button>
-      <button id="nav-mode-range" class="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl text-[10px] sm:text-xs font-black uppercase tracking-wider transition-all text-neutral-400 hover:text-white">
-        ⛳️ Range
-      </button>
-
-      <!-- Fullscreen / Expand Button -->
-      <button id="btn-toggle-fullscreen" aria-label="Fullscreen" class="p-1 sm:p-1.5 rounded-xl text-neutral-300 hover:text-white hover:bg-white/10 transition">
-        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0 0l-5-5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-        </svg>
-      </button>
-
-      <!-- Sound Toggle -->
-      <button id="btn-sound-toggle" aria-label="Audio" class="p-1 sm:p-1.5 rounded-xl text-white/80 hover:text-white hover:bg-white/10 transition">
-        <svg id="sound-icon-on" class="w-4 h-4 text-lime-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-        </svg>
-        <svg id="sound-icon-off" class="w-4 h-4 text-neutral-500 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15zM17 14l4-4m0 4l-4-4" />
-        </svg>
-      </button>
+  <!-- Top Universal Header with Mode Switcher -->
+  <header id="universal-header">
+    <div class="brand-title">TEMPORARY GREENS</div>
+    <div class="mode-switcher">
+      <button id="toggle-skate" class="mode-btn active">🛹 SKATE COMMUTE</button>
+      <button id="toggle-range" class="mode-btn">⛳ DRIVING RANGE</button>
     </div>
   </header>
 
-  <!-- ======================================================== -->
-  <!-- PHASE 1: 2D CART-PATH SKATE RUN CONTAINER                -->
-  <!-- ======================================================== -->
-  <div id="container-skate" class="relative w-full h-full block">
-    <canvas id="canvas-skate" class="w-full h-full block"></canvas>
+  <!-- ========================================================================
+       SCENE 1: SKATE COMMUTE DOM
+       ======================================================================== -->
+  <div id="scene-skate-container">
+    <canvas id="game-canvas"></canvas>
 
-    <!-- Phase 1 Top HUD (Distance & Speed) -->
-    <div id="hud-skate" class="absolute top-14 sm:top-16 pad-safe-left pad-safe-right inset-x-0 flex justify-between items-center pointer-events-none z-20">
-      <div class="bg-black/85 backdrop-blur-md border border-white/20 px-3 py-1.5 rounded-2xl flex flex-col gap-1 shadow-2xl">
-        <div class="flex items-center justify-between gap-3 text-[10px] sm:text-xs uppercase tracking-widest text-emerald-400 font-bold">
-          <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>To Driving Range</span>
-          <span id="skate-dist-text" class="text-white font-black text-xs sm:text-sm">1,000 yd</span>
-        </div>
-        <div class="w-32 sm:w-48 h-1.5 bg-neutral-800 rounded-full overflow-hidden">
-          <div id="skate-progress-bar" class="h-full bg-gradient-to-r from-emerald-500 to-lime-400 transition-all duration-75" style="width: 0%;"></div>
-        </div>
-      </div>
-
-      <div class="bg-black/85 backdrop-blur-md border border-white/20 px-3 py-1.5 rounded-2xl flex flex-col items-end shadow-2xl">
-        <span class="text-[9px] uppercase font-bold text-neutral-400">Pavement Speed</span>
-        <span id="skate-speed-text" class="text-xs sm:text-sm font-black text-lime-400">18 MPH</span>
+    <div style="position: absolute; top: 56px; left: 16px; z-index: 10;">
+      <div id="skate-hud" class="hud-box" style="display: none;">
+        <div>DIST: <span id="skate-dist" style="color: #34d399; font-weight: bold;">0</span> YD</div>
+        <div>SPEED: <span id="skate-speed" style="color: #fbbf24; font-weight: bold;">0</span> MPH</div>
+        <div>SCORE: <span id="skate-score" style="color: #38bdf8; font-weight: bold;">0</span></div>
       </div>
     </div>
 
-    <!-- Phase 1 Mobile Touch Controls (Safely positioned above Android navigation bars) -->
-    <div id="skate-touch-bar" class="absolute inset-x-0 bottom-0 pad-safe-bottom pad-safe-left pad-safe-right flex justify-between items-end pointer-events-none z-30">
-      <!-- LEFT THUMB: DUCK BUTTON (HOLD TO TUCK) -->
-      <div class="pointer-events-auto pb-1">
-        <button id="touch-duck" class="touch-btn w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-neutral-900/90 border-2 border-amber-500/70 shadow-[0_0_20px_rgba(245,158,11,0.25)] backdrop-blur-md flex flex-col items-center justify-center text-white active:bg-amber-600/50">
-          <svg class="w-9 h-9 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
-          <span class="text-xs font-black uppercase tracking-wider text-amber-200 mt-1">DUCK</span>
-          <span class="text-[8px] text-neutral-400 uppercase font-semibold">Hold Low</span>
-        </button>
-      </div>
+    <div id="desktop-helper" class="desktop-helper">
+      <span><kbd>SPACE</kbd> Ollie</span>
+      <span><kbd>S</kbd> Duck</span>
+      <span><kbd>D</kbd> Push Kick</span>
+    </div>
 
-      <!-- RIGHT THUMB: PUSH & OLLIE BUTTONS -->
-      <div class="pointer-events-auto flex items-end gap-3 pb-1">
-        <!-- PUSH -->
-        <button id="touch-push" class="touch-btn w-18 h-18 sm:w-20 sm:h-20 rounded-2xl bg-neutral-900/90 border-2 border-blue-500/70 shadow-[0_0_15px_rgba(59,130,246,0.25)] backdrop-blur-md flex flex-col items-center justify-center text-white active:bg-blue-600/50">
-          <svg class="w-6 h-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 5l7 7-7 7M5 5l7 7-7 7" /></svg>
-          <span class="text-[10px] font-black uppercase tracking-wider text-blue-200 mt-0.5">PUSH</span>
+    <div id="touch-controls">
+      <button id="btn-duck" class="touch-btn">
+        <span>DUCK</span>
+        <span style="font-size: 0.65rem; color: #78350f;">HOLD LOW</span>
+      </button>
+      <div style="display: flex; gap: 10px;">
+        <button id="btn-push" class="touch-btn">
+          <span>PUSH</span>
+          <span style="font-size: 0.65rem; color: #a1a1aa;">KICK</span>
         </button>
-
-        <!-- OLLIE (PRIMARY ACTION) -->
-        <button id="touch-ollie" class="touch-btn w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-neutral-900/90 border-2 border-lime-400 shadow-[0_0_25px_rgba(163,230,53,0.35)] backdrop-blur-md flex flex-col items-center justify-center text-white active:bg-lime-500/50">
-          <svg class="w-9 h-9 text-lime-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.8" d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
-          <span class="text-xs font-black uppercase tracking-wider text-lime-300 mt-1">OLLIE</span>
-          <span class="text-[8px] text-neutral-400 uppercase font-semibold">Jump</span>
+        <button id="btn-ollie" class="touch-btn">
+          <span>OLLIE</span>
+          <span style="font-size: 0.65rem; color: #064e3b;">JUMP</span>
         </button>
       </div>
     </div>
 
-    <!-- Skate Start Overlay -->
-    <div id="skate-overlay-start" class="absolute inset-0 bg-black/85 backdrop-blur-sm z-40 flex flex-col items-center justify-center p-4 text-center">
-      <div class="max-w-md w-full bg-neutral-900/95 border-2 border-white/20 rounded-3xl p-5 shadow-2xl flex flex-col items-center">
-        <canvas id="preview-character-canvas" width="200" height="150" class="mb-1"></canvas>
-        <h1 class="font-script text-3xl sm:text-4xl text-white mb-0.5">Temporary Greens</h1>
-        <p class="text-[11px] uppercase font-bold text-lime-400 tracking-wider mb-3">Phase 1: Commute to the Driving Range</p>
-
-        <div class="w-full bg-black/60 rounded-xl p-2.5 border border-white/10 text-xs text-neutral-300 text-left space-y-1 mb-4 font-medium">
-          <div class="flex justify-between"><span><strong>OLLIE / Space:</strong> Jump over ball baskets & curbs</span></div>
-          <div class="flex justify-between"><span><strong>DUCK / S / Down:</strong> Duck low under course ropes & signs</span></div>
-          <div class="flex justify-between"><span><strong>PUSH / D / Right:</strong> Kick for pavement speed</span></div>
-        </div>
-
-        <button id="btn-start-skate" class="w-full py-3 bg-white hover:bg-neutral-200 text-black font-black uppercase tracking-wider rounded-xl shadow-xl transition active:scale-95 text-xs sm:text-sm">
-          Drop In & Cruise
-        </button>
-      </div>
+    <div id="start-modal" class="modal-screen">
+      <div style="font-size: 3rem; margin-bottom: 8px;">🛹⛳</div>
+      <h1 style="color: #34d399; font-weight: 900; font-style: italic; font-size: 1.8rem; margin-bottom: 6px;">TEMPORARY GREENS</h1>
+      <p style="font-size: 0.85rem; color: #a1a1aa; max-width: 320px; line-height: 1.4; margin-bottom: 16px;">
+        Shred the cart path to the driving range. High ollie ground hazards, duck beneath overhead signs, and push for speed.
+      </p>
+      <button id="btn-start" class="arcade-btn">START COMMUTE</button>
+      <p style="font-size: 0.75rem; color: #71717a; margin-top: 14px;">(Tap anywhere on screen to start)</p>
     </div>
 
-    <!-- Skate Crash Modal -->
-    <div id="skate-overlay-crash" class="hidden absolute inset-0 bg-black/90 backdrop-blur-md z-40 flex flex-col items-center justify-center p-4 text-center">
-      <div class="max-w-xs w-full bg-neutral-900 border-2 border-red-500/50 rounded-3xl p-5 flex flex-col items-center shadow-2xl">
-        <div class="text-4xl mb-1">💥</div>
-        <h2 class="text-xl font-black text-red-400 uppercase tracking-tight mb-1">Bailed Hard!</h2>
-        <p id="crash-reason-text" class="text-xs text-neutral-400 mb-4 font-medium">You wiped out on the cart path.</p>
-        <button id="btn-skate-retry" class="w-full py-3 bg-white text-black font-black uppercase text-xs rounded-xl shadow-lg hover:bg-neutral-200 active:scale-95 transition mb-2">
-          Try Run Again
-        </button>
-        <button id="btn-skate-skip" class="w-full py-2 bg-neutral-800 text-lime-400 font-bold uppercase text-xs rounded-xl hover:bg-neutral-700 transition">
-          Skip To Range ⛳️
-        </button>
-      </div>
+    <div id="wipeout-modal" class="modal-screen" style="display: none;">
+      <div style="font-size: 3.5rem; margin-bottom: 8px;">💥💀</div>
+      <h2 style="color: #f43f5e; font-weight: 900; font-style: italic; font-size: 1.8rem; margin-bottom: 6px;">TOTAL WIPEOUT!</h2>
+      <p id="wipeout-reason" style="font-size: 0.85rem; color: #d4d4d8; margin-bottom: 16px;">You slammed directly into a course hazard.</p>
+      <button id="btn-restart" class="arcade-btn">SHRED AGAIN</button>
     </div>
   </div>
 
-  <!-- ======================================================== -->
-  <!-- PHASE 2: 3D DRIVING RANGE SIMULATION                     -->
-  <!-- ======================================================== -->
-  <div id="container-range" class="relative w-full h-full hidden">
-    <!-- Three.js Canvas Layer -->
-    <div id="threejs-canvas-host" class="w-full h-full block"></div>
+  <!-- ========================================================================
+       SCENE 2: DRIVING RANGE DOM
+       ======================================================================== -->
+  <div id="scene-range-container">
+    <div id="webgl-canvas-container"></div>
 
-    <!-- 2D Driving Range Character Stand Overlay (Left Bay) -->
-    <canvas id="range-golfer-canvas" class="absolute bottom-16 left-4 pointer-events-none z-10 hidden lg:block" width="220" height="220"></canvas>
-
-    <!-- Range Top HUD: Wind, Club Bar, and Score -->
-    <div class="absolute top-12 sm:top-14 pad-safe-left pad-safe-right inset-x-0 flex justify-between items-start pointer-events-none z-20 gap-2">
-      <!-- Wind Indicator -->
-      <div class="bg-black/85 backdrop-blur-md border border-white/20 p-1.5 sm:p-2 rounded-2xl flex items-center gap-2 shadow-2xl pointer-events-auto">
-        <div class="relative w-8 h-8 rounded-full border border-white/20 bg-neutral-900 flex items-center justify-center">
-          <div id="range-wind-compass" class="w-6 h-6 flex items-center justify-center transition-transform duration-500" style="transform: rotate(45deg);">
-            <svg class="w-5 h-5 text-cyan-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L4 19l8-4 8 4-8-17z"/></svg>
+    <div id="target-briefing-card">
+      <div class="glass-card" style="border-color: rgba(16, 185, 129, 0.6);">
+        <div class="target-primary">
+          <div>
+            <div style="font-size: 0.6rem; color: #9ca3af; font-family: monospace;">CURRENT TARGET OBJECTIVE</div>
+            <div id="label-target-name" style="font-size: 0.95rem; font-weight: 900; color: #34d399;">150 YD ISLAND GREEN</div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 0.6rem; color: #9ca3af; font-family: monospace;">RECOMMENDED</div>
+            <div id="label-rec-club" style="font-size: 0.85rem; font-weight: bold; color: #f59e0b; font-family: monospace;">7I (7-Iron)</div>
           </div>
         </div>
-        <div class="flex flex-col">
-          <span class="text-[8px] sm:text-[9px] uppercase font-bold text-neutral-400">Wind</span>
-          <span id="range-wind-label" class="text-[10px] sm:text-xs font-black text-white">8 mph Headwind</span>
-        </div>
-      </div>
-
-      <!-- Club Selection Pills (Top-Center for easy tap without blocking fairway) -->
-      <div class="bg-black/90 backdrop-blur-md border border-white/20 p-1 rounded-2xl flex items-center gap-1 pointer-events-auto shadow-2xl overflow-x-auto max-w-[55vw] sm:max-w-none">
-        <button data-club="1W" class="club-btn px-2 sm:px-2.5 py-1 rounded-xl text-[10px] sm:text-xs font-black transition bg-lime-400 text-black">1W</button>
-        <button data-club="3W" class="club-btn px-2 sm:px-2.5 py-1 rounded-xl text-[10px] sm:text-xs font-black transition text-neutral-300 hover:text-white">3W</button>
-        <button data-club="5I" class="club-btn px-2 sm:px-2.5 py-1 rounded-xl text-[10px] sm:text-xs font-black transition text-neutral-300 hover:text-white">5I</button>
-        <button data-club="7I" class="club-btn px-2 sm:px-2.5 py-1 rounded-xl text-[10px] sm:text-xs font-black transition text-neutral-300 hover:text-white">7I</button>
-        <button data-club="9I" class="club-btn px-2 sm:px-2.5 py-1 rounded-xl text-[10px] sm:text-xs font-black transition text-neutral-300 hover:text-white">9I</button>
-        <button data-club="PW" class="club-btn px-2 sm:px-2.5 py-1 rounded-xl text-[10px] sm:text-xs font-black transition text-neutral-300 hover:text-white">PW</button>
-      </div>
-
-      <!-- Range Score & Shots -->
-      <div class="bg-black/85 backdrop-blur-md border border-white/20 px-3 py-1.5 rounded-2xl flex items-center gap-3 shadow-2xl pointer-events-auto">
-        <div class="flex flex-col items-end">
-          <span class="text-[8px] uppercase font-bold text-neutral-400">Score</span>
-          <span id="range-score-text" class="text-xs sm:text-sm font-black text-lime-400">0 PTS</span>
-        </div>
-        <div class="w-px h-5 bg-white/20"></div>
-        <div class="flex flex-col items-end">
-          <span class="text-[8px] uppercase font-bold text-neutral-400">Shot</span>
-          <span id="range-shot-count" class="text-xs sm:text-sm font-black text-white">1</span>
+        <div class="telemetry-row">
+          <div>TARGET PIN: <span id="label-target-distance" class="telemetry-val" style="color: #34d399;">148 YDS</span></div>
+          <div>WIND: <span id="label-wind" class="telemetry-val" style="color: #38bdf8;">6 MPH ➔</span></div>
+          <div>AIM: <span id="label-aim" class="telemetry-val" style="color: #facc15;">0.0°</span></div>
         </div>
       </div>
     </div>
 
-    <!-- Shot Distance & Stat Callout Banner -->
-    <div id="shot-stats-banner" class="absolute top-24 inset-x-0 mx-auto max-w-xs sm:max-w-sm bg-neutral-900/95 border-2 border-lime-400 rounded-2xl p-2.5 text-center shadow-2xl backdrop-blur-md z-30 hidden">
-      <div class="text-[10px] font-black uppercase tracking-widest text-lime-400" id="shot-quality-text">GREAT STRIKE!</div>
-      <div class="text-2xl sm:text-3xl font-black text-white my-0.5" id="shot-dist-text">248 YDS</div>
-      <div class="flex justify-center gap-4 text-xs font-bold text-neutral-300">
-        <span id="shot-carry-text">Carry: 236y</span>
-        <span id="shot-target-text">Target Green: +100 pts!</span>
+    <div id="shot-result-card" class="glass-card" style="border-color: #34d399;">
+      <div class="stat-badge-row">
+        <span id="res-badge" style="font-size: 0.65rem; font-family: monospace; font-weight: bold; color: #34d399; background: #064e3b; padding: 2px 6px; border-radius: 4px;">SHOT REGISTERED</span>
+        <span id="res-quality" style="font-size: 0.68rem; font-family: monospace; font-weight: bold; color: #38bdf8;">PURE STRAIGHT</span>
+      </div>
+      <div id="res-carry-hero" class="stat-hero-number">162 YDS CARRY</div>
+      <div class="stat-breakdown-row">
+        <span>Total: <strong id="res-total-val" style="color: #ffffff;">166 YDS</strong></span>
+        <span>Rollout: <strong id="res-roll-val" style="color: #cbd5e1;">+4 YDS</strong></span>
+      </div>
+      <div class="stat-pin-highlight">
+        <span>DIST TO PIN:</span>
+        <span id="res-target-diff" style="font-size: 0.85rem; font-weight: 900;">4.8 YDS</span>
+      </div>
+      <div id="res-specs" style="font-size: 0.65rem; font-family: monospace; color: #9ca3af; margin-top: 6px; border-top: 1px solid #1f2937; padding-top: 5px;">
+        Club: 7I • Target Pin: 148 YDS
       </div>
     </div>
 
-    <!-- Phase 2 Ergonomic Swing Zone (Safely positioned in Lower Right) -->
-    <div class="absolute bottom-0 right-0 pad-safe-bottom pad-safe-right p-3 z-30 pointer-events-none">
-      <div class="bg-black/90 backdrop-blur-md border-2 border-white/20 p-2.5 rounded-3xl flex items-center gap-3 pointer-events-auto shadow-[0_0_30px_rgba(0,0,0,0.8)]">
-        <!-- Power & Accuracy Bar -->
-        <div class="flex flex-col gap-1 w-36 sm:w-56">
-          <div class="flex justify-between text-[9px] uppercase font-black text-neutral-400">
-            <span>Hook</span>
-            <span id="meter-status-text" class="text-lime-400 font-extrabold">Ready</span>
-            <span>Slice</span>
-          </div>
+    <div id="aim-controls">
+      <button id="btn-aim-l" class="aim-btn">◀ AIM L</button>
+      <button id="btn-aim-r" class="aim-btn">AIM R ▶</button>
+    </div>
 
-          <div class="relative w-full h-8 bg-neutral-900 border border-white/30 rounded-xl overflow-hidden flex items-center">
-            <!-- Center sweet spot -->
-            <div class="absolute left-1/2 -translate-x-1/2 w-4 h-full bg-lime-500/40 border-x border-lime-400 z-0"></div>
-            <!-- Power meter fill -->
-            <div id="meter-power-fill" class="h-full bg-gradient-to-r from-blue-500 via-lime-400 to-red-500 transition-all duration-75 z-0" style="width: 0%;"></div>
-            <!-- Accuracy Cursor needle -->
-            <div id="meter-accuracy-needle" class="absolute top-0 bottom-0 w-2 bg-white shadow-[0_0_10px_white] z-10 hidden" style="left: 50%;"></div>
-          </div>
+    <div id="club-strip">
+      <button class="club-pill" data-club="1W">1W</button>
+      <button class="club-pill" data-club="3W">3W</button>
+      <button class="club-pill" data-club="5I">5I</button>
+      <button class="club-pill active" data-club="7I">7I</button>
+      <button class="club-pill" data-club="9I">9I</button>
+      <button class="club-pill" data-club="PW">PW</button>
+    </div>
+
+    <div id="swing-system">
+      <div id="meter-box">
+        <div class="meter-label-row">
+          <span style="color: #9ca3af;">1. POWER</span>
+          <span id="meter-power-val" style="color: #f59e0b;">READY</span>
+        </div>
+        <div class="track-power">
+          <div class="sweet-spot-marker"></div>
+          <div id="meter-power-fill" class="track-power-fill"></div>
         </div>
 
-        <!-- Large Swing Action Trigger Button -->
-        <button id="btn-swing-action" class="touch-btn h-14 sm:h-16 px-5 sm:px-7 rounded-2xl bg-lime-400 hover:bg-lime-300 text-black font-black uppercase tracking-wider text-xs sm:text-sm shadow-xl active:scale-95 transition flex flex-col items-center justify-center">
-          <span id="swing-btn-label">HIT BALL</span>
-          <span class="text-[8px] font-bold text-neutral-800 uppercase">Tap 3x</span>
-        </button>
+        <div class="meter-label-row">
+          <span style="color: #9ca3af;">2. SNAP</span>
+          <span id="meter-snap-val" style="color: #38bdf8;">WAITING</span>
+        </div>
+        <div class="track-snap">
+          <div class="snap-pure-zone"></div>
+          <div class="snap-center-line"></div>
+          <div id="meter-snap-needle" class="snap-needle"></div>
+        </div>
+      </div>
+
+      <button id="btn-swing-action" class="arcade-action-btn">
+        START SWING
+      </button>
+      
+      <div class="desktop-key-hint">
+        <kbd>A</kbd>/<kbd>D</kbd> Aim • <kbd>1</kbd>-<kbd>6</kbd> Club • <kbd>SPACE</kbd> Swing
       </div>
     </div>
   </div>
 
   <script>
-    /**
-     * TEMPORARY GREENS - COMPLETE ENGINE
-     * - Vector Character Rigging matching Reference Image
-     * - 2D Side-Scroller Skate Run
-     * - 3D Cel-Shaded Driving Range with Realistic Ball Physics (Three.js)
-     * - Mobile Safe-Area & Landscape Handling
-     */
-
-    // --- FULLSCREEN & ORIENTATION SYSTEM ---
-    const orientBlocker = document.getElementById('orient-blocker');
-    const btnFullscreen = document.getElementById('btn-force-fullscreen');
-    const btnDismissOrient = document.getElementById('btn-dismiss-orient');
-    const btnNavFullscreen = document.getElementById('btn-toggle-fullscreen');
-
-    async function requestDeviceLandscape() {
-      try {
-        if (!document.fullscreenElement) {
-          if (document.documentElement.requestFullscreen) {
-            await document.documentElement.requestFullscreen();
-          } else if (document.documentElement.webkitRequestFullscreen) {
-            await document.documentElement.webkitRequestFullscreen();
-          }
-        }
-        if (screen.orientation && screen.orientation.lock) {
-          await screen.orientation.lock('landscape').catch(() => {});
-        }
-      } catch (err) {
-        // Fallback for browsers that restrict orientation lock without user gesture
-      }
-      orientBlocker.style.display = 'none';
-      setTimeout(() => {
-        if (app && app.skateGame) app.skateGame.resize();
-      }, 300);
-    }
-
-    btnFullscreen.addEventListener('click', requestDeviceLandscape);
-    btnDismissOrient.addEventListener('click', () => {
-      orientBlocker.style.display = 'none';
-    });
-    btnNavFullscreen.addEventListener('click', () => {
-      if (!document.fullscreenElement) {
-        requestDeviceLandscape();
-      } else {
-        if (document.exitFullscreen) document.exitFullscreen();
-      }
-    });
-
-    // --- SYNTHESIZED SOUND FX (ZERO ASSETS REQUIRED) ---
-    class SoundFX {
+    /* ==========================================================================
+       1. UNIFIED COHESIVE AUDIO ENGINE
+       ========================================================================== */
+    class UnifiedAudioEngine {
       constructor() {
         this.ctx = null;
-        this.muted = false;
-        this.skateLoop = null;
-        this.skateGain = null;
+        this.rollingGain = null;
+        this.rollingFilter = null;
       }
+
       init() {
-        if (this.ctx) return;
-        const AudioClass = window.AudioContext || window.webkitAudioContext;
-        this.ctx = new AudioClass();
-        this.buildSkateLoop();
+        try {
+          if (!this.ctx) {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            this.ctx = new AudioContext();
+            this.setupRollingLoop();
+          }
+          if (this.ctx && this.ctx.state === 'suspended') {
+            this.ctx.resume();
+          }
+        } catch (e) {}
       }
-      toggle() {
-        this.muted = !this.muted;
-        if (this.skateGain) {
-          this.skateGain.gain.setValueAtTime(this.muted ? 0 : 0.03, this.ctx.currentTime);
+
+      // --- Skate Sounds ---
+      setupRollingLoop() {
+        if (!this.ctx) return;
+        const bufferSize = this.ctx.sampleRate * 2;
+        const noiseBuffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+        const output = noiseBuffer.getChannelData(0);
+        let b0 = 0, b1 = 0, b2 = 0;
+        for (let i = 0; i < bufferSize; i++) {
+          const white = Math.random() * 2 - 1;
+          b0 = 0.99886 * b0 + white * 0.0555179;
+          b1 = 0.99332 * b1 + white * 0.0750759;
+          b2 = 0.96900 * b2 + white * 0.1538520;
+          output[i] = (b0 + b1 + b2) * 0.08;
         }
-        return this.muted;
+
+        const whiteNoise = this.ctx.createBufferSource();
+        whiteNoise.buffer = noiseBuffer;
+        whiteNoise.loop = true;
+
+        this.rollingFilter = this.ctx.createBiquadFilter();
+        this.rollingFilter.type = 'lowpass';
+        this.rollingFilter.frequency.setValueAtTime(140, this.ctx.currentTime);
+
+        this.rollingGain = this.ctx.createGain();
+        this.rollingGain.gain.setValueAtTime(0, this.ctx.currentTime);
+
+        whiteNoise.connect(this.rollingFilter);
+        this.rollingFilter.connect(this.rollingGain);
+        this.rollingGain.connect(this.ctx.destination);
+        whiteNoise.start(0);
       }
-      buildSkateLoop() {
-        const len = this.ctx.sampleRate * 2;
-        const buf = this.ctx.createBuffer(1, len, this.ctx.sampleRate);
-        const data = buf.getChannelData(0);
-        let b = 0;
-        for (let i = 0; i < len; i++) {
-          const w = Math.random() * 2 - 1;
-          b = (b + (0.02 * w)) / 1.02;
-          data[i] = b * 3.5;
+
+      updateRolling(speed, isGrounded) {
+        if (!this.ctx || !this.rollingGain) return;
+        const now = this.ctx.currentTime;
+        if (!isGrounded || speed <= 1) {
+          this.rollingGain.gain.setTargetAtTime(0, now, 0.05);
+        } else {
+          const targetGain = Math.min(0.2, (speed / 26) * 0.18);
+          const targetFreq = 120 + (speed * 18);
+          this.rollingGain.gain.setTargetAtTime(targetGain, now, 0.05);
+          this.rollingFilter.frequency.setTargetAtTime(targetFreq, now, 0.05);
         }
-        const src = this.ctx.createBufferSource();
-        src.buffer = buf;
-        src.loop = true;
-        const filter = this.ctx.createBiquadFilter();
-        filter.type = 'lowpass';
-        filter.frequency.value = 320;
-        this.skateGain = this.ctx.createGain();
-        this.skateGain.gain.value = this.muted ? 0 : 0.03;
-        src.connect(filter);
-        filter.connect(this.skateGain);
-        this.skateGain.connect(this.ctx.destination);
-        src.start();
-        this.skateLoop = src;
       }
-      playOllie() {
-        if (this.muted || !this.ctx) return;
+
+      playOlliePop() {
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
         const osc = this.ctx.createOscillator();
-        const g = this.ctx.createGain();
+        const gain = this.ctx.createGain();
         osc.type = 'triangle';
-        osc.frequency.setValueAtTime(140, this.ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(45, this.ctx.currentTime + 0.1);
-        g.gain.setValueAtTime(0.25, this.ctx.currentTime);
-        g.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.1);
-        osc.connect(g);
-        g.connect(this.ctx.destination);
-        osc.start();
-        osc.stop(this.ctx.currentTime + 0.11);
+        osc.frequency.setValueAtTime(180, now);
+        osc.frequency.exponentialRampToValueAtTime(40, now + 0.08);
+        gain.gain.setValueAtTime(0.4, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.09);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.1);
       }
-      playGolfStrike(isDriver) {
-        if (this.muted || !this.ctx) return;
-        const dur = isDriver ? 0.35 : 0.22;
-        const buf = this.ctx.createBuffer(1, this.ctx.sampleRate * dur, this.ctx.sampleRate);
-        const d = buf.getChannelData(0);
-        for (let i = 0; i < d.length; i++) {
-          d[i] = (Math.random() * 2 - 1) * Math.exp(-i / (this.ctx.sampleRate * 0.03));
+
+      playLanding() {
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(100, now);
+        osc.frequency.linearRampToValueAtTime(32, now + 0.12);
+        gain.gain.setValueAtTime(0.35, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.13);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.14);
+      }
+
+      playPushKick() {
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(120, now);
+        osc.frequency.exponentialRampToValueAtTime(50, now + 0.08);
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.09);
+      }
+
+      playDuckWhoosh() {
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(220, now);
+        osc.frequency.linearRampToValueAtTime(110, now + 0.12);
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.13);
+      }
+
+      playCrash() {
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(160, now);
+        osc.frequency.exponentialRampToValueAtTime(18, now + 0.45);
+        gain.gain.setValueAtTime(0.6, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.45);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.48);
+      }
+
+      // --- Golf Driving Range Sounds ---
+      playFullSwingStrike(quality) {
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+
+        // 1. Shaft Swoosh
+        const swooshLen = 0.14;
+        const bufferSize = this.ctx.sampleRate * swooshLen;
+        const noiseBuffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+        const output = noiseBuffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          output[i] = (Math.random() * 2 - 1) * 0.38;
         }
-        const noise = this.ctx.createBufferSource();
-        noise.buffer = buf;
-        const tone = this.ctx.createOscillator();
-        tone.type = 'sine';
-        tone.frequency.setValueAtTime(isDriver ? 880 : 1350, this.ctx.currentTime);
-        tone.frequency.exponentialRampToValueAtTime(180, this.ctx.currentTime + dur);
+        const swoosh = this.ctx.createBufferSource();
+        swoosh.buffer = noiseBuffer;
 
-        const g = this.ctx.createGain();
-        g.gain.setValueAtTime(0.4, this.ctx.currentTime);
-        g.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + dur);
+        const swooshFilter = this.ctx.createBiquadFilter();
+        swooshFilter.type = 'bandpass';
+        swooshFilter.frequency.setValueAtTime(2400, now);
+        swooshFilter.frequency.exponentialRampToValueAtTime(450, now + swooshLen);
 
-        noise.connect(g);
-        tone.connect(g);
-        g.connect(this.ctx.destination);
-        noise.start();
-        tone.start();
-        tone.stop(this.ctx.currentTime + dur);
+        const swooshGain = this.ctx.createGain();
+        swooshGain.gain.setValueAtTime(0.01, now);
+        swooshGain.gain.linearRampToValueAtTime(0.32, now + swooshLen * 0.7);
+        swooshGain.gain.linearRampToValueAtTime(0.001, now + swooshLen);
+
+        swoosh.connect(swooshFilter);
+        swooshFilter.connect(swooshGain);
+        swooshGain.connect(this.ctx.destination);
+        swoosh.start(now);
+
+        // 2. Crisp Face Impact Click
+        const strikeTime = now + 0.11;
+        const clickOsc = this.ctx.createOscillator();
+        const clickGain = this.ctx.createGain();
+        clickOsc.type = 'triangle';
+        const baseFreq = quality === 'pure' ? 2400 : 1700;
+        clickOsc.frequency.setValueAtTime(baseFreq, strikeTime);
+        clickOsc.frequency.exponentialRampToValueAtTime(320, strikeTime + 0.04);
+
+        clickGain.gain.setValueAtTime(0.65, strikeTime);
+        clickGain.gain.exponentialRampToValueAtTime(0.001, strikeTime + 0.045);
+
+        clickOsc.connect(clickGain);
+        clickGain.connect(this.ctx.destination);
+        clickOsc.start(strikeTime);
+        clickOsc.stop(strikeTime + 0.05);
+
+        // 3. Resonant Ball Compression Thump
+        const thumpOsc = this.ctx.createOscillator();
+        const thumpGain = this.ctx.createGain();
+        thumpOsc.type = 'sine';
+        thumpOsc.frequency.setValueAtTime(190, strikeTime);
+        thumpOsc.frequency.exponentialRampToValueAtTime(55, strikeTime + 0.14);
+
+        thumpGain.gain.setValueAtTime(0.5, strikeTime);
+        thumpGain.gain.exponentialRampToValueAtTime(0.001, strikeTime + 0.15);
+
+        thumpOsc.connect(thumpGain);
+        thumpGain.connect(this.ctx.destination);
+        thumpOsc.start(strikeTime);
+        thumpOsc.stop(strikeTime + 0.16);
       }
-      playTargetChime() {
-        if (this.muted || !this.ctx) return;
-        [523.25, 659.25, 783.99, 1046.5].forEach((freq, idx) => {
+
+      playBounce() {
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(140, now);
+        osc.frequency.linearRampToValueAtTime(60, now + 0.06);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.07);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.08);
+      }
+
+      playClick() {
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(1100, now);
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.05);
+      }
+
+      playPinChime() {
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
           const osc = this.ctx.createOscillator();
-          const g = this.ctx.createGain();
-          osc.type = 'triangle';
-          osc.frequency.value = freq;
-          g.gain.setValueAtTime(0.18, this.ctx.currentTime + idx * 0.08);
-          g.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + idx * 0.08 + 0.3);
-          osc.connect(g);
-          g.connect(this.ctx.destination);
-          osc.start(this.ctx.currentTime + idx * 0.08);
-          osc.stop(this.ctx.currentTime + idx * 0.08 + 0.35);
+          const gain = this.ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+          gain.gain.setValueAtTime(0.2, now + idx * 0.08);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.4);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now + idx * 0.08);
+          osc.stop(now + idx * 0.08 + 0.42);
         });
       }
-      playThud() {
-        if (this.muted || !this.ctx) return;
-        const osc = this.ctx.createOscillator();
-        const g = this.ctx.createGain();
-        osc.frequency.setValueAtTime(75, this.ctx.currentTime);
-        osc.frequency.linearRampToValueAtTime(20, this.ctx.currentTime + 0.1);
-        g.gain.setValueAtTime(0.2, this.ctx.currentTime);
-        g.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.1);
-        osc.connect(g);
-        g.connect(this.ctx.destination);
-        osc.start();
-        osc.stop(this.ctx.currentTime + 0.12);
+    }
+    const audio = new UnifiedAudioEngine();
+
+    /* ==========================================================================
+       2. SCENE MANAGER & TOGGLING
+       ========================================================================== */
+    let currentActiveScene = 'skate'; // 'skate' | 'range'
+    const btnToggleSkate = document.getElementById('toggle-skate');
+    const btnToggleRange = document.getElementById('toggle-range');
+    const containerSkate = document.getElementById('scene-skate-container');
+    const containerRange = document.getElementById('scene-range-container');
+
+    function switchScene(sceneName) {
+      if (currentActiveScene === sceneName) return;
+      currentActiveScene = sceneName;
+      audio.playClick();
+
+      if (sceneName === 'skate') {
+        btnToggleSkate.classList.add('active');
+        btnToggleRange.classList.remove('active');
+        containerSkate.style.display = 'block';
+        containerRange.style.display = 'none';
+      } else {
+        btnToggleRange.classList.add('active');
+        btnToggleSkate.classList.remove('active');
+        containerSkate.style.display = 'none';
+        containerRange.style.display = 'block';
+
+        // Mute skate rolling loop immediately when leaving
+        audio.updateRolling(0, false);
+
+        // Ensure 3D renderer matches viewport size
+        onWindowResize();
       }
     }
-    const sound = new SoundFX();
 
-    // --- RE-CREATING THE EXACT CHARACTER ARTWORK (VECTOR TRACE) ---
-    function drawExactSkater(ctx, x, y, scale = 1.0, state = 'cruise', animTimer = 0, pushPhase = 0) {
-      ctx.save();
-      ctx.translate(x, y);
-      ctx.scale(scale, scale);
+    btnToggleSkate.addEventListener('click', () => switchScene('skate'));
+    btnToggleRange.addEventListener('click', () => switchScene('range'));
 
-      ctx.strokeStyle = '#FFFFFF';
-      ctx.fillStyle = '#FFFFFF';
-      ctx.lineWidth = 3.2;
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
+    /* ==========================================================================
+       3. SCENE 1: SKATE COMMUTE LOGIC
+       ========================================================================== */
+    const canvasSkate = document.getElementById('game-canvas');
+    const ctxSkate = canvasSkate.getContext('2d');
 
-      const bob = (state === 'cruise') ? Math.sin(animTimer * 2.5) * 2.5 : 0;
-      const isDuck = (state === 'duck');
-      const isPush = (state === 'push');
+    function resizeSkateCanvas() {
+      canvasSkate.width = window.innerWidth;
+      canvasSkate.height = window.innerHeight;
+    }
 
-      // --- 1. SKATEBOARD DECK & TRUCKS ---
-      const deckY = -6;
-      ctx.beginPath();
-      ctx.moveTo(-52, deckY - 9);
-      ctx.quadraticCurveTo(-45, deckY, -30, deckY);
-      ctx.lineTo(32, deckY);
-      ctx.quadraticCurveTo(46, deckY, 54, deckY - 9);
-      ctx.stroke();
+    const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    if (isTouch) {
+      document.getElementById('touch-controls').style.display = 'flex';
+      document.getElementById('desktop-helper').style.display = 'none';
+    }
 
-      // Front & rear truck brackets
-      ctx.strokeRect(-28, deckY, 5, 4);
-      ctx.strokeRect(23, deckY, 4, 4);
+    let skateGameActive = false;
+    let skateDistance = 0;
+    let skateSpeed = 0;
+    let skateScore = 0;
+    let isWipeout = false;
+    let wipeoutTimer = 0;
+    let wipeoutDebris = null;
 
-      // Wheels
-      const drawWheel = (wx, wy) => {
-        ctx.beginPath();
-        ctx.arc(wx, wy, 5.5, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.arc(wx, wy, 2, 0, Math.PI * 2);
-        ctx.fill();
+    const skater = {
+      xRatio: 0.32,
+      x: 220,
+      y: 0,
+      vy: 0,
+      isGrounded: true,
+      isDucking: false,
+      isPushing: false,
+      pushCooldown: 0,
+      scale: 1.05
+    };
+
+    const obstacles = [];
+    const smokeParticles = [];
+    const waterDroplets = [];
+    const crashSparks = [];
+    let lastObstacleSpawn = 0;
+
+    function startCommute() {
+      const startModal = document.getElementById('start-modal');
+      if (startModal) startModal.remove();
+
+      const wipeModal = document.getElementById('wipeout-modal');
+      if (wipeModal) wipeModal.style.display = 'none';
+
+      document.getElementById('skate-hud').style.display = 'flex';
+
+      skateGameActive = true;
+      isWipeout = false;
+      wipeoutTimer = 0;
+      skateDistance = 0;
+      skateSpeed = 12;
+      skateScore = 0;
+      obstacles.length = 0;
+      smokeParticles.length = 0;
+      waterDroplets.length = 0;
+      crashSparks.length = 0;
+      wipeoutDebris = null;
+
+      skater.y = 0;
+      skater.vy = 0;
+      skater.isGrounded = true;
+      skater.isDucking = false;
+      skater.isPushing = false;
+
+      setTimeout(() => { try { audio.init(); } catch (e) {} }, 0);
+    }
+
+    const startModal = document.getElementById('start-modal');
+    if (startModal) {
+      startModal.addEventListener('click', startCommute);
+      startModal.addEventListener('touchend', (e) => { e.preventDefault(); startCommute(); });
+    }
+
+    const btnRestart = document.getElementById('btn-restart');
+    if (btnRestart) {
+      btnRestart.addEventListener('click', startCommute);
+      btnRestart.addEventListener('touchend', (e) => { e.preventDefault(); startCommute(); });
+    }
+
+    function triggerOllie() {
+      if (!skateGameActive || isWipeout || currentActiveScene !== 'skate') return;
+      if (skater.isGrounded && !skater.isDucking) {
+        skater.vy = -14.2;
+        skater.isGrounded = false;
+        audio.playOlliePop();
+      }
+    }
+
+    function startDuck() {
+      if (!skateGameActive || isWipeout || currentActiveScene !== 'skate') return;
+      if (skater.isGrounded) {
+        skater.isDucking = true;
+        audio.playDuckWhoosh();
+      }
+    }
+
+    function stopDuck() {
+      skater.isDucking = false;
+    }
+
+    function triggerPush() {
+      if (!skateGameActive || isWipeout || currentActiveScene !== 'skate') return;
+      if (skater.isGrounded && skater.pushCooldown <= 0) {
+        skateSpeed = Math.min(24, skateSpeed + 4.2);
+        skater.isPushing = true;
+        skater.pushCooldown = 20;
+        audio.playPushKick();
+
+        const roadBaseline = canvasSkate.height - 70;
+        for (let i = 0; i < 5; i++) {
+          smokeParticles.push({
+            x: skater.x - 30,
+            y: roadBaseline + 4,
+            vx: -(Math.random() * 3 + 2),
+            vy: -(Math.random() * 1.5 + 0.2),
+            radius: Math.random() * 4 + 3,
+            life: 1.0
+          });
+        }
+      }
+    }
+
+    function triggerWipeout(reason) {
+      if (isWipeout) return;
+      isWipeout = true;
+      wipeoutTimer = 0;
+      skateSpeed = 0;
+      audio.playCrash();
+
+      const roadBaseline = canvasSkate.height - 70;
+      const originX = skater.x;
+      const originY = roadBaseline + skater.y;
+
+      wipeoutDebris = {
+        body: { x: originX, y: originY, vx: 5, vy: -3, rot: 0, vRot: 0.08 },
+        board: { x: originX, y: originY, vx: 7, vy: -7, rot: 0, vRot: 0.22 },
+        cap: { x: originX + 24, y: originY - 76, vx: -4, vy: -8, rot: 0, vRot: -0.18 },
+        can: { x: originX + 38, y: originY - 72, vx: 4, vy: -9, rot: 0, vRot: 0.25 },
+        club: { x: originX + 15, y: originY - 60, vx: 2, vy: -10, rot: 0, vRot: 0.35 }
       };
-      drawWheel(-28, deckY + 8);
-      drawWheel(23, deckY + 8);
 
-      if (isDuck) {
-        // --- DUCK STATE (Low tucked compression) ---
-        ctx.beginPath();
-        ctx.moveTo(-22, deckY - 2);
-        ctx.lineTo(-34, -18);
-        ctx.lineTo(-10, -22);
-        ctx.stroke();
+      for (let i = 0; i < 25; i++) {
+        crashSparks.push({
+          x: originX + (Math.random() * 20 - 10),
+          y: originY,
+          vx: (Math.random() * 12 - 4),
+          vy: -(Math.random() * 8 + 2),
+          life: 1.0,
+          color: Math.random() > 0.4 ? '#f59e0b' : '#ef4444'
+        });
+      }
 
-        ctx.beginPath();
-        ctx.moveTo(18, deckY - 2);
-        ctx.lineTo(8, -20);
-        ctx.lineTo(-10, -22);
-        ctx.stroke();
+      document.getElementById('wipeout-reason').textContent = reason || "You took a hard digger on the path.";
+      setTimeout(() => {
+        const wipeoutModal = document.getElementById('wipeout-modal');
+        if (wipeoutModal) wipeoutModal.style.display = 'flex';
+      }, 700);
+    }
 
-        ctx.beginPath();
-        ctx.moveTo(-10, -22);
-        ctx.quadraticCurveTo(10, -28, 26, -26);
-        ctx.stroke();
+    const btnTouchDuck = document.getElementById('btn-duck');
+    btnTouchDuck.addEventListener('touchstart', (e) => { e.preventDefault(); startDuck(); }, { passive: false });
+    btnTouchDuck.addEventListener('touchend', (e) => { e.preventDefault(); stopDuck(); }, { passive: false });
+    btnTouchDuck.addEventListener('touchcancel', (e) => { e.preventDefault(); stopDuck(); }, { passive: false });
 
+    const btnTouchOllie = document.getElementById('btn-ollie');
+    btnTouchOllie.addEventListener('touchstart', (e) => { e.preventDefault(); triggerOllie(); }, { passive: false });
+
+    const btnTouchPush = document.getElementById('btn-push');
+    btnTouchPush.addEventListener('touchstart', (e) => { e.preventDefault(); triggerPush(); }, { passive: false });
+
+    function drawSkaterCharacter(ctx, x, y, state) {
+      const roadBaseline = canvasSkate.height - 70;
+
+      if (isWipeout && wipeoutDebris) {
+        wipeoutTimer++;
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 3.5;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        const b = wipeoutDebris.board;
+        b.x += b.vx; b.y += b.vy; b.vy += 0.45; b.rot += b.vRot;
+        if (b.y > roadBaseline) {
+          b.y = roadBaseline; b.vy *= -0.55; b.vx *= 0.8; b.vRot *= 0.6;
+        }
+        ctx.save();
+        ctx.translate(b.x, b.y); ctx.rotate(b.rot);
+        ctx.beginPath(); ctx.moveTo(-42, 0); ctx.lineTo(42, 0); ctx.stroke();
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(-28, 2, 6, 4); ctx.fillRect(22, 2, 6, 4);
         ctx.beginPath();
-        ctx.arc(36, -27, 9, 0, Math.PI * 2);
+        ctx.arc(-25, 8, 4.5, 0, Math.PI * 2);
+        ctx.arc(25, 8, 4.5, 0, Math.PI * 2);
         ctx.fill();
-        ctx.beginPath();
-        ctx.moveTo(34, -34);
-        ctx.lineTo(20, -32);
-        ctx.stroke();
-
-        ctx.strokeRect(45, -28, 7, 11);
-
-        ctx.beginPath();
-        ctx.moveTo(36, -26);
-        ctx.lineTo(-44, -30);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(-44, -30); ctx.lineTo(-50, -35);
-        ctx.stroke();
-
         ctx.restore();
+
+        const cap = wipeoutDebris.cap;
+        cap.x += cap.vx; cap.y += cap.vy; cap.vy += 0.35; cap.rot += cap.vRot;
+        if (cap.y > roadBaseline - 4) { cap.y = roadBaseline - 4; cap.vx *= 0.6; }
+        ctx.save();
+        ctx.translate(cap.x, cap.y); ctx.rotate(cap.rot);
+        ctx.beginPath(); ctx.arc(0, 0, 8, Math.PI, 0); ctx.lineTo(12, 0); ctx.stroke();
+        ctx.restore();
+
+        const can = wipeoutDebris.can;
+        can.x += can.vx; can.y += can.vy; can.vy += 0.4; can.rot += can.vRot;
+        if (can.y > roadBaseline - 6) { can.y = roadBaseline - 6; can.vx *= 0.7; }
+        ctx.save();
+        ctx.translate(can.x, can.y); ctx.rotate(can.rot);
+        ctx.strokeRect(-5, -7, 10, 14);
+        ctx.restore();
+
+        const club = wipeoutDebris.club;
+        club.x += club.vx; club.y += club.vy; club.vy += 0.38; club.rot += club.vRot;
+        if (club.y > roadBaseline - 3) { club.y = roadBaseline - 3; club.vy *= -0.4; club.vx *= 0.7; club.vRot *= 0.5; }
+        ctx.save();
+        ctx.translate(club.x, club.y); ctx.rotate(club.rot);
+        ctx.beginPath(); ctx.moveTo(-35, 0); ctx.lineTo(35, 0); ctx.lineTo(38, -8); ctx.stroke();
+        ctx.restore();
+
+        const body = wipeoutDebris.body;
+        body.x += body.vx; body.y += body.vy; body.vy += 0.5;
+        if (body.y > roadBaseline + 2) { body.y = roadBaseline + 2; body.vy = 0; body.vx = Math.max(0, body.vx - 0.12); }
+        ctx.save();
+        ctx.translate(body.x, body.y);
+        ctx.beginPath();
+        ctx.moveTo(-45, -6); ctx.lineTo(15, -6);
+        ctx.moveTo(-45, -6); ctx.lineTo(-65, -18);
+        ctx.moveTo(-45, -6); ctx.lineTo(-58, 2);
+        ctx.moveTo(15, -6); ctx.lineTo(38, -10);
+        ctx.moveTo(0, -6); ctx.lineTo(18, 4);
+        ctx.stroke();
+        ctx.beginPath(); ctx.arc(44, -10, 8, 0, Math.PI * 2); ctx.stroke();
+        ctx.restore();
+
         return;
       }
 
-      // --- CRUISE / OLLIE / PUSH POSE ---
-      const hipX = -12;
-      const hipY = -54 + bob;
-      const shoulderX = 14;
-      const shoulderY = -68 + bob;
-      const headX = 32;
-      const headY = -76 + bob;
-
-      // Golf Club slung on back
-      ctx.beginPath();
-      ctx.moveTo(shoulderX + 6, shoulderY + 8);
-      ctx.lineTo(-28, -104 + bob);
-      ctx.stroke();
       ctx.save();
-      ctx.lineWidth = 4.5;
+      ctx.translate(x, y);
+      ctx.scale(state.scale, state.scale);
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 3.5;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.fillStyle = '#000000';
+
+      const duckOffset = state.isDucking ? 28 : 0;
+      const pushLegShift = state.isPushing ? Math.sin(Date.now() * 0.04) * 18 : 0;
+
       ctx.beginPath();
-      ctx.moveTo(shoulderX + 2, shoulderY + 4);
-      ctx.lineTo(shoulderX - 4, shoulderY - 3);
-      ctx.stroke();
-      ctx.restore();
-      ctx.beginPath();
-      ctx.moveTo(-28, -104 + bob);
-      ctx.lineTo(-34, -110 + bob);
-      ctx.lineTo(-28, -114 + bob);
+      ctx.moveTo(-45, 0);
+      ctx.quadraticCurveTo(-48, -12, -56, -14);
+      ctx.moveTo(-45, 0);
+      ctx.lineTo(40, 0);
+      ctx.quadraticCurveTo(45, -10, 52, -12);
       ctx.stroke();
 
-      // Front leg with ripped knee
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(-32, 2, 6, 4);
+      ctx.fillRect(26, 2, 6, 4);
       ctx.beginPath();
-      ctx.moveTo(hipX + 3, hipY);
-      ctx.quadraticCurveTo(8, -32, 2, deckY - 4);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(6, -30, 2.5, 0, Math.PI * 2);
-      ctx.stroke();
+      ctx.arc(-29, 9, 5, 0, Math.PI * 2);
+      ctx.arc(29, 9, 5, 0, Math.PI * 2);
+      ctx.fill();
 
-      // Front sneaker
       ctx.beginPath();
-      ctx.moveTo(-6, deckY - 4);
-      ctx.lineTo(14, deckY - 4);
-      ctx.quadraticCurveTo(16, deckY - 9, 10, deckY - 9);
-      ctx.lineTo(-2, deckY - 8);
-      ctx.closePath();
-      ctx.stroke();
-
-      // Rear trailing leg
-      if (isPush) {
-        const kickX = -10 - (pushPhase * 28);
-        ctx.beginPath();
-        ctx.moveTo(hipX, hipY);
-        ctx.quadraticCurveTo(-20, -30, kickX, deckY - 2);
-        ctx.stroke();
-        ctx.strokeRect(kickX - 8, deckY - 4, 12, 5);
+      if (state.isPushing) {
+        ctx.moveTo(-16, -12 + duckOffset);
+        ctx.quadraticCurveTo(-30, 8, -48 + pushLegShift, 10);
       } else {
-        ctx.beginPath();
-        ctx.moveTo(hipX, hipY);
-        ctx.quadraticCurveTo(-42, -50 + bob, -44, -76 + bob);
-        ctx.lineTo(-46, -88 + bob);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.arc(-42, -58 + bob, 2.5, 0, Math.PI * 2);
-        ctx.stroke();
-
-        ctx.save();
-        ctx.translate(-46, -88 + bob);
-        ctx.rotate(-0.35);
-        ctx.strokeRect(-11, -5, 14, 6);
-        ctx.restore();
+        ctx.moveTo(-15, -20 + duckOffset);
+        ctx.quadraticCurveTo(-35, -45 + duckOffset, -48, -48 + duckOffset);
+        ctx.lineTo(-44, -40 + duckOffset);
       }
-
-      // Torso
-      ctx.beginPath();
-      ctx.moveTo(hipX, hipY);
-      ctx.quadraticCurveTo(-4, -68 + bob, shoulderX, shoulderY);
-      ctx.lineWidth = 5;
-      ctx.stroke();
-      ctx.lineWidth = 3.2;
-
-      // Rear arm
-      ctx.beginPath();
-      ctx.moveTo(shoulderX - 4, shoulderY + 2);
-      ctx.quadraticCurveTo(-2, -46 + bob, -4, -38 + bob);
       ctx.stroke();
 
-      // Head & backwards cap
       ctx.beginPath();
-      ctx.arc(headX, headY, 10, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.beginPath();
-      ctx.arc(headX - 1, headY - 2, 10.5, Math.PI * 0.95, 0, false);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(headX + 5, headY - 6);
-      ctx.quadraticCurveTo(headX + 16, headY - 8, headX + 19, headY - 3);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(headX + 4, headY + 5, 3.5, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Lead arm & drink can sip pose
-      ctx.beginPath();
-      ctx.moveTo(shoulderX + 2, shoulderY + 2);
-      ctx.quadraticCurveTo(36, -50 + bob, headX + 13, headY + 4);
+      ctx.moveTo(15, -2);
+      ctx.lineTo(2, -32 + duckOffset);
+      ctx.lineTo(-12, -42 + duckOffset);
       ctx.stroke();
 
-      ctx.save();
-      ctx.translate(headX + 13, headY + 3);
-      ctx.rotate(-0.15);
-      ctx.strokeRect(-2, -6, 8, 12);
       ctx.beginPath();
-      ctx.arc(2, -6, 3, Math.PI, 0);
+      ctx.moveTo(1, -28 + duckOffset);
+      ctx.lineTo(7, -30 + duckOffset);
       ctx.stroke();
-      ctx.restore();
+
+      ctx.beginPath();
+      ctx.moveTo(-12, -42 + duckOffset);
+      ctx.quadraticCurveTo(10, -55 + duckOffset, 25, -62 + duckOffset);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(35, -78 + duckOffset);
+      ctx.lineTo(-32, -32 + duckOffset);
+      ctx.lineTo(-40, -36 + duckOffset);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(-2, -50 + duckOffset);
+      ctx.quadraticCurveTo(-15, -65 + duckOffset, -18, -80 + duckOffset);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(18, -58 + duckOffset);
+      ctx.quadraticCurveTo(34, -50 + duckOffset, 42, -65 + duckOffset);
+      ctx.stroke();
+
+      ctx.strokeRect(38, -72 + duckOffset, 9, 14);
+
+      ctx.beginPath();
+      ctx.arc(32, -72 + duckOffset, 10, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(24, -76 + duckOffset);
+      ctx.lineTo(12, -78 + duckOffset);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(38, -70 + duckOffset, 3, 0, Math.PI);
+      ctx.stroke();
 
       ctx.restore();
     }
 
-    // --- PHASE 1 RUNNER LOGIC ---
-    class SkateRunnerGame {
-      constructor() {
-        this.canvas = document.getElementById('canvas-skate');
-        this.ctx = this.canvas.getContext('2d');
-        this.distText = document.getElementById('skate-dist-text');
-        this.progBar = document.getElementById('skate-progress-bar');
-        this.speedText = document.getElementById('skate-speed-text');
+    function updateSkatePhysics() {
+      const roadBaseline = canvasSkate.height - 70;
+      skater.x = canvasSkate.width * skater.xRatio;
 
-        this.width = window.innerWidth;
-        this.height = window.innerHeight;
-        this.groundY = Math.floor(this.height * 0.72);
-
-        this.skaterX = 140;
-        this.skaterY = this.groundY;
-        this.vy = 0;
-        this.gravity = 0.58;
-        this.jumpForce = -14.0;
-        this.isGrounded = true;
-        this.state = 'cruise';
-
-        this.targetDistance = 1000;
-        this.distanceCovered = 0;
-        this.speed = 8.0;
-        this.baseSpeed = 8.0;
-        this.animTimer = 0;
-        this.pushTimer = 0;
-
-        this.obstacles = [];
-        this.spawnTimer = 1.0;
-        this.isRunning = false;
-
-        this.resize();
-        window.addEventListener('resize', () => this.resize());
-        window.addEventListener('orientationchange', () => setTimeout(() => this.resize(), 200));
+      if (!skateGameActive || currentActiveScene !== 'skate') {
+        audio.updateRolling(0, false);
+        return;
       }
 
-      resize() {
-        this.width = window.innerWidth;
-        this.height = window.innerHeight;
-        this.canvas.width = this.width;
-        this.canvas.height = this.height;
-
-        // Ground sits reliably in lower third, giving plenty of jump room above
-        this.groundY = Math.floor(this.height * 0.72);
-        this.skaterX = Math.max(120, Math.floor(this.width * 0.18));
-        if (this.isGrounded) this.skaterY = this.groundY;
+      if (isWipeout) {
+        audio.updateRolling(0, false);
+        for (let i = crashSparks.length - 1; i >= 0; i--) {
+          const sp = crashSparks[i];
+          sp.x += sp.vx; sp.y += sp.vy; sp.vy += 0.35; sp.life -= 0.035;
+          if (sp.life <= 0 || sp.y > roadBaseline) crashSparks.splice(i, 1);
+        }
+        return;
       }
 
-      start() {
-        this.distanceCovered = 0;
-        this.speed = this.baseSpeed;
-        this.obstacles = [];
-        this.skaterY = this.groundY;
-        this.vy = 0;
-        this.isGrounded = true;
-        this.state = 'cruise';
-        this.isRunning = true;
+      if (!skater.isGrounded) {
+        skater.vy += 0.46;
+        skater.y += skater.vy;
+        if (skater.y >= 0) {
+          skater.y = 0;
+          skater.vy = 0;
+          skater.isGrounded = true;
+          audio.playLanding();
+        }
       }
 
-      ollie() {
-        if (!this.isGrounded || this.state === 'duck') return;
-        this.isGrounded = false;
-        this.vy = this.jumpForce;
-        this.state = 'ollie';
-        sound.playOllie();
+      if (skater.pushCooldown > 0) {
+        skater.pushCooldown--;
+        if (skater.pushCooldown === 0) skater.isPushing = false;
       }
 
-      duck(val) {
-        if (!this.isGrounded) return;
-        this.state = val ? 'duck' : 'cruise';
+      if (skateSpeed > 11) {
+        skateSpeed = Math.max(11, skateSpeed - 0.035);
+      } else if (skateSpeed < 11) {
+        skateSpeed = Math.min(11, skateSpeed + 0.05);
       }
 
-      push() {
-        if (!this.isGrounded || this.state === 'duck') return;
-        this.state = 'push';
-        this.pushTimer = 0.4;
-        this.speed = Math.min(17, this.speed + 2.2);
+      audio.updateRolling(skateSpeed, skater.isGrounded);
+
+      skateDistance += (skateSpeed * 0.035);
+      skateScore += (skateSpeed * 0.012);
+
+      document.getElementById('skate-dist').textContent = Math.floor(skateDistance);
+      document.getElementById('skate-speed').textContent = Math.round(skateSpeed);
+      document.getElementById('skate-score').textContent = Math.floor(skateScore);
+
+      for (let i = smokeParticles.length - 1; i >= 0; i--) {
+        const p = smokeParticles[i];
+        p.x += p.vx; p.y += p.vy; p.life -= 0.04; p.radius *= 1.03;
+        if (p.life <= 0) smokeParticles.splice(i, 1);
       }
 
-      update(dt) {
-        if (!this.isRunning) return;
+      for (let i = waterDroplets.length - 1; i >= 0; i--) {
+        const d = waterDroplets[i];
+        d.x += d.vx; d.y += d.vy; d.vy += 0.35; d.life -= 0.025;
+        if (d.life <= 0 || d.y > roadBaseline) waterDroplets.splice(i, 1);
+      }
 
-        this.animTimer += 0.05 * (this.speed / 8);
-        if (this.speed > this.baseSpeed) this.speed -= dt * 1.5;
+      const now = Date.now();
+      if (now - lastObstacleSpawn > 2700 - Math.min(1000, skateSpeed * 40)) {
+        lastObstacleSpawn = now;
+        const roll = Math.random();
+        let obsType = 'cart', w = 60, h = 38, y = roadBaseline - 38, speedMod = 1.0, isOverhead = false;
 
-        // Jump physics
-        if (!this.isGrounded) {
-          this.vy += this.gravity;
-          this.skaterY += this.vy;
-          if (this.skaterY >= this.groundY) {
-            this.skaterY = this.groundY;
-            this.vy = 0;
-            this.isGrounded = true;
-            this.state = 'cruise';
-            sound.playThud();
+        if (roll < 0.32) {
+          obsType = 'cart'; w = 62; h = 38; y = roadBaseline - 38; speedMod = 1.25;
+        } else if (roll < 0.58) {
+          obsType = 'geyser'; w = 42; h = 42; y = roadBaseline - 42;
+        } else if (roll < 0.78) {
+          obsType = 'cones'; w = 46; h = 28; y = roadBaseline - 28;
+        } else {
+          obsType = 'sign'; w = 70; h = 38; y = roadBaseline - 105; isOverhead = true;
+        }
+
+        obstacles.push({
+          x: canvasSkate.width + 60,
+          type: obsType,
+          width: w,
+          height: h,
+          y: y,
+          speedMod: speedMod,
+          isOverhead: isOverhead,
+          cleared: false,
+          tick: 0
+        });
+      }
+
+      for (let i = obstacles.length - 1; i >= 0; i--) {
+        const obs = obstacles[i];
+        obs.x -= (skateSpeed * 0.55) * (obs.speedMod || 1.0);
+        obs.tick++;
+
+        if (obs.type === 'geyser' && obs.tick % 4 === 0) {
+          for (let k = 0; k < 2; k++) {
+            waterDroplets.push({
+              x: obs.x + obs.width / 2,
+              y: roadBaseline - 8,
+              vx: (Math.random() * 2 - 1) * 1.5,
+              vy: -(Math.random() * 6 + 4),
+              life: 1.0
+            });
           }
         }
 
-        if (this.pushTimer > 0) {
-          this.pushTimer -= dt;
-          if (this.pushTimer <= 0 && this.state === 'push') {
-            this.state = 'cruise';
+        const skaterLeft = skater.x - 28;
+        const skaterRight = skater.x + 36;
+        const obsLeft = obs.x;
+        const obsRight = obs.x + obs.width;
+
+        if (skaterRight > obsLeft && skaterLeft < obsRight) {
+          if (!obs.isOverhead) {
+            const deckY = roadBaseline + skater.y;
+            const obstacleTopY = obs.y;
+            if (deckY >= obstacleTopY + 4) {
+              triggerWipeout(`You slammed directly into a ${obs.type === 'cart' ? 'Range Cart' : 'hazard'}!`);
+              return;
+            }
+          } else {
+            const skaterHeadY = (roadBaseline + skater.y) - (skater.isDucking ? 42 : 86);
+            const obstacleBottomY = obs.y + obs.height;
+            if (skaterHeadY < obstacleBottomY) {
+              triggerWipeout("You jumped into an overhead sign! You must DUCK underneath.");
+              return;
+            }
           }
         }
 
-        // Progression
-        this.distanceCovered += (this.speed * dt * 7);
-        const rem = Math.max(0, this.targetDistance - this.distanceCovered);
-        const pct = Math.min(100, (this.distanceCovered / this.targetDistance) * 100);
+        if (!obs.cleared && obs.x + obs.width < skater.x) {
+          obs.cleared = true;
+          skateScore += 50;
+        }
 
-        this.distText.innerText = `${Math.floor(rem)} yd`;
-        this.progBar.style.width = `${pct}%`;
-        this.speedText.innerText = `${Math.floor(this.speed * 1.5)} MPH`;
+        if (obs.x < -80) {
+          obstacles.splice(i, 1);
+        }
+      }
+    }
 
-        if (this.distanceCovered >= this.targetDistance) {
-          this.isRunning = false;
-          sound.playTargetChime();
-          app.switchMode('range');
+    function renderSkate() {
+      ctxSkate.clearRect(0, 0, canvasSkate.width, canvasSkate.height);
+      const w = canvasSkate.width;
+      const h = canvasSkate.height;
+      const roadBaseline = h - 70;
+
+      const skyGrad = ctxSkate.createLinearGradient(0, 0, 0, roadBaseline);
+      skyGrad.addColorStop(0, '#04070d');
+      skyGrad.addColorStop(1, '#09151c');
+      ctxSkate.fillStyle = skyGrad;
+      ctxSkate.fillRect(0, 0, w, h);
+
+      ctxSkate.fillStyle = '#ffffff';
+      for (let i = 0; i < 24; i++) {
+        const sx = ((i * 137) + (skateDistance * 0.2)) % w;
+        const sy = (i * 39) % (roadBaseline - 80);
+        ctxSkate.fillRect(sx, sy, 1.5, 1.5);
+      }
+
+      ctxSkate.fillStyle = '#061a12';
+      ctxSkate.beginPath();
+      ctxSkate.moveTo(0, roadBaseline);
+      for (let x = 0; x <= w; x += 35) {
+        const yOff = Math.sin((x + skateDistance * 0.8) * 0.004) * 32;
+        ctxSkate.lineTo(x, roadBaseline - 70 + yOff);
+      }
+      ctxSkate.lineTo(w, roadBaseline);
+      ctxSkate.fill();
+
+      ctxSkate.fillStyle = '#0a291d';
+      for (let x = 20; x < w; x += 85) {
+        const treeX = ((x - (skateDistance * 0.8)) % (w + 120)) - 60;
+        ctxSkate.beginPath();
+        ctxSkate.moveTo(treeX, roadBaseline - 25);
+        ctxSkate.lineTo(treeX + 16, roadBaseline - 68);
+        ctxSkate.lineTo(treeX + 32, roadBaseline - 25);
+        ctxSkate.fill();
+      }
+
+      ctxSkate.strokeStyle = '#1e3a2b';
+      ctxSkate.lineWidth = 2;
+      ctxSkate.beginPath();
+      ctxSkate.moveTo(0, roadBaseline - 22);
+      ctxSkate.lineTo(w, roadBaseline - 22);
+      ctxSkate.moveTo(0, roadBaseline - 10);
+      ctxSkate.lineTo(w, roadBaseline - 10);
+      for (let fx = 0; fx <= w; fx += 16) {
+        const postX = (fx - (skateDistance * 1.5)) % w;
+        ctxSkate.moveTo(postX, roadBaseline - 28);
+        ctxSkate.lineTo(postX, roadBaseline);
+      }
+      ctxSkate.stroke();
+
+      ctxSkate.fillStyle = '#14171d';
+      ctxSkate.fillRect(0, roadBaseline, w, h - roadBaseline);
+
+      ctxSkate.fillStyle = '#22c55e';
+      ctxSkate.fillRect(0, roadBaseline - 2, w, 3);
+
+      ctxSkate.strokeStyle = '#27272a';
+      ctxSkate.lineWidth = 2;
+      for (let gx = 0; gx < w; gx += 220) {
+        const grateX = (gx - (skateDistance * 3.5)) % (w + 220);
+        ctxSkate.strokeRect(grateX, roadBaseline + 12, 36, 14);
+      }
+
+      ctxSkate.strokeStyle = '#3f3f46';
+      ctxSkate.lineWidth = 4;
+      ctxSkate.setLineDash([26, 22]);
+      ctxSkate.lineDashOffset = -skateDistance * 4;
+      ctxSkate.beginPath();
+      ctxSkate.moveTo(0, roadBaseline + 35);
+      ctxSkate.lineTo(w, roadBaseline + 35);
+      ctxSkate.stroke();
+      ctxSkate.setLineDash([]);
+
+      for (const p of smokeParticles) {
+        ctxSkate.fillStyle = `rgba(255, 255, 255, ${p.life * 0.35})`;
+        ctxSkate.beginPath();
+        ctxSkate.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctxSkate.fill();
+      }
+      for (const d of waterDroplets) {
+        ctxSkate.fillStyle = `rgba(56, 189, 248, ${d.life * 0.8})`;
+        ctxSkate.beginPath();
+        ctxSkate.arc(d.x, d.y, 2, 0, Math.PI * 2);
+        ctxSkate.fill();
+      }
+      for (const sp of crashSparks) {
+        ctxSkate.fillStyle = sp.color;
+        ctxSkate.fillRect(sp.x, sp.y, 2.5, 2.5);
+      }
+
+      for (const obs of obstacles) {
+        ctxSkate.save();
+        ctxSkate.translate(obs.x, obs.y);
+
+        if (obs.type === 'cart') {
+          ctxSkate.strokeStyle = '#38bdf8';
+          ctxSkate.lineWidth = 2.5;
+          ctxSkate.strokeRect(0, 14, 56, 22);
+          ctxSkate.strokeRect(6, 0, 46, 6);
+          ctxSkate.beginPath();
+          ctxSkate.moveTo(10, 6); ctxSkate.lineTo(10, 14);
+          ctxSkate.moveTo(48, 6); ctxSkate.lineTo(48, 14);
+          ctxSkate.stroke();
+
+          ctxSkate.fillStyle = (Math.floor(Date.now() / 200) % 2 === 0) ? '#f59e0b' : '#78350f';
+          ctxSkate.beginPath();
+          ctxSkate.arc(28, -2, 3.5, 0, Math.PI * 2);
+          ctxSkate.fill();
+
+          ctxSkate.fillStyle = '#ffffff';
+          ctxSkate.beginPath();
+          ctxSkate.arc(14, 36, 5, 0, Math.PI * 2);
+          ctxSkate.arc(44, 36, 5, 0, Math.PI * 2);
+          ctxSkate.fill();
+
+        } else if (obs.type === 'geyser') {
+          ctxSkate.strokeStyle = '#38bdf8';
+          ctxSkate.lineWidth = 2;
+          ctxSkate.strokeRect(4, 34, obs.width - 8, 8);
+          ctxSkate.fillStyle = 'rgba(56, 189, 248, 0.45)';
+          ctxSkate.beginPath();
+          ctxSkate.moveTo(obs.width / 2 - 12, 34);
+          ctxSkate.lineTo(obs.width / 2 + 12, 34);
+          ctxSkate.lineTo(obs.width / 2 + 4, 4);
+          ctxSkate.lineTo(obs.width / 2 - 4, 4);
+          ctxSkate.closePath();
+          ctxSkate.fill();
+
+        } else if (obs.type === 'cones') {
+          ctxSkate.fillStyle = '#f97316';
+          ctxSkate.beginPath();
+          ctxSkate.moveTo(6, 28); ctxSkate.lineTo(16, 2); ctxSkate.lineTo(26, 28);
+          ctxSkate.fill();
+          ctxSkate.strokeStyle = '#e4e4e7';
+          ctxSkate.lineWidth = 2;
+          ctxSkate.strokeRect(28, 12, 16, 16);
+          ctxSkate.fillStyle = '#ffffff';
+          ctxSkate.beginPath();
+          ctxSkate.arc(32, 24, 3.5, 0, Math.PI * 2);
+          ctxSkate.arc(38, 24, 3.5, 0, Math.PI * 2);
+          ctxSkate.arc(44, 25, 3.5, 0, Math.PI * 2);
+          ctxSkate.fill();
+
+        } else {
+          ctxSkate.strokeStyle = '#ef4444';
+          ctxSkate.lineWidth = 2.5;
+          ctxSkate.strokeRect(0, 0, obs.width, obs.height);
+          ctxSkate.fillStyle = '#ffffff';
+          ctxSkate.font = 'bold 9px monospace';
+          ctxSkate.fillText('CART PATH', 8, 15);
+          ctxSkate.fillText('ONLY', 24, 28);
+          ctxSkate.beginPath();
+          ctxSkate.moveTo(obs.width * 0.2, 0); ctxSkate.lineTo(obs.width * 0.2, -45);
+          ctxSkate.moveTo(obs.width * 0.8, 0); ctxSkate.lineTo(obs.width * 0.8, -45);
+          ctxSkate.stroke();
+        }
+
+        ctxSkate.restore();
+      }
+
+      drawSkaterCharacter(ctxSkate, skater.x, roadBaseline + skater.y, skater);
+    }
+
+    /* ==========================================================================
+       4. SCENE 2: DRIVING RANGE LOGIC (Calibrated Ballistics & No Runaway Drift)
+       ========================================================================== */
+    const clubProfiles = {
+      '1W': { name: 'Driver', maxCarry: 285, flightTime: 5.8, apex: 34, rollFactor: 14.0, recTier: 300 },
+      '3W': { name: '3-Wood', maxCarry: 245, flightTime: 5.4, apex: 32, rollFactor: 10.0, recTier: 250 },
+      '5I': { name: '5-Iron', maxCarry: 200, flightTime: 5.0, apex: 30, rollFactor: 7.0, recTier: 200 },
+      '7I': { name: '7-Iron', maxCarry: 162, flightTime: 4.6, apex: 28, rollFactor: 4.5, recTier: 150 },
+      '9I': { name: '9-Iron', maxCarry: 138, flightTime: 4.3, apex: 26, rollFactor: 3.0, recTier: 100 },
+      'PW': { name: 'Pitching Wedge', maxCarry: 116, flightTime: 4.0, apex: 24, rollFactor: 2.0, recTier: 50 }
+    };
+    let activeClubKey = '7I';
+
+    const targetTiers = [
+      { tier: 50, name: "50 YD WEDGE GREEN", variations: [48, 51, 54], color: 0xffffff },
+      { tier: 100, name: "100 YD ISLAND GREEN", variations: [97, 102, 106], color: 0x38bdf8 },
+      { tier: 150, name: "150 YD ISLAND GREEN", variations: [147, 151, 154], color: 0x34d399 },
+      { tier: 200, name: "200 YD TARGET BULLSEYE", variations: [196, 202, 208], color: 0xfacc15 },
+      { tier: 250, name: "250 YD DEEP TURF GREEN", variations: [246, 252, 258], color: 0xf97316 },
+      { tier: 300, name: "300 YD DRIVER CHALLENGE", variations: [292, 298, 304], color: 0xef4444 }
+    ];
+    let currentTierIdx = 2;
+    let currentTargetYardage = 148;
+
+    let aimAngleDeg = 0;
+    let windMph = 6;
+    let windAngleRad = 0;
+    let windLateralYardsTotal = 0;
+    let windHeadTailMph = 0;
+
+    let sceneRange, cameraRange, rendererRange, golfBallMesh, ballTracerLine, aimGuideLine, proximityLineMesh;
+    const tracerPoints = [];
+    const targetMeshGroups = [];
+
+    let ballInFlight = false;
+    let ballResting = false;
+    const ballPos = new THREE.Vector3(0, 0.24, 0);
+    const ballVel = new THREE.Vector3(0, 0, 0);
+    let ballGravity = 0.5;
+
+    let frameLateralDrift = 0;
+    let firstLandingCarry = 0;
+    let hasPitched = false;
+
+    function initRangeScene() {
+      const container = document.getElementById('webgl-canvas-container');
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+
+      sceneRange = new THREE.Scene();
+      sceneRange.background = new THREE.Color(0x04080e);
+      sceneRange.fog = new THREE.FogExp2(0x04080e, 0.0035);
+
+      cameraRange = new THREE.PerspectiveCamera(50, w / h, 0.1, 800);
+      resetTeeCamera();
+
+      rendererRange = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+      rendererRange.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      rendererRange.setSize(w, h);
+      container.appendChild(rendererRange.domElement);
+
+      // Fairway Ground Plane
+      const fairwayGeo = new THREE.PlaneGeometry(160, 380);
+      const fairwayMat = new THREE.MeshBasicMaterial({ color: 0x072818 });
+      const fairway = new THREE.Mesh(fairwayGeo, fairwayMat);
+      fairway.rotation.x = -Math.PI / 2;
+      fairway.position.set(0, -0.05, -180);
+      sceneRange.add(fairway);
+
+      // Grid Lines
+      const grid = new THREE.GridHelper(380, 76, 0x15803d, 0x0a3c22);
+      grid.position.set(0, 0, -180);
+      sceneRange.add(grid);
+
+      // Tee Box Mat
+      const matGeo = new THREE.BoxGeometry(6, 0.2, 5);
+      const matMesh = new THREE.Mesh(matGeo, new THREE.MeshBasicMaterial({ color: 0x166534 }));
+      matMesh.position.set(0, 0.1, 2.5);
+      sceneRange.add(matMesh);
+
+      const beamGeo = new THREE.BoxGeometry(0.18, 0.4, 5.2);
+      const beamMesh = new THREE.Mesh(beamGeo, new THREE.MeshBasicMaterial({ color: 0x78350f }));
+      beamMesh.position.set(-3.0, 0.25, 2.5);
+      sceneRange.add(beamMesh);
+
+      // Build Target Greens
+      targetTiers.forEach((tierObj) => {
+        const group = new THREE.Group();
+
+        const greenGeo = new THREE.CylinderGeometry(9, 9.5, 0.4, 32);
+        const greenMat = new THREE.MeshBasicMaterial({ color: 0x064e3b });
+        const green = new THREE.Mesh(greenGeo, greenMat);
+        green.position.set(0, 0.2, 0);
+        group.add(green);
+
+        [4, 7, 9].forEach((rad, rIdx) => {
+          const ringGeo = new THREE.RingGeometry(rad - 0.2, rad + 0.2, 32);
+          const ringMat = new THREE.MeshBasicMaterial({ color: tierObj.color, side: THREE.DoubleSide });
+          const ring = new THREE.Mesh(ringGeo, ringMat);
+          ring.rotation.x = Math.PI / 2;
+          ring.position.set(0, 0.42 + (rIdx * 0.01), 0);
+          group.add(ring);
+        });
+
+        const poleGeo = new THREE.CylinderGeometry(0.08, 0.08, 5.5);
+        const poleMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+        const pole = new THREE.Mesh(poleGeo, poleMat);
+        pole.position.set(0, 2.9, 0);
+        group.add(pole);
+
+        const flagGeo = new THREE.PlaneGeometry(1.8, 1.0);
+        const flagMat = new THREE.MeshBasicMaterial({ color: tierObj.color, side: THREE.DoubleSide });
+        const flag = new THREE.Mesh(flagGeo, flagMat);
+        flag.position.set(0.9, 5.0, 0);
+        group.add(flag);
+
+        group.position.set(0, 0, -tierObj.tier);
+        sceneRange.add(group);
+        targetMeshGroups.push(group);
+      });
+
+      // Net Boundary Towers
+      [-75, 75].forEach(xSide => {
+        for (let zPos = 0; zPos >= -360; zPos -= 45) {
+          const towerGeo = new THREE.CylinderGeometry(0.4, 0.6, 32, 12);
+          const towerMat = new THREE.MeshBasicMaterial({ color: 0x27272a });
+          const tower = new THREE.Mesh(towerGeo, towerMat);
+          tower.position.set(xSide, 16, zPos);
+          sceneRange.add(tower);
+
+          const lampGeo = new THREE.BoxGeometry(2.5, 1.2, 1.2);
+          const lampMat = new THREE.MeshBasicMaterial({ color: 0xfef08a });
+          const lamp = new THREE.Mesh(lampGeo, lampMat);
+          lamp.position.set(xSide > 0 ? xSide - 1 : xSide + 1, 31.5, zPos);
+          lamp.rotation.y = xSide > 0 ? -0.3 : 0.3;
+          sceneRange.add(lamp);
+        }
+      });
+
+      // Golf Ball
+      const ballGeo = new THREE.SphereGeometry(0.24, 16, 16);
+      const ballMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+      golfBallMesh = new THREE.Mesh(ballGeo, ballMat);
+      golfBallMesh.position.set(0, 0.24, 0);
+      sceneRange.add(golfBallMesh);
+
+      // Tracer
+      const tracerGeo = new THREE.BufferGeometry();
+      const tracerMat = new THREE.LineBasicMaterial({ color: 0x38bdf8, linewidth: 2.5 });
+      ballTracerLine = new THREE.Line(tracerGeo, tracerMat);
+      sceneRange.add(ballTracerLine);
+
+      // Aim Line
+      const aimGeo = new THREE.BufferGeometry();
+      const aimMat = new THREE.LineDashedMaterial({ color: 0xfacc15, dashSize: 2.0, gapSize: 1.0 });
+      aimGuideLine = new THREE.Line(aimGeo, aimMat);
+      sceneRange.add(aimGuideLine);
+
+      // Distance to Pin Measure Line
+      const proxGeo = new THREE.BufferGeometry();
+      const proxMat = new THREE.LineDashedMaterial({ color: 0x34d399, dashSize: 1.0, gapSize: 0.6 });
+      proximityLineMesh = new THREE.Line(proxGeo, proxMat);
+      proximityLineMesh.visible = false;
+      sceneRange.add(proximityLineMesh);
+
+      setupActiveTarget(currentTierIdx);
+      updateAimVisual();
+      generateRealisticWind();
+    }
+
+    function resetTeeCamera() {
+      cameraRange.position.set(0, 2.5, 6.0);
+      cameraRange.lookAt(0, 1.8, -60);
+    }
+
+    function setupActiveTarget(tierIdx) {
+      currentTierIdx = tierIdx;
+      const tierObj = targetTiers[tierIdx];
+
+      const pick = tierObj.variations[Math.floor(Math.random() * tierObj.variations.length)];
+      currentTargetYardage = pick;
+
+      targetMeshGroups[tierIdx].position.set(0, 0, -currentTargetYardage);
+
+      document.getElementById('label-target-name').textContent = tierObj.name;
+      document.getElementById('label-target-distance').textContent = `${currentTargetYardage} YDS`;
+
+      let rec = '7I';
+      for (const [key, val] of Object.entries(clubProfiles)) {
+        if (val.recTier === tierObj.tier) rec = key;
+      }
+      document.getElementById('label-rec-club').textContent = `${rec} (${clubProfiles[rec].name})`;
+    }
+
+    function updateAimVisual() {
+      if (!aimGuideLine) return;
+      const rad = (aimAngleDeg * Math.PI) / 180;
+      const length = 55;
+      const targetX = Math.sin(rad) * length;
+      const targetZ = -Math.cos(rad) * length;
+
+      aimGuideLine.geometry.setFromPoints([
+        new THREE.Vector3(0, 0.15, 0),
+        new THREE.Vector3(targetX, 0.15, targetZ)
+      ]);
+      aimGuideLine.computeLineDistances();
+    }
+
+    function adjustAim(delta) {
+      if (ballInFlight) return;
+      aimAngleDeg = Math.max(-20, Math.min(20, aimAngleDeg + delta));
+      document.getElementById('label-aim').textContent = `${aimAngleDeg > 0 ? '+' : ''}${aimAngleDeg.toFixed(1)}°`;
+      updateAimVisual();
+      audio.playClick();
+    }
+
+    document.getElementById('btn-aim-l').addEventListener('click', () => adjustAim(-1.5));
+    document.getElementById('btn-aim-r').addEventListener('click', () => adjustAim(1.5));
+
+    function generateRealisticWind() {
+      windMph = Math.round((Math.random() * 8 + 3) * 10) / 10;
+      windAngleRad = Math.random() * Math.PI * 2;
+
+      const crosswindComponent = Math.cos(windAngleRad);
+      const headTailComponent = Math.sin(windAngleRad);
+
+      windLateralYardsTotal = (windMph / 10.0) * 2.0 * crosswindComponent;
+      windHeadTailMph = windMph * headTailComponent;
+
+      const arrow = crosswindComponent > 0 ? '➔' : '⬅';
+      document.getElementById('label-wind').textContent = `${Math.round(windMph)} MPH ${arrow}`;
+    }
+
+    function selectClub(clubKey) {
+      if (ballInFlight) return;
+      activeClubKey = clubKey;
+      document.querySelectorAll('.club-pill').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.club === clubKey);
+      });
+      audio.playClick();
+    }
+
+    document.querySelectorAll('.club-pill').forEach(btn => {
+      btn.addEventListener('click', () => selectClub(btn.dataset.club));
+    });
+
+    // Two-Stage Swing Gauge Engine
+    let swingStage = 'idle';
+    let powerStartTime = 0;
+    let snapStartTime = 0;
+    let lockedPower = 0;
+    let lockedSnap = 0;
+
+    const btnSwing = document.getElementById('btn-swing-action');
+    const meterPowerFill = document.getElementById('meter-power-fill');
+    const meterPowerVal = document.getElementById('meter-power-val');
+    const meterSnapNeedle = document.getElementById('meter-snap-needle');
+    const meterSnapVal = document.getElementById('meter-snap-val');
+    const shotResultCard = document.getElementById('shot-result-card');
+
+    function handleSwingStep(timestamp) {
+      if (swingStage === 'landed') {
+        resetForNextShot();
+        return;
+      }
+      if (ballInFlight) return;
+
+      if (swingStage === 'idle') {
+        shotResultCard.style.display = 'none';
+        proximityLineMesh.visible = false;
+
+        swingStage = 'power';
+        powerStartTime = timestamp;
+        btnSwing.textContent = "LOCK POWER";
+        btnSwing.style.background = "#f59e0b";
+        btnSwing.style.borderColor = "#fde68a";
+        btnSwing.style.color = "#451a03";
+        audio.playClick();
+
+      } else if (swingStage === 'power') {
+        const elapsed = (timestamp - powerStartTime) / 1000;
+        const cycle = (elapsed % 1.4) / 1.4;
+        lockedPower = cycle <= 0.5 ? (cycle * 2) : (1 - (cycle - 0.5) * 2);
+
+        meterPowerFill.style.width = `${lockedPower * 100}%`;
+        const pct = Math.round(lockedPower * 100);
+        meterPowerVal.textContent = `${pct}% ${lockedPower >= 0.78 && lockedPower <= 0.96 ? '⭐ SWEET' : ''}`;
+
+        swingStage = 'snap';
+        snapStartTime = timestamp;
+        btnSwing.textContent = "SNAP ACCURACY";
+        btnSwing.style.background = "#38bdf8";
+        btnSwing.style.borderColor = "#bae6fd";
+        btnSwing.style.color = "#082f49";
+        audio.playClick();
+
+      } else if (swingStage === 'snap') {
+        const elapsed = (timestamp - snapStartTime) / 1000;
+        lockedSnap = Math.sin(elapsed * 4.0);
+
+        let quality = 'pure';
+        let shapeLabel = "PURE STRAIGHT";
+        
+        if (Math.abs(lockedSnap) <= 0.35) {
+          shapeLabel = "PURE STRAIGHT";
+          quality = 'pure';
+        } else if (lockedSnap < 0) {
+          shapeLabel = Math.abs(lockedSnap) > 0.70 ? "HOOK ↩" : "GENTLE DRAW ↩";
+          quality = Math.abs(lockedSnap) > 0.70 ? 'hook' : 'draw';
+        } else {
+          shapeLabel = Math.abs(lockedSnap) > 0.70 ? "SLICE ↪" : "SLIGHT FADE ↪";
+          quality = Math.abs(lockedSnap) > 0.70 ? 'slice' : 'fade';
+        }
+        meterSnapVal.textContent = shapeLabel;
+
+        launchCalibratedBall(lockedPower, lockedSnap, quality, shapeLabel);
+      }
+    }
+
+    btnSwing.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      handleSwingStep(performance.now());
+    });
+
+    let lastShotShape = "PURE STRAIGHT";
+
+    function launchCalibratedBall(power, snap, quality, shapeLabel) {
+      swingStage = 'flying';
+      ballInFlight = true;
+      ballResting = false;
+      hasPitched = false;
+      firstLandingCarry = 0;
+      lastShotShape = shapeLabel;
+      audio.playFullSwingStrike(quality);
+
+      const club = clubProfiles[activeClubKey];
+      const powerScalar = 0.75 + (power * 0.25);
+      const windCarryDelta = (windHeadTailMph * 0.25);
+      const targetCarry = Math.max(20, (club.maxCarry * powerScalar) + windCarryDelta);
+      
+      const totalFlightSeconds = club.flightTime;
+      const totalFrames = totalFlightSeconds * 60;
+      const halfFlightFrames = totalFrames / 2;
+
+      const apexY = club.apex;
+      ballGravity = (2 * apexY) / (halfFlightFrames * halfFlightFrames);
+      const initialVy = ballGravity * halfFlightFrames;
+
+      const forwardSpeed = targetCarry / totalFrames;
+
+      ballPos.set(0, 0.24, 0);
+      golfBallMesh.position.copy(ballPos);
+
+      const aimRad = (aimAngleDeg * Math.PI) / 180;
+
+      ballVel.set(
+        Math.sin(aimRad) * forwardSpeed,
+        initialVy,
+        -Math.cos(aimRad) * forwardSpeed
+      );
+
+      let totalCurveYards = 0;
+      if (Math.abs(snap) > 0.35) {
+        const excess = (Math.abs(snap) - 0.35) / 0.65;
+        const sign = snap > 0 ? 1 : -1;
+        totalCurveYards = sign * (2.5 + (excess * 6.5));
+      }
+
+      const totalLateralYards = windLateralYardsTotal + totalCurveYards;
+      frameLateralDrift = totalLateralYards / totalFrames;
+
+      tracerPoints.length = 0;
+      tracerPoints.push(ballPos.clone());
+
+      btnSwing.textContent = "WATCHING...";
+      btnSwing.style.background = "#27272a";
+      btnSwing.style.borderColor = "#3f3f46";
+      btnSwing.style.color = "#71717a";
+    }
+
+    function updateRangePhysics() {
+      const now = performance.now();
+
+      if (swingStage === 'power') {
+        const elapsed = (now - powerStartTime) / 1000;
+        const cycle = (elapsed % 1.4) / 1.4;
+        const livePower = cycle <= 0.5 ? (cycle * 2) : (1 - (cycle - 0.5) * 2);
+        meterPowerFill.style.width = `${livePower * 100}%`;
+      } else if (swingStage === 'snap') {
+        const elapsed = (now - snapStartTime) / 1000;
+        const liveSnap = Math.sin(elapsed * 4.0);
+        meterSnapNeedle.style.left = `${(liveSnap + 1) / 2 * 100}%`;
+      }
+
+      if (ballInFlight) {
+        ballPos.x += ballVel.x + frameLateralDrift;
+        ballPos.y += ballVel.y;
+        ballPos.z += ballVel.z;
+        ballVel.y -= ballGravity;
+
+        golfBallMesh.position.copy(ballPos);
+
+        tracerPoints.push(ballPos.clone());
+        ballTracerLine.geometry.setFromPoints(tracerPoints);
+
+        const aimRad = (aimAngleDeg * Math.PI) / 180;
+        const camDistanceBehind = 11.5;
+        const camTargetX = ballPos.x - Math.sin(aimRad) * camDistanceBehind;
+        const camTargetZ = ballPos.z + Math.cos(aimRad) * camDistanceBehind;
+        const camTargetY = Math.max(3.2, ballPos.y + 1.8);
+
+        cameraRange.position.lerp(new THREE.Vector3(camTargetX, camTargetY, camTargetZ), 0.14);
+        cameraRange.lookAt(ballPos.x, Math.max(0.5, ballPos.y * 0.65), ballPos.z - 16);
+
+        if (ballPos.y <= 0.24) {
+          ballPos.y = 0.24;
+
+          if (!hasPitched) {
+            hasPitched = true;
+            firstLandingCarry = Math.round(Math.sqrt(ballPos.x * ballPos.x + ballPos.z * ballPos.z));
+            audio.playBounce();
+          }
+
+          ballVel.y = Math.abs(ballVel.y) * 0.28;
+          ballVel.z *= 0.65;
+          ballVel.x *= 0.65;
+          frameLateralDrift *= 0.65;
+
+          if (ballVel.length() < 0.10 || ballVel.y < 0.06) {
+            ballInFlight = false;
+            ballResting = true;
+            ballVel.set(0, 0, 0);
+            frameLateralDrift = 0;
+            concludeShotAndFocusLanding();
+          }
+        }
+      }
+
+      if (ballResting) {
+        const aimRad = (aimAngleDeg * Math.PI) / 180;
+        const elevatedCamX = ballPos.x - Math.sin(aimRad) * 16.0;
+        const elevatedCamZ = ballPos.z + Math.cos(aimRad) * 16.0;
+        const elevatedCamY = 8.0;
+
+        cameraRange.position.lerp(new THREE.Vector3(elevatedCamX, elevatedCamY, elevatedCamZ), 0.06);
+        cameraRange.lookAt(ballPos.x, 0.4, ballPos.z - 4);
+      }
+    }
+
+    function concludeShotAndFocusLanding() {
+      swingStage = 'landed';
+
+      const totalDistanceYards = Math.round(Math.sqrt(ballPos.x * ballPos.x + ballPos.z * ballPos.z));
+      const rollYards = Math.max(0, totalDistanceYards - firstLandingCarry);
+
+      const distanceToPin = (new THREE.Vector2(ballPos.x, ballPos.z).distanceTo(new THREE.Vector2(0, -currentTargetYardage))).toFixed(1);
+
+      proximityLineMesh.geometry.setFromPoints([
+        new THREE.Vector3(ballPos.x, 0.25, ballPos.z),
+        new THREE.Vector3(0, 0.25, -currentTargetYardage)
+      ]);
+      proximityLineMesh.computeLineDistances();
+      proximityLineMesh.visible = true;
+
+      document.getElementById('res-quality').textContent = lastShotShape;
+      document.getElementById('res-carry-hero').textContent = `${firstLandingCarry} YDS CARRY`;
+      document.getElementById('res-total-val').textContent = `${totalDistanceYards} YDS`;
+      document.getElementById('res-roll-val').textContent = `+${rollYards} YDS`;
+      document.getElementById('res-target-diff').textContent = `${distanceToPin} YDS`;
+      document.getElementById('res-specs').textContent = `Club: ${activeClubKey} • Target Pin: ${currentTargetYardage} YDS`;
+
+      if (parseFloat(distanceToPin) <= 8.0) {
+        audio.playPinChime();
+        document.getElementById('res-badge').textContent = '🎯 TARGET PIN HIT!';
+        document.getElementById('res-badge').style.background = '#065f46';
+        document.getElementById('res-badge').style.color = '#34d399';
+      } else {
+        document.getElementById('res-badge').textContent = 'SHOT REGISTERED';
+        document.getElementById('res-badge').style.background = '#064e3b';
+        document.getElementById('res-badge').style.color = '#a7f3d0';
+      }
+
+      shotResultCard.style.display = 'block';
+
+      btnSwing.textContent = "NEXT SHOT ➔";
+      btnSwing.style.background = "#10b981";
+      btnSwing.style.borderColor = "#a7f3d0";
+      btnSwing.style.color = "#064e3b";
+
+      setTimeout(() => {
+        setupActiveTarget((currentTierIdx + 1) % targetTiers.length);
+      }, 500);
+
+      setTimeout(() => {
+        if (swingStage === 'landed') {
+          resetForNextShot();
+        }
+      }, 4800);
+    }
+
+    function resetForNextShot() {
+      swingStage = 'idle';
+      ballResting = false;
+      ballInFlight = false;
+      proximityLineMesh.visible = false;
+
+      btnSwing.textContent = "START SWING";
+      btnSwing.style.background = "#10b981";
+      btnSwing.style.borderColor = "#a7f3d0";
+      btnSwing.style.color = "#064e3b";
+
+      resetTeeCamera();
+      generateRealisticWind();
+    }
+
+    /* ==========================================================================
+       5. UNIFIED EVENT ROUTER & MAIN ANIMATION LOOP
+       ========================================================================== */
+    window.addEventListener('keydown', (e) => {
+      if (currentActiveScene === 'skate') {
+        if (!skateGameActive || isWipeout) {
+          if (e.code === 'Space' || e.code === 'Enter') startCommute();
           return;
         }
-
-        // Obstacle Spawning
-        this.spawnTimer -= dt;
-        if (this.spawnTimer <= 0) {
-          const types = ['basket', 'sign', 'cart', 'cone'];
-          const t = types[Math.floor(Math.random() * types.length)];
-          this.obstacles.push({
-            x: this.width + 60,
-            type: t,
-            w: t === 'cart' ? 70 : 36,
-            h: t === 'sign' ? 38 : 34,
-            isHigh: t === 'sign'
-          });
-          this.spawnTimer = 1.6 + Math.random() * 1.8;
+        if (e.code === 'Space' || e.code === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
+          triggerOllie();
+        } else if (e.code === 'ArrowDown' || e.key === 's' || e.key === 'S') {
+          startDuck();
+        } else if (e.code === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+          triggerPush();
         }
-
-        const skaterBox = {
-          x: this.skaterX - 35,
-          y: this.state === 'duck' ? this.skaterY - 35 : this.skaterY - 85,
-          w: 70,
-          h: this.state === 'duck' ? 35 : 85
-        };
-
-        for (let i = this.obstacles.length - 1; i >= 0; i--) {
-          const obs = this.obstacles[i];
-          obs.x -= this.speed;
-
-          const obsBox = {
-            x: obs.x,
-            y: obs.isHigh ? this.groundY - 105 : this.groundY - obs.h,
-            w: obs.w,
-            h: obs.h
-          };
-
-          if (skaterBox.x < obsBox.x + obsBox.w &&
-              skaterBox.x + skaterBox.w > obsBox.x &&
-              skaterBox.y < obsBox.y + obsBox.h &&
-              skaterBox.y + skaterBox.h > obsBox.y) {
-            this.triggerCrash(obs.type);
-            return;
-          }
-
-          if (obs.x < -100) this.obstacles.splice(i, 1);
+      } else if (currentActiveScene === 'range') {
+        if (e.code === 'Space') {
+          handleSwingStep(performance.now());
+        } else if (e.code === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+          adjustAim(-1.5);
+        } else if (e.code === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+          adjustAim(1.5);
+        } else if (e.key >= '1' && e.key <= '6') {
+          const clubs = ['1W', '3W', '5I', '7I', '9I', 'PW'];
+          selectClub(clubs[parseInt(e.key) - 1]);
         }
       }
+    });
 
-      triggerCrash(type) {
-        this.isRunning = false;
-        sound.playThud();
-        let reason = 'You wiped out on the cart path!';
-        if (type === 'sign') reason = 'Clocked by the wooden sign! Hold DUCK to slide under.';
-        if (type === 'cart') reason = 'Slammed into the runaway golf cart! OLLIE over next time.';
-        if (type === 'basket') reason = 'Tripped right over the ball basket!';
-        document.getElementById('crash-reason-text').innerText = reason;
-        document.getElementById('skate-overlay-crash').classList.remove('hidden');
+    window.addEventListener('keyup', (e) => {
+      if (currentActiveScene === 'skate') {
+        if (e.code === 'ArrowDown' || e.key === 's' || e.key === 'S') {
+          stopDuck();
+        }
       }
+    });
 
-      draw() {
-        this.ctx.fillStyle = '#0a0d10';
-        this.ctx.fillRect(0, 0, this.width, this.height);
+    function onWindowResize() {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
 
-        // Course Hill background
-        this.ctx.fillStyle = '#112219';
-        this.ctx.beginPath();
-        this.ctx.moveTo(0, this.groundY);
-        for (let x = 0; x <= this.width + 120; x += 120) {
-          this.ctx.quadraticCurveTo(x + 60, this.groundY - 90, x + 120, this.groundY - 20);
-        }
-        this.ctx.lineTo(this.width, this.groundY);
-        this.ctx.fill();
+      resizeSkateCanvas();
 
-        // Asphalt ground
-        this.ctx.fillStyle = '#171717';
-        this.ctx.fillRect(0, this.groundY, this.width, this.height - this.groundY);
-        this.ctx.fillStyle = '#444444';
-        this.ctx.fillRect(0, this.groundY - 3, this.width, 4);
-
-        // Dashed lines
-        this.ctx.fillStyle = '#facc1533';
-        const offset = (this.distanceCovered * 10) % 80;
-        for (let x = -80; x < this.width + 80; x += 80) {
-          this.ctx.fillRect(x - offset, this.groundY + 32, 40, 3);
-        }
-
-        // Draw Obstacles
-        this.ctx.strokeStyle = '#FFFFFF';
-        this.ctx.fillStyle = '#FFFFFF';
-        this.ctx.lineWidth = 2.5;
-
-        this.obstacles.forEach(obs => {
-          this.ctx.save();
-          this.ctx.translate(obs.x, obs.isHigh ? this.groundY - 105 : this.groundY - obs.h);
-
-          if (obs.type === 'basket') {
-            this.ctx.strokeRect(0, 0, 34, 30);
-            this.ctx.beginPath();
-            this.ctx.moveTo(11, 0); this.ctx.lineTo(11, 30);
-            this.ctx.moveTo(22, 0); this.ctx.lineTo(22, 30);
-            this.ctx.stroke();
-            this.ctx.fillStyle = '#a3e635';
-            this.ctx.beginPath();
-            this.ctx.arc(8, 12, 3, 0, Math.PI * 2);
-            this.ctx.arc(17, 10, 3, 0, Math.PI * 2);
-            this.ctx.arc(26, 14, 3, 0, Math.PI * 2);
-            this.ctx.fill();
-          } else if (obs.type === 'sign') {
-            this.ctx.beginPath();
-            this.ctx.moveTo(8, -15); this.ctx.lineTo(8, 0);
-            this.ctx.moveTo(26, -15); this.ctx.lineTo(26, 0);
-            this.ctx.stroke();
-            this.ctx.fillStyle = '#1c1917';
-            this.ctx.fillRect(0, 0, 36, 26);
-            this.ctx.strokeRect(0, 0, 36, 26);
-            this.ctx.fillStyle = '#facc15';
-            this.ctx.font = 'bold 7px Outfit';
-            this.ctx.textAlign = 'center';
-            this.ctx.fillText('DUCK!', 18, 16);
-          } else if (obs.type === 'cart') {
-            this.ctx.strokeRect(4, 16, 58, 18);
-            this.ctx.beginPath();
-            this.ctx.moveTo(14, 16); this.ctx.lineTo(18, 2);
-            this.ctx.moveTo(48, 16); this.ctx.lineTo(46, 2);
-            this.ctx.rect(12, 0, 38, 4);
-            this.ctx.stroke();
-            this.ctx.beginPath();
-            this.ctx.arc(18, 34, 6, 0, Math.PI * 2);
-            this.ctx.arc(48, 34, 6, 0, Math.PI * 2);
-            this.ctx.stroke();
-          } else {
-            this.ctx.beginPath();
-            this.ctx.moveTo(4, 28); this.ctx.lineTo(24, 28);
-            this.ctx.lineTo(16, 2); this.ctx.lineTo(12, 2);
-            this.ctx.closePath();
-            this.ctx.stroke();
-          }
-          this.ctx.restore();
-        });
-
-        drawExactSkater(this.ctx, this.skaterX, this.skaterY, 1.0, this.state, this.animTimer, (0.4 - this.pushTimer) / 0.4);
+      if (cameraRange && rendererRange) {
+        cameraRange.aspect = w / h;
+        cameraRange.updateProjectionMatrix();
+        rendererRange.setSize(w, h);
       }
     }
+    window.addEventListener('resize', onWindowResize);
 
-    // --- PHASE 2: 3D THREE.JS DRIVING RANGE SIMULATION ---
-    class DrivingRangeSim {
-      constructor() {
-        this.container = document.getElementById('threejs-canvas-host');
-        this.scoreText = document.getElementById('range-score-text');
-        this.shotCountText = document.getElementById('range-shot-count');
-        this.windCompass = document.getElementById('range-wind-compass');
-        this.windLabel = document.getElementById('range-wind-label');
-        this.meterPower = document.getElementById('meter-power-fill');
-        this.meterNeedle = document.getElementById('meter-accuracy-needle');
-        this.meterStatus = document.getElementById('meter-status-text');
-        this.swingBtn = document.getElementById('btn-swing-action');
-        this.swingBtnLabel = document.getElementById('swing-btn-label');
-
-        this.shotStats = document.getElementById('shot-stats-banner');
-        this.shotDistText = document.getElementById('shot-dist-text');
-        this.shotCarryText = document.getElementById('shot-carry-text');
-        this.shotTargetText = document.getElementById('shot-target-text');
-
-        this.clubs = {
-          '1W': { name: 'Driver', loft: 10.5, speed: 160, spin: 2600 },
-          '3W': { name: '3-Wood', loft: 15.0, speed: 145, spin: 3600 },
-          '5I': { name: '5-Iron', loft: 24.0, speed: 125, spin: 5200 },
-          '7I': { name: '7-Iron', loft: 32.0, speed: 110, spin: 6800 },
-          '9I': { name: '9-Iron', loft: 41.0, speed: 95, spin: 8500 },
-          'PW': { name: 'Pitching Wedge', loft: 46.0, speed: 85, spin: 9800 }
-        };
-        this.selectedClubKey = '1W';
-
-        this.meterState = 0;
-        this.powerVal = 0;
-        this.accuracyVal = 0;
-        this.powerDir = 1;
-        this.accuracyDir = 1;
-
-        this.score = 0;
-        this.shotsFired = 0;
-
-        this.windSpeed = 9;
-        this.windAngle = Math.PI * 0.25;
-
-        this.initThree();
-        this.buildFairwayAndTargets();
-        this.bindEvents();
-        this.randomizeWind();
+    function mainAnimationLoop() {
+      if (currentActiveScene === 'skate') {
+        updateSkatePhysics();
+        renderSkate();
+      } else if (currentActiveScene === 'range') {
+        updateRangePhysics();
+        rendererRange.render(sceneRange, cameraRange);
       }
-
-      initThree() {
-        this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0x0a141a);
-        this.scene.fog = new THREE.FogExp2(0x0a141a, 0.0028);
-
-        this.camera = new THREE.PerspectiveCamera(52, window.innerWidth / window.innerHeight, 0.1, 1200);
-        this.camera.position.set(0, 3.8, -7.5);
-        this.camera.lookAt(0, 2.5, 45);
-
-        this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
-        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        this.container.appendChild(this.renderer.domElement);
-
-        const hemiLight = new THREE.HemisphereLight(0xffffff, 0x112211, 0.85);
-        this.scene.add(hemiLight);
-
-        const dirLight = new THREE.DirectionalLight(0xffffff, 0.7);
-        dirLight.position.set(30, 80, -40);
-        this.scene.add(dirLight);
-
-        // Golf ball & tracer
-        const ballGeo = new THREE.SphereGeometry(0.22, 16, 16);
-        const ballMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
-        this.ballMesh = new THREE.Mesh(ballGeo, ballMat);
-        this.ballMesh.position.set(0, 0.22, 0);
-        this.scene.add(this.ballMesh);
-
-        this.tracerPoints = [];
-        this.tracerGeo = new THREE.BufferGeometry();
-        this.tracerMat = new THREE.LineBasicMaterial({ color: 0xa3e635, linewidth: 2 });
-        this.tracerLine = new THREE.Line(this.tracerGeo, this.tracerMat);
-        this.scene.add(this.tracerLine);
-
-        this.isBallInFlight = false;
-        this.ballPos = new THREE.Vector3(0, 0.22, 0);
-        this.ballVel = new THREE.Vector3(0, 0, 0);
-        this.ballCarry = 0;
-
-        const onResize = () => {
-          this.camera.aspect = window.innerWidth / window.innerHeight;
-          this.camera.updateProjectionMatrix();
-          this.renderer.setSize(window.innerWidth, window.innerHeight);
-        };
-        window.addEventListener('resize', onResize);
-        window.addEventListener('orientationchange', () => setTimeout(onResize, 200));
-      }
-
-      buildFairwayAndTargets() {
-        const groundGeo = new THREE.PlaneGeometry(350, 800, 30, 50);
-        const groundMat = new THREE.MeshLambertMaterial({ color: 0x143423 });
-        const ground = new THREE.Mesh(groundGeo, groundMat);
-        ground.rotation.x = -Math.PI / 2;
-        ground.position.set(0, 0, 350);
-        this.scene.add(ground);
-
-        const distances = [50, 100, 150, 200, 250, 300];
-        this.targetGreens = [];
-
-        distances.forEach((dist) => {
-          const zPos = dist * 2.0;
-
-          const ringGeo = new THREE.RingGeometry(4, 18, 24);
-          const ringMat = new THREE.MeshBasicMaterial({
-            color: dist % 100 === 0 ? 0x22c55e : 0x15803d,
-            side: THREE.DoubleSide
-          });
-          const ring = new THREE.Mesh(ringGeo, ringMat);
-          ring.rotation.x = -Math.PI / 2;
-          ring.position.set((Math.sin(dist) * 12), 0.05, zPos);
-          this.scene.add(ring);
-
-          const bullGeo = new THREE.CircleGeometry(4, 20);
-          const bullMat = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
-          const bull = new THREE.Mesh(bullGeo, bullMat);
-          bull.rotation.x = -Math.PI / 2;
-          bull.position.set(ring.position.x, 0.08, zPos);
-          this.scene.add(bull);
-
-          const poleGeo = new THREE.CylinderGeometry(0.1, 0.1, 5, 8);
-          const poleMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
-          const pole = new THREE.Mesh(poleGeo, poleMat);
-          pole.position.set(ring.position.x, 2.5, zPos);
-          this.scene.add(pole);
-
-          const flagGeo = new THREE.PlaneGeometry(2.2, 1.4);
-          const flagMat = new THREE.MeshBasicMaterial({ color: 0xef4444, side: THREE.DoubleSide });
-          const flag = new THREE.Mesh(flagGeo, flagMat);
-          flag.position.set(ring.position.x + 1.1, 4.3, zPos);
-          this.scene.add(flag);
-
-          this.targetGreens.push({
-            dist: dist,
-            pos: new THREE.Vector3(ring.position.x, 0, zPos),
-            outerRadius: 18,
-            innerRadius: 4
-          });
-        });
-
-        // Animated Ball Picker Cart
-        const cartGeo = new THREE.BoxGeometry(4.5, 3.2, 7);
-        const cartMat = new THREE.MeshLambertMaterial({ color: 0xfacc15 });
-        this.pickerCart = new THREE.Mesh(cartGeo, cartMat);
-        this.pickerCart.position.set(-60, 1.6, 280);
-        this.scene.add(this.pickerCart);
-        this.pickerDir = 1;
-
-        const cageGeo = new THREE.WireframeGeometry(cartGeo);
-        const cageLine = new THREE.LineSegments(cageGeo);
-        cageLine.material.color.setHex(0x000000);
-        this.pickerCart.add(cageLine);
-      }
-
-      randomizeWind() {
-        this.windSpeed = Math.floor(4 + Math.random() * 16);
-        this.windAngle = Math.random() * Math.PI * 2;
-
-        const deg = Math.floor(this.windAngle * (180 / Math.PI));
-        this.windCompass.style.transform = `rotate(${deg}deg)`;
-
-        let label = `${this.windSpeed} mph `;
-        const cos = Math.cos(this.windAngle);
-        const sin = Math.sin(this.windAngle);
-
-        if (cos > 0.4) label += 'Tailwind';
-        else if (cos < -0.4) label += 'Headwind';
-        else label += 'Crosswind';
-
-        if (sin > 0.4) label += ' → R';
-        else if (sin < -0.4) label += ' ← L';
-
-        this.windLabel.innerText = label;
-      }
-
-      bindEvents() {
-        document.querySelectorAll('.club-btn').forEach(btn => {
-          btn.addEventListener('click', (e) => {
-            document.querySelectorAll('.club-btn').forEach(b => {
-              b.classList.remove('bg-lime-400', 'text-black');
-              b.classList.add('text-neutral-300');
-            });
-            btn.classList.add('bg-lime-400', 'text-black');
-            btn.classList.remove('text-neutral-300');
-            this.selectedClubKey = btn.dataset.club;
-          });
-        });
-
-        this.swingBtn.addEventListener('click', () => this.handleSwingClick());
-        window.addEventListener('keydown', (e) => {
-          if (app.currentMode === 'range' && e.code === 'Space') {
-            e.preventDefault();
-            this.handleSwingClick();
-          }
-        });
-      }
-
-      handleSwingClick() {
-        if (this.isBallInFlight) return;
-
-        if (this.meterState === 0) {
-          this.meterState = 1;
-          this.powerVal = 0;
-          this.powerDir = 1;
-          this.meterNeedle.classList.add('hidden');
-          this.meterStatus.innerText = 'Lock Power';
-          this.swingBtnLabel.innerText = 'SET POWER';
-        } else if (this.meterState === 1) {
-          this.meterState = 2;
-          this.accuracyVal = -1;
-          this.accuracyDir = 1;
-          this.meterNeedle.classList.remove('hidden');
-          this.meterStatus.innerText = 'Snap Center';
-          this.swingBtnLabel.innerText = 'SNAP!';
-        } else if (this.meterState === 2) {
-          this.meterState = 3;
-          this.meterStatus.innerText = 'In Flight';
-          this.swingBtnLabel.innerText = 'FLYING...';
-          this.launchBall();
-        }
-      }
-
-      launchBall() {
-        const club = this.clubs[this.selectedClubKey];
-        this.shotsFired++;
-        this.shotCountText.innerText = this.shotsFired;
-
-        sound.playGolfStrike(this.selectedClubKey === '1W');
-
-        const powerFactor = Math.max(0.25, this.powerVal);
-        const launchSpeed = (club.speed * 0.44704) * powerFactor * 1.05;
-        const launchAngleRad = (club.loft * (Math.PI / 180)) * 0.92;
-        const sideCurve = this.accuracyVal * 0.16;
-
-        this.ballPos.set(0, 0.22, 0);
-        this.ballVel.set(
-          launchSpeed * Math.sin(sideCurve),
-          launchSpeed * Math.sin(launchAngleRad),
-          launchSpeed * Math.cos(launchAngleRad)
-        );
-
-        this.tracerPoints = [this.ballPos.clone()];
-        this.isBallInFlight = true;
-        this.ballCarry = 0;
-        this.shotStats.classList.add('hidden');
-      }
-
-      update(dt) {
-        if (this.meterState === 1) {
-          this.powerVal += this.powerDir * dt * 1.5;
-          if (this.powerVal >= 1) { this.powerVal = 1; this.powerDir = -1; }
-          if (this.powerVal <= 0.05) { this.powerVal = 0.05; this.powerDir = 1; }
-          this.meterPower.style.width = `${Math.floor(this.powerVal * 100)}%`;
-        } else if (this.meterState === 2) {
-          this.accuracyVal += this.accuracyDir * dt * 2.8;
-          if (this.accuracyVal >= 1) { this.accuracyVal = 1; this.accuracyDir = -1; }
-          if (this.accuracyVal <= -1) { this.accuracyVal = -1; this.accuracyDir = 1; }
-          const needlePercent = ((this.accuracyVal + 1) / 2) * 100;
-          this.meterNeedle.style.left = `${needlePercent}%`;
-        }
-
-        if (this.pickerCart) {
-          this.pickerCart.position.x += this.pickerDir * dt * 16;
-          if (this.pickerCart.position.x > 65) this.pickerDir = -1;
-          if (this.pickerCart.position.x < -65) this.pickerDir = 1;
-        }
-
-        if (this.isBallInFlight) {
-          const gravity = 9.81 * 0.95;
-          const windX = Math.sin(this.windAngle) * (this.windSpeed * 0.22);
-          const windZ = Math.cos(this.windAngle) * (this.windSpeed * 0.22);
-          const liftForce = (this.ballVel.z > 0) ? 2.4 : 0;
-
-          this.ballVel.x += (windX - this.ballVel.x * 0.015) * dt;
-          this.ballVel.y += (-gravity + liftForce) * dt;
-          this.ballVel.z += (windZ - this.ballVel.z * 0.012) * dt;
-
-          this.ballPos.x += this.ballVel.x * dt * 2.1;
-          this.ballPos.y += this.ballVel.y * dt * 2.1;
-          this.ballPos.z += this.ballVel.z * dt * 2.1;
-
-          this.ballMesh.position.copy(this.ballPos);
-
-          if (this.tracerPoints.length < 80) {
-            this.tracerPoints.push(this.ballPos.clone());
-            this.tracerGeo.setFromPoints(this.tracerPoints);
-          }
-
-          // Follow Camera
-          this.camera.position.x += (this.ballPos.x * 0.5 - this.camera.position.x) * 0.12;
-          this.camera.position.y += ((this.ballPos.y + 4.5) - this.camera.position.y) * 0.12;
-          this.camera.position.z += ((this.ballPos.z - 12) - this.camera.position.z) * 0.12;
-          this.camera.lookAt(this.ballPos.x, this.ballPos.y + 1, this.ballPos.z + 18);
-
-          if (this.ballPos.y <= 0.22) {
-            this.ballPos.y = 0.22;
-            if (this.ballCarry === 0) {
-              this.ballCarry = Math.floor(this.ballPos.z / 2.0);
-            }
-
-            this.ballVel.y = -this.ballVel.y * 0.35;
-            this.ballVel.z = this.ballVel.z * 0.65;
-            this.ballVel.x = this.ballVel.x * 0.65;
-
-            if (Math.abs(this.ballVel.z) < 1.0) {
-              this.isBallInFlight = false;
-              this.completeShot();
-            }
-          }
-
-          if (this.pickerCart) {
-            const distToCart = this.ballPos.distanceTo(this.pickerCart.position);
-            if (distToCart < 4.5) {
-              this.isBallInFlight = false;
-              this.score += 500;
-              this.scoreText.innerText = `${this.score} PTS`;
-              sound.playTargetChime();
-              this.showShotResults('DIRECT HIT ON THE BALL PICKER!', 500);
-            }
-          }
-        }
-
-        this.renderer.render(this.scene, this.camera);
-      }
-
-      completeShot() {
-        const totalYards = Math.floor(this.ballPos.z / 2.0);
-        let bonus = 0;
-        let quality = 'NICE SHOT!';
-
-        this.targetGreens.forEach(tg => {
-          const d = this.ballPos.distanceTo(tg.pos);
-          if (d <= tg.innerRadius) {
-            bonus = 250;
-            quality = `BULLSEYE ${tg.dist} YD PIN!`;
-            sound.playTargetChime();
-          } else if (d <= tg.outerRadius) {
-            bonus = 100;
-            quality = `ON THE ${tg.dist} YD GREEN!`;
-            sound.playTargetChime();
-          }
-        });
-
-        this.score += totalYards + bonus;
-        this.scoreText.innerText = `${this.score} PTS`;
-        this.showShotResults(quality, bonus, totalYards);
-
-        setTimeout(() => {
-          this.resetForNextShot();
-        }, 3200);
-      }
-
-      showShotResults(quality, bonus, dist = Math.floor(this.ballPos.z / 2.0)) {
-        document.getElementById('shot-quality-text').innerText = quality;
-        this.shotDistText.innerText = `${dist} YDS`;
-        this.shotCarryText.innerText = `Carry: ${this.ballCarry} yd`;
-        this.shotTargetText.innerText = bonus > 0 ? `Target Bonus: +${bonus} pts!` : `Fairway Roll`;
-        this.shotStats.classList.remove('hidden');
-      }
-
-      resetForNextShot() {
-        this.meterState = 0;
-        this.meterPower.style.width = '0%';
-        this.meterNeedle.classList.add('hidden');
-        this.meterStatus.innerText = 'Ready';
-        this.swingBtnLabel.innerText = 'HIT BALL';
-        this.shotStats.classList.add('hidden');
-
-        this.camera.position.set(0, 3.8, -7.5);
-        this.camera.lookAt(0, 2.5, 45);
-
-        this.ballPos.set(0, 0.22, 0);
-        this.ballMesh.position.copy(this.ballPos);
-        this.tracerPoints = [];
-        this.tracerGeo.setFromPoints([]);
-
-        this.randomizeWind();
-      }
+      requestAnimationFrame(mainAnimationLoop);
     }
 
-    // --- OVERALL APP / MODE CONTROLLER ---
-    class AppController {
-      constructor() {
-        this.currentMode = 'skate';
-        this.skateGame = new SkateRunnerGame();
-        this.rangeGame = new DrivingRangeSim();
-
-        this.btnSkate = document.getElementById('nav-mode-skate');
-        this.btnRange = document.getElementById('nav-mode-range');
-        this.skateContainer = document.getElementById('container-skate');
-        this.rangeContainer = document.getElementById('container-range');
-
-        this.bindNav();
-        this.drawTitleCharacterPreview();
-        this.drawBayGolferAvatar();
-      }
-
-      bindNav() {
-        this.btnSkate.addEventListener('click', () => this.switchMode('skate'));
-        this.btnRange.addEventListener('click', () => this.switchMode('range'));
-
-        document.getElementById('btn-start-skate').addEventListener('click', () => {
-          sound.init();
-          document.getElementById('skate-overlay-start').classList.add('hidden');
-          this.skateGame.start();
-        });
-
-        document.getElementById('btn-skate-retry').addEventListener('click', () => {
-          document.getElementById('skate-overlay-crash').classList.add('hidden');
-          this.skateGame.start();
-        });
-
-        document.getElementById('btn-skate-skip').addEventListener('click', () => {
-          document.getElementById('skate-overlay-crash').classList.add('hidden');
-          this.switchMode('range');
-        });
-
-        // Touch buttons for Phase 1 with touchstart/touchend
-        const touchOllie = document.getElementById('touch-ollie');
-        const touchDuck = document.getElementById('touch-duck');
-        const touchPush = document.getElementById('touch-push');
-
-        touchOllie.addEventListener('touchstart', (e) => { e.preventDefault(); this.skateGame.ollie(); }, { passive: false });
-        touchDuck.addEventListener('touchstart', (e) => { e.preventDefault(); this.skateGame.duck(true); }, { passive: false });
-        touchDuck.addEventListener('touchend', (e) => { e.preventDefault(); this.skateGame.duck(false); }, { passive: false });
-        touchPush.addEventListener('touchstart', (e) => { e.preventDefault(); this.skateGame.push(); }, { passive: false });
-
-        // Desktop keyboard controls
-        window.addEventListener('keydown', (e) => {
-          if (this.currentMode === 'skate') {
-            if (e.code === 'Space' || e.code === 'ArrowUp' || e.code === 'KeyW') {
-              e.preventDefault();
-              this.skateGame.ollie();
-            }
-            if (e.code === 'ArrowDown' || e.code === 'KeyS') {
-              e.preventDefault();
-              this.skateGame.duck(true);
-            }
-            if (e.code === 'ArrowRight' || e.code === 'KeyD') {
-              e.preventDefault();
-              this.skateGame.push();
-            }
-          }
-        });
-
-        window.addEventListener('keyup', (e) => {
-          if (this.currentMode === 'skate' && (e.code === 'ArrowDown' || e.code === 'KeyS')) {
-            this.skateGame.duck(false);
-          }
-        });
-
-        // Audio Toggle
-        document.getElementById('btn-sound-toggle').addEventListener('click', () => {
-          sound.init();
-          const isMuted = sound.toggle();
-          document.getElementById('sound-icon-on').classList.toggle('hidden', isMuted);
-          document.getElementById('sound-icon-off').classList.toggle('hidden', !isMuted);
-        });
-      }
-
-      switchMode(mode) {
-        this.currentMode = mode;
-        if (mode === 'skate') {
-          this.skateContainer.classList.remove('hidden');
-          this.rangeContainer.classList.add('hidden');
-
-          this.btnSkate.classList.add('bg-white', 'text-black');
-          this.btnSkate.classList.remove('text-neutral-400');
-          this.btnRange.classList.remove('bg-white', 'text-black');
-          this.btnRange.classList.add('text-neutral-400');
-
-          this.skateGame.resize();
-        } else {
-          this.skateContainer.classList.add('hidden');
-          this.rangeContainer.classList.remove('hidden');
-
-          this.btnRange.classList.add('bg-white', 'text-black');
-          this.btnRange.classList.remove('text-neutral-400');
-          this.btnSkate.classList.remove('bg-white', 'text-black');
-          this.btnSkate.classList.add('text-neutral-400');
-
-          sound.init();
-          this.rangeGame.resetForNextShot();
-        }
-      }
-
-      drawTitleCharacterPreview() {
-        const cvs = document.getElementById('preview-character-canvas');
-        if (!cvs) return;
-        const ctx = cvs.getContext('2d');
-        ctx.clearRect(0, 0, cvs.width, cvs.height);
-        drawExactSkater(ctx, cvs.width / 2 + 10, cvs.height - 25, 1.25, 'cruise', 0, 0);
-      }
-
-      drawBayGolferAvatar() {
-        const cvs = document.getElementById('range-golfer-canvas');
-        if (!cvs) return;
-        const ctx = cvs.getContext('2d');
-        ctx.clearRect(0, 0, cvs.width, cvs.height);
-        drawExactSkater(ctx, 110, 195, 1.25, 'cruise', 0, 0);
-      }
-
-      loop(time) {
-        if (!this.lastTime) this.lastTime = time;
-        const dt = Math.min((time - this.lastTime) / 1000, 0.1);
-        this.lastTime = time;
-
-        if (this.currentMode === 'skate') {
-          this.skateGame.update(dt);
-          this.skateGame.draw();
-        } else {
-          this.rangeGame.update(dt);
-        }
-
-        requestAnimationFrame((t) => this.loop(t));
-      }
-    }
-
-    let app;
-    window.onload = function() {
-      app = new AppController();
-      requestAnimationFrame((t) => app.loop(t));
-    };
+    // Initialize Both Environments
+    resizeSkateCanvas();
+    initRangeScene();
+    requestAnimationFrame(mainAnimationLoop);
   </script>
 </body>
 </html>
