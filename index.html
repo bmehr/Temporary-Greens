@@ -46,30 +46,35 @@
       font-weight: 900;
       font-style: italic;
       color: #34d399;
+      background: rgba(10, 15, 20, 0.88);
+      padding: 6px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(52, 211, 153, 0.4);
       font-size: 1.05rem;
       letter-spacing: 0.05em;
       pointer-events: auto;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
     }
 
     .mode-switcher {
       display: flex;
-      background: rgba(10, 15, 20, 0.92);
+      background: rgba(10, 15, 20, 0.94);
       border: 1px solid #27272a;
       border-radius: 12px;
-      padding: 3px;
+      padding: 4px;
       gap: 4px;
       pointer-events: auto;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
     }
 
     .mode-btn {
       background: transparent;
       border: 1px solid transparent;
       color: #9ca3af;
-      padding: 6px 14px;
+      padding: 7px 15px;
       border-radius: 8px;
       font-family: monospace;
-      font-size: 0.78rem;
+      font-size: 0.84rem;
       font-weight: 800;
       cursor: pointer;
       display: flex;
@@ -108,10 +113,10 @@
     .hud-box {
       background: rgba(0, 0, 0, 0.85);
       border: 1px solid #27272a;
-      padding: 6px 14px;
+      padding: 7px 15px;
       border-radius: 10px;
       font-family: monospace;
-      font-size: 0.75rem;
+      font-size: 0.82rem;
       display: flex;
       gap: 16px;
       pointer-events: auto;
@@ -135,8 +140,8 @@
       background: #10b981;
       color: #064e3b;
       font-weight: 900;
-      font-size: 1.1rem;
-      padding: 14px 36px;
+      font-size: 1.15rem;
+      padding: 15px 38px;
       border-radius: 16px;
       border: 2px solid #a7f3d0;
       box-shadow: 0 4px 0 #000000;
@@ -184,54 +189,54 @@
       background: #d97706;
       color: #451a03;
       border: 2px solid #fde68a;
-      width: 90px;
-      height: 75px;
-      font-size: 0.95rem;
+      width: 94px;
+      height: 78px;
+      font-size: 1.0rem;
     }
 
     #btn-push {
       background: #27272a;
       color: #e4e4e7;
       border: 2px solid #52525b;
-      width: 78px;
-      height: 75px;
-      font-size: 0.95rem;
+      width: 82px;
+      height: 78px;
+      font-size: 1.0rem;
     }
 
     #btn-ollie {
       background: #10b981;
       color: #022c22;
       border: 2px solid #a7f3d0;
-      width: 96px;
-      height: 75px;
-      font-size: 1rem;
+      width: 100px;
+      height: 78px;
+      font-size: 1.05rem;
     }
 
     .desktop-helper {
       position: absolute;
       bottom: 14px;
       left: 14px;
-      background: rgba(0, 0, 0, 0.75);
+      background: rgba(0, 0, 0, 0.78);
       border: 1px solid #27272a;
       border-radius: 8px;
-      padding: 6px 12px;
+      padding: 7px 14px;
       font-family: monospace;
-      font-size: 0.75rem;
-      color: #a1a1aa;
+      font-size: 0.82rem;
+      color: #cbd5e1;
       z-index: 10;
       display: flex;
-      gap: 12px;
+      gap: 14px;
     }
     .desktop-helper kbd {
       background: #27272a;
-      padding: 2px 6px;
+      padding: 2px 7px;
       border-radius: 4px;
       color: #ffffff;
       font-weight: bold;
     }
 
     /* ==========================================================================
-       SCENE 2: DRIVING RANGE CSS
+       SCENE 2: DRIVING RANGE CSS (Daylight High-Contrast Large-Type HUD)
        ========================================================================== */
     #scene-range-container {
       position: absolute;
@@ -252,27 +257,27 @@
 
     #target-briefing-card {
       position: absolute;
-      top: 56px;
+      top: 58px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
       flex-direction: column;
       align-items: center;
-      width: 90%;
-      max-width: 440px;
+      width: 94%;
+      max-width: 500px;
       z-index: 10;
       pointer-events: none;
     }
 
     .glass-card {
-      background: rgba(10, 15, 20, 0.92);
+      background: rgba(10, 15, 20, 0.93);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       border: 1px solid #27272a;
       border-radius: 12px;
-      padding: 10px 14px;
+      padding: 11px 16px;
       width: 100%;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
     }
 
     .target-primary {
@@ -280,20 +285,35 @@
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid #1f2937;
-      padding-bottom: 6px;
-      margin-bottom: 6px;
+      padding-bottom: 7px;
+      margin-bottom: 7px;
     }
 
     .telemetry-row {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       font-family: monospace;
-      font-size: 0.72rem;
-      color: #9ca3af;
+      font-size: 0.80rem;
+      color: #cbd5e1;
     }
     .telemetry-val {
-      font-weight: bold;
-      color: #f3f4f6;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .wind-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: #38bdf8;
+      font-weight: 800;
+    }
+    #wind-arrow-icon {
+      display: inline-block;
+      font-size: 0.95rem;
+      line-height: 1;
+      transition: transform 0.25s ease;
     }
 
     #shot-result-card {
@@ -301,7 +321,7 @@
       top: 60px;
       left: 16px;
       z-index: 10;
-      width: 280px;
+      width: 295px;
       display: none;
     }
 
@@ -313,7 +333,7 @@
     }
 
     .stat-hero-number {
-      font-size: 1.35rem;
+      font-size: 1.5rem;
       font-weight: 900;
       color: #ffffff;
       line-height: 1.1;
@@ -321,20 +341,20 @@
 
     .stat-breakdown-row {
       display: flex;
-      gap: 12px;
+      gap: 14px;
       font-family: monospace;
-      font-size: 0.75rem;
-      color: #9ca3af;
-      margin: 4px 0 8px 0;
+      font-size: 0.84rem;
+      color: #cbd5e1;
+      margin: 5px 0 9px 0;
     }
 
     .stat-pin-highlight {
-      background: rgba(16, 185, 129, 0.12);
-      border: 1px solid rgba(16, 185, 129, 0.4);
+      background: rgba(16, 185, 129, 0.16);
+      border: 1px solid rgba(16, 185, 129, 0.5);
       border-radius: 8px;
-      padding: 6px 10px;
+      padding: 7px 11px;
       font-family: monospace;
-      font-size: 0.8rem;
+      font-size: 0.88rem;
       font-weight: bold;
       color: #34d399;
       display: flex;
@@ -344,71 +364,111 @@
 
     #aim-controls {
       position: absolute;
-      bottom: 24px;
+      bottom: 92px;
       left: 16px;
       display: flex;
+      flex-wrap: wrap;
       gap: 8px;
       z-index: 10;
     }
 
     .aim-btn {
-      background: #18181b;
-      color: #e4e4e7;
-      border: 1px solid #3f3f46;
+      background: rgba(15, 23, 42, 0.94);
+      color: #f8fafc;
+      border: 1px solid #334155;
       border-radius: 12px;
-      padding: 12px 16px;
+      padding: 11px 15px;
       font-family: monospace;
-      font-size: 0.8rem;
-      font-weight: bold;
+      font-size: 0.84rem;
+      font-weight: 800;
       cursor: pointer;
       box-shadow: 0 4px 0 #000000;
       touch-action: manipulation;
     }
-    .aim-btn:active {
+    .aim-btn:active, .aim-btn.zoom-active {
       transform: translateY(3px);
       box-shadow: 0 1px 0 #000000;
+      border-color: #38bdf8;
+      color: #38bdf8;
+    }
+
+    /* Full 13-Club Bag Strip with Larger, High-Contrast Yardage Labels */
+    #club-bag-wrapper {
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      right: 234px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      z-index: 10;
     }
 
     #club-strip {
-      position: absolute;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%);
       display: flex;
       gap: 6px;
-      background: rgba(10, 15, 20, 0.90);
+      background: rgba(10, 15, 20, 0.94);
       backdrop-filter: blur(8px);
       border: 1px solid #27272a;
-      padding: 6px;
+      padding: 7px;
       border-radius: 14px;
-      z-index: 10;
-      max-width: 90vw;
       overflow-x: auto;
+      scrollbar-width: none;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+    }
+    #club-strip::-webkit-scrollbar {
+      display: none;
     }
 
     .club-pill {
       background: #18181b;
-      color: #a1a1aa;
-      border: 1px solid transparent;
-      padding: 8px 14px;
-      border-radius: 8px;
+      color: #ffffff;
+      border: 1px solid #3f3f46;
+      padding: 8px 12px;
+      border-radius: 9px;
       font-family: monospace;
-      font-size: 0.8rem;
-      font-weight: bold;
+      font-size: 0.98rem;
+      font-weight: 900;
       cursor: pointer;
       transition: all 0.1s ease;
       touch-action: manipulation;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 56px;
+      line-height: 1.15;
+    }
+    .club-pill span.club-carry-tag {
+      font-size: 0.80rem;
+      font-weight: 800;
+      color: #cbd5e1;
+      margin-top: 2px;
+      letter-spacing: -0.02em;
+    }
+    .club-pill[data-cat="wood"] {
+      border-bottom: 3px solid #10b981;
+    }
+    .club-pill[data-cat="iron"] {
+      border-bottom: 3px solid #38bdf8;
+    }
+    .club-pill[data-cat="wedge"] {
+      border-bottom: 3px solid #f59e0b;
     }
     .club-pill.active {
       background: #10b981;
-      color: #064e3b;
-      border-color: #6ee7b7;
-      box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+      color: #022c22;
+      border-color: #a7f3d0;
+      box-shadow: 0 0 14px rgba(16, 185, 129, 0.5);
+    }
+    .club-pill.active span.club-carry-tag {
+      color: #022c22;
+      font-weight: 900;
     }
 
     #swing-system {
       position: absolute;
-      bottom: 24px;
+      bottom: 16px;
       right: 16px;
       display: flex;
       flex-direction: column;
@@ -418,33 +478,33 @@
     }
 
     #meter-box {
-      width: 195px;
-      background: rgba(10, 15, 20, 0.92);
+      width: 205px;
+      background: rgba(10, 15, 20, 0.94);
       backdrop-filter: blur(8px);
       border: 2px solid #27272a;
       border-radius: 12px;
-      padding: 10px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      padding: 11px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
     }
 
     .meter-label-row {
       display: flex;
       justify-content: space-between;
       font-family: monospace;
-      font-size: 0.68rem;
+      font-size: 0.76rem;
       font-weight: bold;
-      margin-bottom: 3px;
+      margin-bottom: 4px;
     }
 
     .track-power {
       position: relative;
       width: 100%;
-      height: 12px;
+      height: 13px;
       background: #09090b;
       border-radius: 999px;
       border: 1px solid #27272a;
       overflow: hidden;
-      margin-bottom: 8px;
+      margin-bottom: 9px;
     }
     .track-power-fill {
       height: 100%;
@@ -465,7 +525,7 @@
     .track-snap {
       position: relative;
       width: 100%;
-      height: 12px;
+      height: 13px;
       background: #09090b;
       border-radius: 999px;
       border: 1px solid #27272a;
@@ -483,7 +543,7 @@
     }
     .snap-pure-zone {
       position: absolute;
-      width: 52px;
+      width: 54px;
       height: 100%;
       background: rgba(16, 185, 129, 0.40);
       border-left: 1px solid #10b981;
@@ -502,12 +562,12 @@
     }
 
     .arcade-action-btn {
-      width: 195px;
-      height: 48px;
+      width: 205px;
+      height: 50px;
       background: #10b981;
       color: #064e3b;
       font-weight: 900;
-      font-size: 0.95rem;
+      font-size: 1.02rem;
       border-radius: 12px;
       border: 2px solid #a7f3d0;
       box-shadow: 0 4px 0 #000000;
@@ -523,16 +583,31 @@
 
     .desktop-key-hint {
       font-family: monospace;
-      font-size: 0.65rem;
-      color: #9ca3af;
-      margin-top: 2px;
+      font-size: 0.72rem;
+      color: #f1f5f9;
+      background: rgba(10, 15, 20, 0.82);
+      padding: 3px 9px;
+      border-radius: 6px;
       text-align: right;
     }
     .desktop-key-hint kbd {
       background: #27272a;
-      padding: 1px 4px;
+      padding: 1px 5px;
       border-radius: 4px;
       color: #ffffff;
+    }
+
+    @media (max-width: 768px) {
+      #club-bag-wrapper {
+        right: 16px;
+        bottom: 178px;
+      }
+      #aim-controls {
+        bottom: 246px;
+      }
+      #shot-result-card {
+        width: 245px;
+      }
     }
   </style>
 </head>
@@ -570,34 +645,34 @@
     <div id="touch-controls">
       <button id="btn-duck" class="touch-btn">
         <span>DUCK</span>
-        <span style="font-size: 0.65rem; color: #78350f;">HOLD LOW</span>
+        <span style="font-size: 0.7rem; color: #78350f;">HOLD LOW</span>
       </button>
       <div style="display: flex; gap: 10px;">
         <button id="btn-push" class="touch-btn">
           <span>PUSH</span>
-          <span style="font-size: 0.65rem; color: #a1a1aa;">KICK</span>
+          <span style="font-size: 0.7rem; color: #a1a1aa;">KICK</span>
         </button>
         <button id="btn-ollie" class="touch-btn">
           <span>OLLIE</span>
-          <span style="font-size: 0.65rem; color: #064e3b;">JUMP</span>
+          <span style="font-size: 0.7rem; color: #064e3b;">JUMP</span>
         </button>
       </div>
     </div>
 
     <div id="start-modal" class="modal-screen">
       <div style="font-size: 3rem; margin-bottom: 8px;">🛹⛳</div>
-      <h1 style="color: #34d399; font-weight: 900; font-style: italic; font-size: 1.8rem; margin-bottom: 6px;">TEMPORARY GREENS</h1>
-      <p style="font-size: 0.85rem; color: #a1a1aa; max-width: 320px; line-height: 1.4; margin-bottom: 16px;">
+      <h1 style="color: #34d399; font-weight: 900; font-style: italic; font-size: 1.9rem; margin-bottom: 6px;">TEMPORARY GREENS</h1>
+      <p style="font-size: 0.92rem; color: #cbd5e1; max-width: 330px; line-height: 1.4; margin-bottom: 16px;">
         Shred the cart path to the driving range. High ollie ground hazards, duck beneath overhead signs, and push for speed.
       </p>
       <button id="btn-start" class="arcade-btn">START COMMUTE</button>
-      <p style="font-size: 0.75rem; color: #71717a; margin-top: 14px;">(Tap anywhere on screen to start)</p>
+      <p style="font-size: 0.8rem; color: #94a3b8; margin-top: 14px;">(Tap anywhere on screen to start)</p>
     </div>
 
     <div id="wipeout-modal" class="modal-screen" style="display: none;">
       <div style="font-size: 3.5rem; margin-bottom: 8px;">💥💀</div>
-      <h2 style="color: #f43f5e; font-weight: 900; font-style: italic; font-size: 1.8rem; margin-bottom: 6px;">TOTAL WIPEOUT!</h2>
-      <p id="wipeout-reason" style="font-size: 0.85rem; color: #d4d4d8; margin-bottom: 16px;">You slammed directly into a course hazard.</p>
+      <h2 style="color: #f43f5e; font-weight: 900; font-style: italic; font-size: 1.9rem; margin-bottom: 6px;">TOTAL WIPEOUT!</h2>
+      <p id="wipeout-reason" style="font-size: 0.92rem; color: #e2e8f0; margin-bottom: 16px;">You slammed directly into a course hazard.</p>
       <button id="btn-restart" class="arcade-btn">SHRED AGAIN</button>
     </div>
   </div>
@@ -609,20 +684,20 @@
     <div id="webgl-canvas-container"></div>
 
     <div id="target-briefing-card">
-      <div class="glass-card" style="border-color: rgba(16, 185, 129, 0.6);">
+      <div class="glass-card" style="border-color: rgba(16, 185, 129, 0.65);">
         <div class="target-primary">
           <div>
-            <div style="font-size: 0.6rem; color: #9ca3af; font-family: monospace;">CURRENT TARGET OBJECTIVE</div>
-            <div id="label-target-name" style="font-size: 0.95rem; font-weight: 900; color: #34d399;">150 YD ISLAND GREEN</div>
+            <div style="font-size: 0.68rem; color: #9ca3af; font-family: monospace;">CURRENT TARGET OBJECTIVE</div>
+            <div id="label-target-name" style="font-size: 1.05rem; font-weight: 900; color: #34d399;">150 YD ISLAND GREEN</div>
           </div>
           <div style="text-align: right;">
-            <div style="font-size: 0.6rem; color: #9ca3af; font-family: monospace;">RECOMMENDED</div>
-            <div id="label-rec-club" style="font-size: 0.85rem; font-weight: bold; color: #f59e0b; font-family: monospace;">7I (7-Iron)</div>
+            <div style="font-size: 0.68rem; color: #9ca3af; font-family: monospace;">RECOMMENDED</div>
+            <div id="label-rec-club" style="font-size: 0.95rem; font-weight: 800; color: #f59e0b; font-family: monospace;">7I (7-Iron)</div>
           </div>
         </div>
         <div class="telemetry-row">
-          <div>TARGET PIN: <span id="label-target-distance" class="telemetry-val" style="color: #34d399;">148 YDS</span></div>
-          <div>WIND: <span id="label-wind" class="telemetry-val" style="color: #38bdf8;">6 MPH ➔</span></div>
+          <div>TARGET PIN: <span id="label-target-distance" class="telemetry-val" style="color: #34d399;">153 YDS (L)</span></div>
+          <div>WIND: <span class="wind-pill"><span id="label-wind-speed">6 MPH</span> <span id="wind-arrow-icon">➔</span> <span id="label-wind-dir" style="font-size: 0.72rem; color: #7dd3fc;">(R)</span></span></div>
           <div>AIM: <span id="label-aim" class="telemetry-val" style="color: #facc15;">0.0°</span></div>
         </div>
       </div>
@@ -630,41 +705,53 @@
 
     <div id="shot-result-card" class="glass-card" style="border-color: #34d399;">
       <div class="stat-badge-row">
-        <span id="res-badge" style="font-size: 0.65rem; font-family: monospace; font-weight: bold; color: #34d399; background: #064e3b; padding: 2px 6px; border-radius: 4px;">SHOT REGISTERED</span>
-        <span id="res-quality" style="font-size: 0.68rem; font-family: monospace; font-weight: bold; color: #38bdf8;">PURE STRAIGHT</span>
+        <span id="res-badge" style="font-size: 0.72rem; font-family: monospace; font-weight: 800; color: #34d399; background: #064e3b; padding: 3px 8px; border-radius: 4px;">SHOT REGISTERED</span>
+        <span id="res-quality" style="font-size: 0.75rem; font-family: monospace; font-weight: 800; color: #38bdf8;">PURE STRAIGHT</span>
       </div>
-      <div id="res-carry-hero" class="stat-hero-number">162 YDS CARRY</div>
+      <div id="res-carry-hero" class="stat-hero-number">157 YDS CARRY</div>
       <div class="stat-breakdown-row">
-        <span>Total: <strong id="res-total-val" style="color: #ffffff;">166 YDS</strong></span>
-        <span>Rollout: <strong id="res-roll-val" style="color: #cbd5e1;">+4 YDS</strong></span>
+        <span>Total: <strong id="res-total-val" style="color: #ffffff;">162 YDS</strong></span>
+        <span>Rollout: <strong id="res-roll-val" style="color: #cbd5e1;">+5 YDS</strong></span>
       </div>
       <div class="stat-pin-highlight">
         <span>DIST TO PIN:</span>
-        <span id="res-target-diff" style="font-size: 0.85rem; font-weight: 900;">4.8 YDS</span>
+        <span id="res-target-diff" style="font-size: 0.95rem; font-weight: 900;">4.8 YDS</span>
       </div>
-      <div id="res-specs" style="font-size: 0.65rem; font-family: monospace; color: #9ca3af; margin-top: 6px; border-top: 1px solid #1f2937; padding-top: 5px;">
-        Club: 7I • Target Pin: 148 YDS
+      <div id="res-specs" style="font-size: 0.74rem; font-family: monospace; color: #cbd5e1; margin-top: 7px; border-top: 1px solid #1f2937; padding-top: 6px;">
+        Club: 7I • Lie: Green
       </div>
     </div>
 
     <div id="aim-controls">
       <button id="btn-aim-l" class="aim-btn">◀ AIM L</button>
       <button id="btn-aim-r" class="aim-btn">AIM R ▶</button>
+      <button id="btn-zoom-pin" class="aim-btn">🔍 ZOOM PIN</button>
+      <button id="btn-next-pin" class="aim-btn">🎯 NEXT PIN</button>
     </div>
 
-    <div id="club-strip">
-      <button class="club-pill" data-club="1W">1W</button>
-      <button class="club-pill" data-club="3W">3W</button>
-      <button class="club-pill" data-club="5I">5I</button>
-      <button class="club-pill active" data-club="7I">7I</button>
-      <button class="club-pill" data-club="9I">9I</button>
-      <button class="club-pill" data-club="PW">PW</button>
+    <!-- Full 13-Club Bag Strip -->
+    <div id="club-bag-wrapper">
+      <div id="club-strip">
+        <button class="club-pill" data-club="1W" data-cat="wood">1W<span class="club-carry-tag">285y</span></button>
+        <button class="club-pill" data-club="3W" data-cat="wood">3W<span class="club-carry-tag">245y</span></button>
+        <button class="club-pill" data-club="3H" data-cat="wood">3H<span class="club-carry-tag">220y</span></button>
+        <button class="club-pill" data-club="4I" data-cat="iron">4I<span class="club-carry-tag">205y</span></button>
+        <button class="club-pill" data-club="5I" data-cat="iron">5I<span class="club-carry-tag">192y</span></button>
+        <button class="club-pill" data-club="6I" data-cat="iron">6I<span class="club-carry-tag">178y</span></button>
+        <button class="club-pill active" data-club="7I" data-cat="iron">7I<span class="club-carry-tag">162y</span></button>
+        <button class="club-pill" data-club="8I" data-cat="iron">8I<span class="club-carry-tag">148y</span></button>
+        <button class="club-pill" data-club="9I" data-cat="iron">9I<span class="club-carry-tag">135y</span></button>
+        <button class="club-pill" data-club="PW" data-cat="wedge">PW<span class="club-carry-tag">120y</span></button>
+        <button class="club-pill" data-club="GW" data-cat="wedge">GW<span class="club-carry-tag">105y</span></button>
+        <button class="club-pill" data-club="SW" data-cat="wedge">SW<span class="club-carry-tag">88y</span></button>
+        <button class="club-pill" data-club="LW" data-cat="wedge">LW<span class="club-carry-tag">65y</span></button>
+      </div>
     </div>
 
     <div id="swing-system">
       <div id="meter-box">
         <div class="meter-label-row">
-          <span style="color: #9ca3af;">1. POWER</span>
+          <span style="color: #cbd5e1;">1. POWER</span>
           <span id="meter-power-val" style="color: #f59e0b;">READY</span>
         </div>
         <div class="track-power">
@@ -673,7 +760,7 @@
         </div>
 
         <div class="meter-label-row">
-          <span style="color: #9ca3af;">2. SNAP</span>
+          <span style="color: #cbd5e1;">2. SNAP</span>
           <span id="meter-snap-val" style="color: #38bdf8;">WAITING</span>
         </div>
         <div class="track-snap">
@@ -688,7 +775,7 @@
       </button>
       
       <div class="desktop-key-hint">
-        <kbd>A</kbd>/<kbd>D</kbd> Aim • <kbd>1</kbd>-<kbd>6</kbd> Club • <kbd>SPACE</kbd> Swing
+        <kbd>A</kbd>/<kbd>D</kbd> Aim • <kbd>[</kbd>/<kbd>]</kbd> Club • <kbd>TAB</kbd> Pin • <kbd>Z</kbd> Zoom • <kbd>SPACE</kbd> Swing
       </div>
     </div>
   </div>
@@ -717,7 +804,6 @@
         } catch (e) {}
       }
 
-      // --- Skate Sounds ---
       setupRollingLoop() {
         if (!this.ctx) return;
         const bufferSize = this.ctx.sampleRate * 2;
@@ -762,204 +848,159 @@
         }
       }
 
-      playOlliePop() {
+      playTone(type, freqStart, freqEnd, duration, vol, delay = 0) {
         this.init();
         if (!this.ctx) return;
-        const now = this.ctx.currentTime;
+        const t = this.ctx.currentTime + delay;
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(180, now);
-        osc.frequency.exponentialRampToValueAtTime(40, now + 0.08);
-        gain.gain.setValueAtTime(0.4, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.09);
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-        osc.start(now);
-        osc.stop(now + 0.1);
-      }
-
-      playLanding() {
-        this.init();
-        if (!this.ctx) return;
-        const now = this.ctx.currentTime;
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(100, now);
-        osc.frequency.linearRampToValueAtTime(32, now + 0.12);
-        gain.gain.setValueAtTime(0.35, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.13);
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-        osc.start(now);
-        osc.stop(now + 0.14);
-      }
-
-      playPushKick() {
-        this.init();
-        if (!this.ctx) return;
-        const now = this.ctx.currentTime;
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(120, now);
-        osc.frequency.exponentialRampToValueAtTime(50, now + 0.08);
-        gain.gain.setValueAtTime(0.3, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-        osc.start(now);
-        osc.stop(now + 0.09);
-      }
-
-      playDuckWhoosh() {
-        this.init();
-        if (!this.ctx) return;
-        const now = this.ctx.currentTime;
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(220, now);
-        osc.frequency.linearRampToValueAtTime(110, now + 0.12);
-        gain.gain.setValueAtTime(0.15, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-        osc.start(now);
-        osc.stop(now + 0.13);
-      }
-
-      playCrash() {
-        this.init();
-        if (!this.ctx) return;
-        const now = this.ctx.currentTime;
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(160, now);
-        osc.frequency.exponentialRampToValueAtTime(18, now + 0.45);
-        gain.gain.setValueAtTime(0.6, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.45);
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-        osc.start(now);
-        osc.stop(now + 0.48);
-      }
-
-      // --- Golf Driving Range Sounds ---
-      playFullSwingStrike(quality) {
-        this.init();
-        if (!this.ctx) return;
-        const now = this.ctx.currentTime;
-
-        // 1. Shaft Swoosh
-        const swooshLen = 0.14;
-        const bufferSize = this.ctx.sampleRate * swooshLen;
-        const noiseBuffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
-        const output = noiseBuffer.getChannelData(0);
-        for (let i = 0; i < bufferSize; i++) {
-          output[i] = (Math.random() * 2 - 1) * 0.38;
+        osc.type = type;
+        osc.frequency.setValueAtTime(freqStart, t);
+        if (freqEnd !== null) {
+          osc.frequency.exponentialRampToValueAtTime(Math.max(10, freqEnd), t + duration);
         }
-        const swoosh = this.ctx.createBufferSource();
-        swoosh.buffer = noiseBuffer;
+        gain.gain.setValueAtTime(vol, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + duration);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(t);
+        osc.stop(t + duration + 0.02);
+      }
+
+      playOlliePop()  { this.playTone('triangle', 180, 40, 0.09, 0.4); }
+      playLanding()   { this.playTone('sine', 100, 32, 0.13, 0.35); }
+      playPushKick()  { this.playTone('triangle', 120, 50, 0.08, 0.3); }
+      playDuckWhoosh(){ this.playTone('sine', 220, 110, 0.12, 0.15); }
+      playCrash()     { this.playTone('sawtooth', 160, 18, 0.45, 0.6); }
+      playClick()     { this.playTone('triangle', 1100, null, 0.04, 0.08); }
+      playBounce(intensity = 1.0) {
+        this.playTone('sine', 140 * Math.max(0.7, intensity), 55, 0.07, 0.24 * intensity);
+      }
+
+      // Natural downswing air whoosh + dry composite Driver/Wood thwack & crisp Iron strikes
+      playFullSwingStrike(quality, clubKey, power = 0.85) {
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+
+        const isWood = (clubKey === '1W' || clubKey === '3W' || clubKey === '3H');
+        const isLongIron = (clubKey === '4I' || clubKey === '5I');
+        const isWedge = (clubKey === 'PW' || clubKey === 'GW' || clubKey === 'SW' || clubKey === 'LW');
+        const pScale = 0.78 + power * 0.22;
+
+        // 1. Warm Low-Pass Air Whoosh
+        const swooshDur = isWood ? 0.21 : (isLongIron ? 0.19 : (isWedge ? 0.14 : 0.17));
+        const swooshSamples = Math.floor(this.ctx.sampleRate * swooshDur);
+        const swooshBuf = this.ctx.createBuffer(1, swooshSamples, this.ctx.sampleRate);
+        const sData = swooshBuf.getChannelData(0);
+        for (let i = 0; i < swooshSamples; i++) {
+          const p = i / swooshSamples;
+          const env = Math.sin(Math.pow(p, 0.7) * Math.PI);
+          sData[i] = (Math.random() * 2 - 1) * env;
+        }
+
+        const swooshSrc = this.ctx.createBufferSource();
+        swooshSrc.buffer = swooshBuf;
 
         const swooshFilter = this.ctx.createBiquadFilter();
-        swooshFilter.type = 'bandpass';
-        swooshFilter.frequency.setValueAtTime(2400, now);
-        swooshFilter.frequency.exponentialRampToValueAtTime(450, now + swooshLen);
+        swooshFilter.type = 'lowpass';
+        swooshFilter.Q.value = 1.2;
+        swooshFilter.frequency.setValueAtTime(isWood ? 190 : 220, now);
+        swooshFilter.frequency.exponentialRampToValueAtTime((isWood ? 820 : 1050) * pScale, now + swooshDur * 0.75);
+        swooshFilter.frequency.exponentialRampToValueAtTime(300, now + swooshDur);
 
         const swooshGain = this.ctx.createGain();
-        swooshGain.gain.setValueAtTime(0.01, now);
-        swooshGain.gain.linearRampToValueAtTime(0.32, now + swooshLen * 0.7);
-        swooshGain.gain.linearRampToValueAtTime(0.001, now + swooshLen);
+        swooshGain.gain.setValueAtTime((isWood ? 0.36 : 0.24) * pScale, now);
 
-        swoosh.connect(swooshFilter);
+        swooshSrc.connect(swooshFilter);
         swooshFilter.connect(swooshGain);
         swooshGain.connect(this.ctx.destination);
-        swoosh.start(now);
+        swooshSrc.start(now);
 
-        // 2. Crisp Face Impact Click
-        const strikeTime = now + 0.11;
-        const clickOsc = this.ctx.createOscillator();
-        const clickGain = this.ctx.createGain();
-        clickOsc.type = 'triangle';
-        const baseFreq = quality === 'pure' ? 2400 : 1700;
-        clickOsc.frequency.setValueAtTime(baseFreq, strikeTime);
-        clickOsc.frequency.exponentialRampToValueAtTime(320, strikeTime + 0.04);
+        // 2. Percussive Clubface Compression Crack
+        const strikeOffset = swooshDur * 0.76;
+        const strikeTime = now + strikeOffset;
+        const snapDur = isWood ? 0.024 : 0.018;
+        const snapSamples = Math.floor(this.ctx.sampleRate * snapDur);
+        const snapBuf = this.ctx.createBuffer(1, snapSamples, this.ctx.sampleRate);
+        const snapData = snapBuf.getChannelData(0);
+        for (let i = 0; i < snapSamples; i++) {
+          snapData[i] = (Math.random() * 2 - 1) * Math.exp(-i / (snapSamples * 0.26));
+        }
 
-        clickGain.gain.setValueAtTime(0.65, strikeTime);
-        clickGain.gain.exponentialRampToValueAtTime(0.001, strikeTime + 0.045);
+        const snapSrc = this.ctx.createBufferSource();
+        snapSrc.buffer = snapBuf;
 
-        clickOsc.connect(clickGain);
-        clickGain.connect(this.ctx.destination);
-        clickOsc.start(strikeTime);
-        clickOsc.stop(strikeTime + 0.05);
+        const snapFilter = this.ctx.createBiquadFilter();
+        snapFilter.type = 'bandpass';
+        snapFilter.Q.value = isWood ? 1.4 : 1.5;
+        const snapFreq = isWood ? (clubKey === '1W' ? 1180 : 1320) : (isLongIron ? 2150 : (isWedge ? 2600 : 2050));
+        snapFilter.frequency.setValueAtTime(snapFreq, strikeTime);
 
-        // 3. Resonant Ball Compression Thump
-        const thumpOsc = this.ctx.createOscillator();
-        const thumpGain = this.ctx.createGain();
-        thumpOsc.type = 'sine';
-        thumpOsc.frequency.setValueAtTime(190, strikeTime);
-        thumpOsc.frequency.exponentialRampToValueAtTime(55, strikeTime + 0.14);
+        const snapGain = this.ctx.createGain();
+        snapGain.gain.setValueAtTime((quality === 'pure' ? 0.95 : 0.68) * pScale, strikeTime);
+        snapGain.gain.exponentialRampToValueAtTime(0.001, strikeTime + snapDur);
 
-        thumpGain.gain.setValueAtTime(0.5, strikeTime);
-        thumpGain.gain.exponentialRampToValueAtTime(0.001, strikeTime + 0.15);
+        snapSrc.connect(snapFilter);
+        snapFilter.connect(snapGain);
+        snapGain.connect(this.ctx.destination);
+        snapSrc.start(strikeTime);
 
-        thumpOsc.connect(thumpGain);
-        thumpGain.connect(this.ctx.destination);
-        thumpOsc.start(strikeTime);
-        thumpOsc.stop(strikeTime + 0.16);
+        // 3. Clubhead Acoustic Body (Dry composite thwack for Driver/Woods, crisp compression for Irons)
+        if (isWood) {
+          const woodBodyFreq = clubKey === '1W' ? 235 : (clubKey === '3W' ? 265 : 295);
+          this.playTone('sine', woodBodyFreq, woodBodyFreq * 0.65, 0.085, 0.42 * pScale, strikeOffset);
+          this.playTone('sine', 115, 36, 0.14, 0.78 * pScale, strikeOffset);
+        } else if (isLongIron) {
+          this.playTone('triangle', 320, 240, 0.08, 0.24 * pScale, strikeOffset);
+          this.playTone('sine', 162, 42, 0.14, 0.60 * pScale, strikeOffset);
+        } else if (isWedge) {
+          this.playTone('sine', 210, 68, 0.08, 0.36 * pScale, strikeOffset);
+        } else {
+          this.playTone('sine', 175, 48, 0.12, 0.52 * pScale, strikeOffset);
+        }
       }
 
-      playBounce() {
+      playSandThud() {
         this.init();
         if (!this.ctx) return;
         const now = this.ctx.currentTime;
-        const osc = this.ctx.createOscillator();
+        const len = 0.18;
+        const buf = this.ctx.createBuffer(1, Math.floor(this.ctx.sampleRate * len), this.ctx.sampleRate);
+        const data = buf.getChannelData(0);
+        for (let i = 0; i < data.length; i++) {
+          data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (data.length * 0.35));
+        }
+        const src = this.ctx.createBufferSource();
+        src.buffer = buf;
+        const filter = this.ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(580, now);
         const gain = this.ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(140, now);
-        osc.frequency.linearRampToValueAtTime(60, now + 0.06);
-        gain.gain.setValueAtTime(0.2, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.07);
-        osc.connect(gain);
+        gain.gain.setValueAtTime(0.45, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + len);
+        src.connect(filter);
+        filter.connect(gain);
         gain.connect(this.ctx.destination);
-        osc.start(now);
-        osc.stop(now + 0.08);
-      }
-
-      playClick() {
-        this.init();
-        if (!this.ctx) return;
-        const now = this.ctx.currentTime;
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(1100, now);
-        gain.gain.setValueAtTime(0.08, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-        osc.start(now);
-        osc.stop(now + 0.05);
+        src.start(now);
       }
 
       playPinChime() {
         this.init();
-        if (!this.ctx) return;
-        const now = this.ctx.currentTime;
-        [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
-          const osc = this.ctx.createOscillator();
-          const gain = this.ctx.createGain();
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(freq, now + idx * 0.08);
-          gain.gain.setValueAtTime(0.2, now + idx * 0.08);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.4);
-          osc.connect(gain);
-          gain.connect(this.ctx.destination);
-          osc.start(now + idx * 0.08);
-          osc.stop(now + idx * 0.08 + 0.42);
+        const notes = [523.25, 659.25, 783.99, 1046.50];
+        notes.forEach((freq, idx) => {
+          this.playTone('triangle', freq, null, 0.45, 0.28, idx * 0.08);
+        });
+      }
+
+      playHoleInOneFanfare() {
+        this.init();
+        [0, 0.06, 0.13].forEach(offset => {
+          this.playTone('triangle', 920, 240, 0.05, 0.35, offset);
+        });
+        const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98];
+        notes.forEach((freq, idx) => {
+          this.playTone(idx === notes.length - 1 ? 'triangle' : 'sine', freq, null, idx === notes.length - 1 ? 0.95 : 0.45, 0.28, 0.18 + idx * 0.09);
         });
       }
     }
@@ -968,7 +1009,7 @@
     /* ==========================================================================
        2. SCENE MANAGER & TOGGLING
        ========================================================================== */
-    let currentActiveScene = 'skate'; // 'skate' | 'range'
+    let currentActiveScene = 'skate';
     const btnToggleSkate = document.getElementById('toggle-skate');
     const btnToggleRange = document.getElementById('toggle-range');
     const containerSkate = document.getElementById('scene-skate-container');
@@ -989,11 +1030,7 @@
         btnToggleSkate.classList.remove('active');
         containerSkate.style.display = 'none';
         containerRange.style.display = 'block';
-
-        // Mute skate rolling loop immediately when leaving
         audio.updateRolling(0, false);
-
-        // Ensure 3D renderer matches viewport size
         onWindowResize();
       }
     }
@@ -1023,7 +1060,6 @@
     let skateSpeed = 0;
     let skateScore = 0;
     let isWipeout = false;
-    let wipeoutTimer = 0;
     let wipeoutDebris = null;
 
     const skater = {
@@ -1055,7 +1091,6 @@
 
       skateGameActive = true;
       isWipeout = false;
-      wipeoutTimer = 0;
       skateDistance = 0;
       skateSpeed = 12;
       skateScore = 0;
@@ -1132,7 +1167,6 @@
     function triggerWipeout(reason) {
       if (isWipeout) return;
       isWipeout = true;
-      wipeoutTimer = 0;
       skateSpeed = 0;
       audio.playCrash();
 
@@ -1181,7 +1215,6 @@
       const roadBaseline = canvasSkate.height - 70;
 
       if (isWipeout && wipeoutDebris) {
-        wipeoutTimer++;
         ctx.strokeStyle = '#ffffff';
         ctx.lineWidth = 3.5;
         ctx.lineCap = 'round';
@@ -1643,48 +1676,595 @@
     }
 
     /* ==========================================================================
-       4. SCENE 2: DRIVING RANGE LOGIC (Calibrated Ballistics & No Runaway Drift)
+       4. SCENE 2: DAYLIGHT LOW-POLY DRIVING RANGE
        ========================================================================== */
+    const clubOrder = ['1W', '3W', '3H', '4I', '5I', '6I', '7I', '8I', '9I', 'PW', 'GW', 'SW', 'LW'];
     const clubProfiles = {
-      '1W': { name: 'Driver', maxCarry: 285, flightTime: 5.8, apex: 34, rollFactor: 14.0, recTier: 300 },
-      '3W': { name: '3-Wood', maxCarry: 245, flightTime: 5.4, apex: 32, rollFactor: 10.0, recTier: 250 },
-      '5I': { name: '5-Iron', maxCarry: 200, flightTime: 5.0, apex: 30, rollFactor: 7.0, recTier: 200 },
-      '7I': { name: '7-Iron', maxCarry: 162, flightTime: 4.6, apex: 28, rollFactor: 4.5, recTier: 150 },
-      '9I': { name: '9-Iron', maxCarry: 138, flightTime: 4.3, apex: 26, rollFactor: 3.0, recTier: 100 },
-      'PW': { name: 'Pitching Wedge', maxCarry: 116, flightTime: 4.0, apex: 24, rollFactor: 2.0, recTier: 50 }
+      '1W': { name: 'Driver',         maxCarry: 270, flightTime: 7.4, apex: 38, rollFactor: 15.0 },
+      '3W': { name: '3-Wood',         maxCarry: 234, flightTime: 7.0, apex: 36, rollFactor: 11.0 },
+      '3H': { name: '3-Hybrid',       maxCarry: 211, flightTime: 6.7, apex: 35, rollFactor: 9.0  },
+      '4I': { name: '4-Iron',         maxCarry: 197, flightTime: 6.5, apex: 34, rollFactor: 8.0  },
+      '5I': { name: '5-Iron',         maxCarry: 185, flightTime: 6.3, apex: 33, rollFactor: 7.0  },
+      '6I': { name: '6-Iron',         maxCarry: 172, flightTime: 6.1, apex: 32, rollFactor: 6.0  },
+      '7I': { name: '7-Iron',         maxCarry: 157, flightTime: 5.9, apex: 32, rollFactor: 5.0  },
+      '8I': { name: '8-Iron',         maxCarry: 144, flightTime: 5.7, apex: 31, rollFactor: 4.0  },
+      '9I': { name: '9-Iron',         maxCarry: 132, flightTime: 5.4, apex: 30, rollFactor: 3.0  },
+      'PW': { name: 'Pitching Wedge', maxCarry: 118, flightTime: 5.1, apex: 29, rollFactor: 2.0  },
+      'GW': { name: 'Gap Wedge',      maxCarry: 103, flightTime: 4.8, apex: 27, rollFactor: 2.0  },
+      'SW': { name: 'Sand Wedge',     maxCarry: 87,  flightTime: 4.5, apex: 25, rollFactor: 1.0  },
+      'LW': { name: 'Lob Wedge',      maxCarry: 64,  flightTime: 4.1, apex: 23, rollFactor: 1.0  }
     };
     let activeClubKey = '7I';
 
     const targetTiers = [
-      { tier: 50, name: "50 YD WEDGE GREEN", variations: [48, 51, 54], color: 0xffffff },
-      { tier: 100, name: "100 YD ISLAND GREEN", variations: [97, 102, 106], color: 0x38bdf8 },
-      { tier: 150, name: "150 YD ISLAND GREEN", variations: [147, 151, 154], color: 0x34d399 },
-      { tier: 200, name: "200 YD TARGET BULLSEYE", variations: [196, 202, 208], color: 0xfacc15 },
-      { tier: 250, name: "250 YD DEEP TURF GREEN", variations: [246, 252, 258], color: 0xf97316 },
-      { tier: 300, name: "300 YD DRIVER CHALLENGE", variations: [292, 298, 304], color: 0xef4444 }
+      {
+        tier: 68, baseX: -11, x: -11, z: -68, flagScale: 0.95,
+        rx: 9.5, rz: 8.4, rotY: 0.15, shape: 'peanut',
+        greenSlopeX: 0.025, greenSlopeZ: -0.015,
+        bunkers: [
+          { ox: -8.8, oz: 6.4, rx: 6.2, rz: 3.0, rotY: -0.55, style: 'crescent' }
+        ],
+        name: "SHORT PEANUT GREEN", color: 0xffffff, hex: '#ffffff'
+      },
+      {
+        tier: 105, baseX: 16, x: 16, z: -105, flagScale: 1.1,
+        rx: 12.4, rz: 9.2, rotY: -0.35, shape: 'kidney',
+        greenSlopeX: -0.028, greenSlopeZ: 0.018,
+        bunkers: [
+          { ox: 11.6, oz: 5.2, rx: 5.0, rz: 3.8, rotY: 0.4, style: 'pot' }
+        ],
+        name: "100 YD KIDNEY GREEN", color: 0x38bdf8, hex: '#38bdf8'
+      },
+      {
+        tier: 150, baseX: -28, x: -28, z: -150, flagScale: 1.25,
+        rx: 10.4, rz: 14.6, rotY: 0.25, shape: 'teardrop',
+        greenSlopeX: 0.022, greenSlopeZ: 0.024,
+        bunkers: [
+          { ox: -11.6, oz: 4.8, rx: 4.8, rz: 3.2, rotY: -0.3, style: 'oval' },
+          { ox: 11.4, oz: -4.2, rx: 4.5, rz: 3.0, rotY: 0.25, style: 'pot' }
+        ],
+        name: "150 YD TEARDROP GREEN", color: 0x10b981, hex: '#34d399'
+      },
+      {
+        tier: 200, baseX: 30, x: 30, z: -200, flagScale: 1.4,
+        rx: 14.4, rz: 11.8, rotY: 0.3, shape: 'clover',
+        greenSlopeX: -0.024, greenSlopeZ: -0.020,
+        bunkers: [
+          { ox: 7.2, oz: 12.6, rx: 8.0, rz: 3.2, rotY: 0.25, style: 'crescent' }
+        ],
+        name: "200 YD CLOVER GREEN", color: 0xfacc15, hex: '#facc15'
+      },
+      {
+        tier: 250, baseX: -15, x: -15, z: -250, flagScale: 1.65,
+        rx: 15.4, rz: 11.6, rotY: -0.2, shape: 'boomerang',
+        greenSlopeX: 0.026, greenSlopeZ: 0.015,
+        bunkers: [
+          { ox: -14.6, oz: 3.8, rx: 6.2, rz: 4.2, rotY: -0.45, style: 'kidney' }
+        ],
+        name: "250 YD BOOMERANG GREEN", color: 0xf97316, hex: '#f97316'
+      },
+      {
+        tier: 290, baseX: 15, x: 15, z: -290, flagScale: 1.85,
+        rx: 16.8, rz: 15.6, rotY: 0.0, shape: 'shield',
+        greenSlopeX: -0.018, greenSlopeZ: 0.026,
+        bunkers: [
+          { ox: -17.0, oz: 4.8, rx: 5.8, rz: 3.8, rotY: -0.35, style: 'kidney' },
+          { ox: 17.0, oz: 4.8, rx: 5.8, rz: 3.8, rotY: 0.35, style: 'kidney' }
+        ],
+        name: "300 YD CHAMPIONSHIP GREEN", color: 0xef4444, hex: '#ef4444'
+      }
     ];
     let currentTierIdx = 2;
-    let currentTargetYardage = 148;
+    let currentTargetX = -28;
+    let currentTargetZ = -150;
+    let currentTargetYardage = 153;
+
+    let shuffledTierQueue = [];
+    function getNextShuffledTier(excludeIdx) {
+      if (shuffledTierQueue.length === 0) {
+        shuffledTierQueue = [0, 1, 2, 3, 4, 5];
+        for (let i = shuffledTierQueue.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffledTierQueue[i], shuffledTierQueue[j]] = [shuffledTierQueue[j], shuffledTierQueue[i]];
+        }
+        if (shuffledTierQueue[shuffledTierQueue.length - 1] === excludeIdx) {
+          const swapWith = Math.floor(Math.random() * (shuffledTierQueue.length - 1));
+          [shuffledTierQueue[shuffledTierQueue.length - 1], shuffledTierQueue[swapWith]] = [shuffledTierQueue[swapWith], shuffledTierQueue[shuffledTierQueue.length - 1]];
+        }
+      }
+      return shuffledTierQueue.pop();
+    }
 
     let aimAngleDeg = 0;
     let windMph = 6;
-    let windAngleRad = 0;
-    let windLateralYardsTotal = 0;
-    let windHeadTailMph = 0;
+    let windAngleDeg = 90;
+    let windCrossYardsTotal = 0;
+    let windTailYardsTotal = 0;
 
-    let sceneRange, cameraRange, rendererRange, golfBallMesh, ballTracerLine, aimGuideLine, proximityLineMesh;
+    let sceneRange, cameraRange, rendererRange, terrainMesh, golfBallMesh, ballShadowMesh, ballTracerLine, aimGuideLine, proximityLineMesh, activeBeaconRing;
+    const terrainRaycaster = new THREE.Raycaster();
+    const downVector = new THREE.Vector3(0, -1, 0);
+    const rayOrigin = new THREE.Vector3();
+
     const tracerPoints = [];
     const targetMeshGroups = [];
+    const bunkerGroupsList = [];
+    const flagMeshes = [];
+    const yardagePoles = [];
 
+    const BALL_RADIUS = 0.34;
+    const CUP_RADIUS = 0.42;
+    const FAIRWAY_HALF_W = 55;
+
+    let manualZoomHeld = false;
     let ballInFlight = false;
     let ballResting = false;
-    const ballPos = new THREE.Vector3(0, 0.24, 0);
+    let ballHoledOut = false;
+    let landingSurfaceName = 'Fairway';
+    const ballPos = new THREE.Vector3(0, BALL_RADIUS + 0.14, 0);
     const ballVel = new THREE.Vector3(0, 0, 0);
     let ballGravity = 0.5;
 
-    let frameLateralDrift = 0;
+    let frameWindDriftX = 0;
+    let frameWindDriftZ = 0;
     let firstLandingCarry = 0;
     let hasPitched = false;
+    let bounceCount = 0;
+    let isRollingPhase = false;
+    let rollVelX = 0;
+    let rollVelZ = 0;
+
+    function getGreenRadialScale(shape, theta) {
+      switch (shape) {
+        case 'peanut':
+          return 0.88 + 0.18 * Math.cos(2 * theta);
+        case 'kidney':
+          return 0.94 + 0.12 * Math.sin(theta) - 0.14 * Math.exp(-Math.pow(Math.cos(theta), 2) * 4.0) * (Math.sin(theta) > 0 ? 1 : 0.2);
+        case 'teardrop':
+          return 0.92 + 0.16 * Math.sin(theta) + 0.06 * Math.cos(2 * theta);
+        case 'clover':
+          return 0.91 + 0.13 * Math.cos(3 * theta);
+        case 'boomerang':
+          return 0.92 + 0.15 * Math.cos(2 * theta) + 0.10 * Math.sin(theta);
+        case 'shield':
+          return 0.95 + 0.08 * Math.cos(4 * theta) - 0.06 * Math.sin(theta);
+        default:
+          return 1.0;
+      }
+    }
+
+    function getRawTerrainHeight(x, z) {
+      if (z > -15) return 0;
+      const distFactor = Math.min(1.0, Math.abs(z + 15) / 45);
+      const wave1 = Math.sin(x * 0.055 + z * 0.025) * 1.45;
+      const wave2 = Math.cos(z * 0.042 - x * 0.03) * 1.15;
+      const gentleRise = Math.max(0, (-z - 60) * 0.008);
+      return (wave1 + wave2) * distFactor + gentleRise;
+    }
+
+    function getTerrainHeight(x, z) {
+      let h = getRawTerrainHeight(x, z);
+      for (let i = 0; i < targetTiers.length; i++) {
+        const t = targetTiers[i];
+        const maxRad = Math.max(t.rx, t.rz) + 16.5;
+        const dist = Math.hypot(x - t.x, z - t.z);
+        if (dist < maxRad + 6.0) {
+          const flatH = getRawTerrainHeight(t.x, t.z);
+          if (dist <= maxRad) return flatH;
+          const blend = (dist - maxRad) / 6.0;
+          const smooth = blend * blend * (3 - 2 * blend);
+          h = flatH * (1 - smooth) + h * smooth;
+        }
+      }
+      return h;
+    }
+
+    function getSurfaceHeightAt(x, z) {
+      if (terrainMesh) {
+        rayOrigin.set(x, 60, z);
+        terrainRaycaster.set(rayOrigin, downVector);
+        const hits = terrainRaycaster.intersectObject(terrainMesh, false);
+        if (hits.length > 0) {
+          return hits[0].point.y;
+        }
+      }
+      return getTerrainHeight(x, z);
+    }
+
+    function getSurfaceInfoAt(x, z) {
+      for (let i = 0; i < targetTiers.length; i++) {
+        const t = targetTiers[i];
+        const dx = x - t.x;
+        const dz = z - t.z;
+        const cosR = Math.cos(-t.rotY);
+        const sinR = Math.sin(-t.rotY);
+        const lx = dx * cosR - dz * sinR;
+        const lz = dx * sinR + dz * cosR;
+
+        const nx = lx / t.rx;
+        const nz = lz / t.rz;
+        const theta = Math.atan2(nz, nx);
+        const rScale = getGreenRadialScale(t.shape, theta);
+        const normGreen = Math.hypot(nx, nz) / rScale;
+        if (normGreen <= 1.03) {
+          return { type: 'green', tierIdx: i, extraHeight: 0.34 };
+        }
+
+        for (let b = 0; b < t.bunkers.length; b++) {
+          const bSpec = t.bunkers[b];
+          const bdx = x - (t.x + bSpec.ox);
+          const bdz = z - (t.z + bSpec.oz);
+          const bCos = Math.cos(-bSpec.rotY);
+          const bSin = Math.sin(-bSpec.rotY);
+          const blx = bdx * bCos - bdz * bSin;
+          const blz = bdx * bSin + bdz * bCos;
+          const normBunker = (blx * blx) / (bSpec.rx * bSpec.rx) + (blz * blz) / (bSpec.rz * bSpec.rz);
+          if (normBunker <= 1.0) {
+            return { type: 'bunker', tierIdx: i, extraHeight: 0.14 };
+          }
+        }
+      }
+      return { type: Math.abs(x) <= FAIRWAY_HALF_W ? 'fairway' : 'rough', tierIdx: -1, extraHeight: 0.14 };
+    }
+
+    function createDimpledBallTextures() {
+      const size = 256;
+      const diffCanvas = document.createElement('canvas');
+      diffCanvas.width = size;
+      diffCanvas.height = size;
+      const dCtx = diffCanvas.getContext('2d');
+
+      const bumpCanvas = document.createElement('canvas');
+      bumpCanvas.width = size;
+      bumpCanvas.height = size;
+      const bCtx = bumpCanvas.getContext('2d');
+
+      dCtx.fillStyle = '#ffffff';
+      dCtx.fillRect(0, 0, size, size);
+      bCtx.fillStyle = '#ffffff';
+      bCtx.fillRect(0, 0, size, size);
+
+      const rows = 16;
+      const cols = 28;
+      for (let r = 0; r < rows; r++) {
+        const y = ((r + 0.5) / rows) * size;
+        const offset = (r % 2) * (size / cols / 2);
+        for (let c = 0; c < cols; c++) {
+          const x = ((c / cols) * size + offset) % size;
+          const rad = 3.6;
+
+          const dGrad = dCtx.createRadialGradient(x, y, 0.5, x, y, rad);
+          dGrad.addColorStop(0, '#cbd5e1');
+          dGrad.addColorStop(0.75, '#f1f5f9');
+          dGrad.addColorStop(1, '#ffffff');
+          dCtx.fillStyle = dGrad;
+          dCtx.beginPath();
+          dCtx.arc(x, y, rad, 0, Math.PI * 2);
+          dCtx.fill();
+
+          const bGrad = bCtx.createRadialGradient(x, y, 0.4, x, y, rad);
+          bGrad.addColorStop(0, '#555555');
+          bGrad.addColorStop(1, '#ffffff');
+          bCtx.fillStyle = bGrad;
+          bCtx.beginPath();
+          bCtx.arc(x, y, rad, 0, Math.PI * 2);
+          bCtx.fill();
+        }
+      }
+
+      dCtx.fillStyle = '#10b981';
+      dCtx.fillRect(0, size * 0.485, size, size * 0.03);
+
+      return {
+        map: new THREE.CanvasTexture(diffCanvas),
+        bumpMap: new THREE.CanvasTexture(bumpCanvas)
+      };
+    }
+
+    function createRakedSandTextures() {
+      const size = 256;
+      const diffCanvas = document.createElement('canvas');
+      diffCanvas.width = size;
+      diffCanvas.height = size;
+      const dCtx = diffCanvas.getContext('2d');
+
+      const bumpCanvas = document.createElement('canvas');
+      bumpCanvas.width = size;
+      bumpCanvas.height = size;
+      const bCtx = bumpCanvas.getContext('2d');
+
+      dCtx.fillStyle = '#f6d365';
+      dCtx.fillRect(0, 0, size, size);
+      bCtx.fillStyle = '#808080';
+      bCtx.fillRect(0, 0, size, size);
+
+      for (let y = 0; y < size; y += 8) {
+        dCtx.fillStyle = (y % 16 === 0) ? 'rgba(255, 251, 235, 0.25)' : 'rgba(217, 119, 6, 0.14)';
+        dCtx.fillRect(0, y, size, 4);
+
+        bCtx.fillStyle = (y % 16 === 0) ? '#c8c8c8' : '#484848';
+        bCtx.fillRect(0, y, size, 4);
+      }
+
+      for (let i = 0; i < 2800; i++) {
+        const sx = Math.random() * size;
+        const sy = Math.random() * size;
+        const light = Math.random() > 0.45;
+        dCtx.fillStyle = light ? 'rgba(255, 255, 255, 0.35)' : 'rgba(180, 83, 9, 0.25)';
+        dCtx.fillRect(sx, sy, 2, 2);
+
+        bCtx.fillStyle = light ? '#e0e0e0' : '#303030';
+        bCtx.fillRect(sx, sy, 2, 2);
+      }
+
+      const map = new THREE.CanvasTexture(diffCanvas);
+      map.wrapS = map.wrapT = THREE.RepeatWrapping;
+      map.repeat.set(3, 3);
+
+      const bumpMap = new THREE.CanvasTexture(bumpCanvas);
+      bumpMap.wrapS = bumpMap.wrapT = THREE.RepeatWrapping;
+      bumpMap.repeat.set(3, 3);
+
+      return { map, bumpMap };
+    }
+
+    function getBunkerRadialScale(style, theta) {
+      if (style === 'crescent') {
+        return 0.92 + 0.18 * Math.sin(2 * theta);
+      } else if (style === 'kidney') {
+        return 0.94 - 0.16 * Math.exp(-Math.pow(Math.cos(theta), 2) * 3.5) * (Math.sin(theta) > 0 ? 1 : 0.2);
+      } else if (style === 'pot') {
+        return 0.96 + 0.05 * Math.cos(3 * theta);
+      }
+      return 1.0;
+    }
+
+    function buildConformingBunker(tierObj, bSpec, sandMat, lipMat) {
+      const bunkerGroup = new THREE.Group();
+      const segs = 28;
+
+      const sandGeo = new THREE.CircleGeometry(1, segs);
+      sandGeo.rotateX(-Math.PI / 2);
+      const baseSandVerts = Float32Array.from(sandGeo.attributes.position.array);
+
+      const lipGeo = new THREE.RingGeometry(0.92, 1.22, segs);
+      lipGeo.rotateX(-Math.PI / 2);
+      const baseLipVerts = Float32Array.from(lipGeo.attributes.position.array);
+
+      const sandMesh = new THREE.Mesh(sandGeo, sandMat);
+      const lipMesh = new THREE.Mesh(lipGeo, lipMat);
+
+      bunkerGroup.add(sandMesh);
+      bunkerGroup.add(lipMesh);
+      bunkerGroup.userData = { sandMesh, lipMesh, baseSandVerts, baseLipVerts, tierObj, bSpec };
+
+      return bunkerGroup;
+    }
+
+    function conformBunkerToTerrain(bunkerGroup) {
+      const { sandMesh, lipMesh, baseSandVerts, baseLipVerts, tierObj, bSpec } = bunkerGroup.userData;
+      const worldCx = tierObj.x + bSpec.ox;
+      const worldCz = tierObj.z + bSpec.oz;
+      const cosR = Math.cos(bSpec.rotY);
+      const sinR = Math.sin(bSpec.rotY);
+
+      bunkerGroup.position.set(worldCx, 0, worldCz);
+
+      const sPos = sandMesh.geometry.attributes.position;
+      for (let i = 0; i < sPos.count; i++) {
+        const ux = baseSandVerts[i * 3];
+        const uz = baseSandVerts[i * 3 + 2];
+        const theta = Math.atan2(uz, ux);
+        const rScale = getBunkerRadialScale(bSpec.style, theta);
+        const sx = ux * bSpec.rx * rScale;
+        const sz = uz * bSpec.rz * rScale;
+
+        const lx = sx * cosR - sz * sinR;
+        const lz = sx * sinR + sz * cosR;
+        const rNorm = Math.hypot(ux, uz);
+        const basinDepth = (1.0 - rNorm * rNorm) * 0.08;
+        const wy = getSurfaceHeightAt(worldCx + lx, worldCz + lz) + 0.13 - basinDepth;
+        sPos.setXYZ(i, lx, wy, lz);
+      }
+      sPos.needsUpdate = true;
+      sandMesh.geometry.computeVertexNormals();
+
+      const lPos = lipMesh.geometry.attributes.position;
+      for (let i = 0; i < lPos.count; i++) {
+        const ux = baseLipVerts[i * 3];
+        const uz = baseLipVerts[i * 3 + 2];
+        const rUnit = Math.hypot(ux, uz) || 1;
+        const theta = Math.atan2(uz, ux);
+        const rScale = getBunkerRadialScale(bSpec.style, theta);
+        const sx = ux * bSpec.rx * rScale;
+        const sz = uz * bSpec.rz * rScale;
+
+        const lx = sx * cosR - sz * sinR;
+        const lz = sx * sinR + sz * cosR;
+        const lipLift = rUnit < 1.06 ? 0.16 : 0.05;
+        const wy = getSurfaceHeightAt(worldCx + lx, worldCz + lz) + lipLift;
+        lPos.setXYZ(i, lx, wy, lz);
+      }
+      lPos.needsUpdate = true;
+      lipMesh.geometry.computeVertexNormals();
+    }
+
+    function buildShapedGreenComplex(tierObj, idx, greenMat, poleMat, cupHoleMat, cupRimMat) {
+      const group = new THREE.Group();
+      group.userData = { tierIdx: idx };
+
+      const segs = 40;
+      const greenGeo = new THREE.CylinderGeometry(1, 1.06, 0.34, segs);
+      const gPos = greenGeo.attributes.position;
+      for (let i = 0; i < gPos.count; i++) {
+        const vx = gPos.getX(i);
+        const vz = gPos.getZ(i);
+        const theta = Math.atan2(vz, vx);
+        const rScale = getGreenRadialScale(tierObj.shape, theta);
+        gPos.setX(i, vx * tierObj.rx * rScale);
+        gPos.setZ(i, vz * tierObj.rz * rScale);
+      }
+      greenGeo.computeVertexNormals();
+
+      const green = new THREE.Mesh(greenGeo, greenMat);
+      green.position.set(0, 0.16, 0);
+      green.rotation.y = tierObj.rotY;
+      group.add(green);
+
+      const cupHole = new THREE.Mesh(new THREE.CylinderGeometry(CUP_RADIUS, CUP_RADIUS, 0.38, 18), cupHoleMat);
+      cupHole.position.set(0, 0.17, 0);
+      group.add(cupHole);
+
+      const cupRimGeo = new THREE.RingGeometry(CUP_RADIUS, CUP_RADIUS + 0.09, 20);
+      cupRimGeo.rotateX(-Math.PI / 2);
+      const cupRim = new THREE.Mesh(cupRimGeo, cupRimMat);
+      cupRim.position.set(0, 0.365, 0);
+      group.add(cupRim);
+
+      const fScale = tierObj.flagScale;
+      const poleH = 8.4 * fScale;
+      const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.11 * fScale, 0.13 * fScale, poleH, 8), poleMat);
+      pole.position.set(0, poleH / 2 + 0.2, 0);
+      group.add(pole);
+
+      const initDist = Math.round(Math.hypot(tierObj.x, tierObj.z));
+      const flagTex = createFlagYardageTexture(initDist, tierObj.hex);
+      const flagW = 4.4 * fScale;
+      const flagH = 2.4 * fScale;
+      const flagMat = new THREE.MeshBasicMaterial({ map: flagTex, side: THREE.DoubleSide, transparent: true, opacity: 1.0 });
+      const flag = new THREE.Mesh(new THREE.PlaneGeometry(flagW, flagH), flagMat);
+      flag.position.set(flagW / 2, poleH - flagH * 0.45, 0);
+      group.add(flag);
+      flagMeshes.push(flag);
+
+      return group;
+    }
+
+    function updateBeaconGeometryForTier(tierObj) {
+      if (!activeBeaconRing) return;
+      if (activeBeaconRing.geometry) activeBeaconRing.geometry.dispose();
+      const segs = 40;
+      const geo = new THREE.RingGeometry(1.02, 1.10, segs);
+      geo.rotateX(-Math.PI / 2);
+      const pos = geo.attributes.position;
+      for (let i = 0; i < pos.count; i++) {
+        const vx = pos.getX(i);
+        const vz = pos.getZ(i);
+        const theta = Math.atan2(vz, vx);
+        const rScale = getGreenRadialScale(tierObj.shape, theta);
+        pos.setX(i, vx * tierObj.rx * rScale);
+        pos.setZ(i, vz * tierObj.rz * rScale);
+      }
+      activeBeaconRing.geometry = geo;
+    }
+
+    function createFlagYardageTexture(yardNum, bgHex) {
+      const c = document.createElement('canvas');
+      c.width = 256;
+      c.height = 140;
+      const g = c.getContext('2d');
+
+      g.fillStyle = bgHex;
+      g.fillRect(0, 0, 256, 140);
+
+      g.strokeStyle = 'rgba(0, 0, 0, 0.45)';
+      g.lineWidth = 10;
+      g.strokeRect(5, 5, 246, 130);
+
+      const isLightBg = (bgHex === '#ffffff' || bgHex === '#facc15' || bgHex === '#34d399' || bgHex === '#38bdf8');
+      g.fillStyle = isLightBg ? '#090d16' : '#ffffff';
+      g.font = '900 80px monospace';
+      g.textAlign = 'center';
+      g.textBaseline = 'middle';
+      g.fillText(`${yardNum}Y`, 128, 72);
+
+      const tex = new THREE.CanvasTexture(c);
+      tex.needsUpdate = true;
+      return tex;
+    }
+
+    function createYardageStake(mainHex, stripeHex) {
+      const stake = new THREE.Group();
+      const postH = 5.6;
+      const post = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.24, 0.28, postH, 8),
+        new THREE.MeshStandardMaterial({ color: mainHex, roughness: 0.45, flatShading: true })
+      );
+      post.position.y = postH / 2;
+      stake.add(post);
+
+      const band = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.26, 0.26, 1.15, 8),
+        new THREE.MeshBasicMaterial({ color: stripeHex })
+      );
+      band.position.y = postH - 0.65;
+      stake.add(band);
+      return stake;
+    }
+
+    function buildLowPolyTree(scale, trunkMat, foliageMat, coneGeos) {
+      const tree = new THREE.Group();
+      const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.35 * scale, 0.55 * scale, 3.2 * scale, 6), trunkMat);
+      trunk.position.y = 1.6 * scale;
+      tree.add(trunk);
+
+      const tierHeights = [4.2, 6.4, 8.3];
+      coneGeos.forEach((geo, idx) => {
+        const cone = new THREE.Mesh(geo, foliageMat);
+        cone.scale.set(scale, scale, scale);
+        cone.position.y = tierHeights[idx] * scale;
+        cone.rotation.y = Math.random() * Math.PI;
+        tree.add(cone);
+      });
+      return tree;
+    }
+
+    function rebuildTerrainAndComplexes() {
+      if (terrainMesh) {
+        const posAttr = terrainMesh.geometry.attributes.position;
+        for (let i = 0; i < posAttr.count; i++) {
+          const vx = posAttr.getX(i);
+          const vz = posAttr.getZ(i);
+          posAttr.setY(i, getTerrainHeight(vx, vz));
+        }
+        posAttr.needsUpdate = true;
+        terrainMesh.geometry.computeVertexNormals();
+        terrainMesh.geometry.computeBoundingBox();
+        terrainMesh.geometry.computeBoundingSphere();
+      }
+
+      targetTiers.forEach((t, idx) => {
+        const gy = getSurfaceHeightAt(t.x, t.z);
+        targetMeshGroups[idx].position.set(t.x, gy, t.z);
+
+        const exactDist = Math.round(Math.hypot(t.x, t.z));
+        if (flagMeshes[idx].material.map) flagMeshes[idx].material.map.dispose();
+        flagMeshes[idx].material.map = createFlagYardageTexture(exactDist, t.hex);
+        flagMeshes[idx].material.needsUpdate = true;
+      });
+
+      bunkerGroupsList.forEach(bGroup => conformBunkerToTerrain(bGroup));
+
+      yardagePoles.forEach(p => {
+        p.mesh.position.y = getSurfaceHeightAt(p.x, p.z);
+      });
+    }
+
+    function randomizeTargetCoords(tierIdx) {
+      const tierObj = targetTiers[tierIdx];
+      const zOffset = Math.floor(Math.random() * 21) - 10;
+      const xSpread = tierObj.tier <= 75 ? 4 : 6;
+      const xOffset = Math.floor(Math.random() * (xSpread * 2 + 1)) - xSpread;
+
+      const maxLat = tierObj.tier <= 75 ? 14 : 32;
+      tierObj.x = Math.max(-maxLat, Math.min(maxLat, tierObj.baseX + xOffset));
+      let candidateZ = -Math.max(60, Math.min(302, tierObj.tier + zOffset));
+
+      while (Math.hypot(tierObj.x, candidateZ) < 60) {
+        candidateZ -= 1;
+      }
+      tierObj.z = candidateZ;
+    }
 
     function initRangeScene() {
       const container = document.getElementById('webgl-canvas-container');
@@ -1692,10 +2272,10 @@
       const h = window.innerHeight;
 
       sceneRange = new THREE.Scene();
-      sceneRange.background = new THREE.Color(0x04080e);
-      sceneRange.fog = new THREE.FogExp2(0x04080e, 0.0035);
+      sceneRange.background = new THREE.Color(0x63b8f2);
+      sceneRange.fog = new THREE.Fog(0x9bd2f8, 195, 520);
 
-      cameraRange = new THREE.PerspectiveCamera(50, w / h, 0.1, 800);
+      cameraRange = new THREE.PerspectiveCamera(48, w / h, 0.1, 800);
       resetTeeCamera();
 
       rendererRange = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
@@ -1703,156 +2283,287 @@
       rendererRange.setSize(w, h);
       container.appendChild(rendererRange.domElement);
 
-      // Fairway Ground Plane
-      const fairwayGeo = new THREE.PlaneGeometry(160, 380);
-      const fairwayMat = new THREE.MeshBasicMaterial({ color: 0x072818 });
-      const fairway = new THREE.Mesh(fairwayGeo, fairwayMat);
-      fairway.rotation.x = -Math.PI / 2;
-      fairway.position.set(0, -0.05, -180);
-      sceneRange.add(fairway);
+      const hemiLight = new THREE.HemisphereLight(0xdbeafe, 0x14532d, 0.95);
+      hemiLight.position.set(0, 120, 0);
+      sceneRange.add(hemiLight);
 
-      // Grid Lines
-      const grid = new THREE.GridHelper(380, 76, 0x15803d, 0x0a3c22);
-      grid.position.set(0, 0, -180);
-      sceneRange.add(grid);
+      const sunLight = new THREE.DirectionalLight(0xfffbeb, 0.95);
+      sunLight.position.set(80, 160, 60);
+      sceneRange.add(sunLight);
 
-      // Tee Box Mat
-      const matGeo = new THREE.BoxGeometry(6, 0.2, 5);
-      const matMesh = new THREE.Mesh(matGeo, new THREE.MeshBasicMaterial({ color: 0x166534 }));
-      matMesh.position.set(0, 0.1, 2.5);
+      const sunDisc = new THREE.Mesh(
+        new THREE.CircleGeometry(18, 16),
+        new THREE.MeshBasicMaterial({ color: 0xfef9c3, fog: false })
+      );
+      sunDisc.position.set(140, 140, -395);
+      sceneRange.add(sunDisc);
+
+      // Subdivided Undulating Low-Poly Terrain (110y wide fairway)
+      const terrainWidth = 360;
+      const terrainLength = 420;
+      const segW = 108;
+      const segL = 126;
+      const terrainGeo = new THREE.PlaneGeometry(terrainWidth, terrainLength, segW, segL);
+      terrainGeo.rotateX(-Math.PI / 2);
+      terrainGeo.translate(0, 0, -190);
+
+      const posAttr = terrainGeo.attributes.position;
+      const colors = [];
+      const cFairwayLight = new THREE.Color(0x16a34a);
+      const cFairwayDark  = new THREE.Color(0x15803d);
+      const cRough        = new THREE.Color(0x14532d);
+
+      for (let i = 0; i < posAttr.count; i++) {
+        const vx = posAttr.getX(i);
+        const vz = posAttr.getZ(i);
+        if (Math.abs(vx) <= FAIRWAY_HALF_W && vz <= 12 && vz >= -360) {
+          const stripeIdx = Math.abs(Math.floor(vz / 25));
+          const col = stripeIdx % 2 === 0 ? cFairwayDark : cFairwayLight;
+          colors.push(col.r, col.g, col.b);
+        } else {
+          colors.push(cRough.r, cRough.g, cRough.b);
+        }
+      }
+
+      terrainGeo.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+      terrainMesh = new THREE.Mesh(
+        terrainGeo,
+        new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.9, flatShading: true })
+      );
+      sceneRange.add(terrainMesh);
+
+      // Tee Box Deck & Wood Rail
+      const matMesh = new THREE.Mesh(
+        new THREE.BoxGeometry(7, 0.25, 5.5),
+        new THREE.MeshStandardMaterial({ color: 0x15803d, roughness: 0.85 })
+      );
+      matMesh.position.set(0, 0.12, 2.5);
       sceneRange.add(matMesh);
 
-      const beamGeo = new THREE.BoxGeometry(0.18, 0.4, 5.2);
-      const beamMesh = new THREE.Mesh(beamGeo, new THREE.MeshBasicMaterial({ color: 0x78350f }));
-      beamMesh.position.set(-3.0, 0.25, 2.5);
+      const beamMesh = new THREE.Mesh(
+        new THREE.BoxGeometry(0.22, 0.45, 5.6),
+        new THREE.MeshStandardMaterial({ color: 0x78350f, roughness: 0.9 })
+      );
+      beamMesh.position.set(-3.5, 0.25, 2.5);
       sceneRange.add(beamMesh);
 
-      // Build Target Greens
-      targetTiers.forEach((tierObj) => {
-        const group = new THREE.Group();
-
-        const greenGeo = new THREE.CylinderGeometry(9, 9.5, 0.4, 32);
-        const greenMat = new THREE.MeshBasicMaterial({ color: 0x064e3b });
-        const green = new THREE.Mesh(greenGeo, greenMat);
-        green.position.set(0, 0.2, 0);
-        group.add(green);
-
-        [4, 7, 9].forEach((rad, rIdx) => {
-          const ringGeo = new THREE.RingGeometry(rad - 0.2, rad + 0.2, 32);
-          const ringMat = new THREE.MeshBasicMaterial({ color: tierObj.color, side: THREE.DoubleSide });
-          const ring = new THREE.Mesh(ringGeo, ringMat);
-          ring.rotation.x = Math.PI / 2;
-          ring.position.set(0, 0.42 + (rIdx * 0.01), 0);
-          group.add(ring);
+      // Classic Course Yardage Poles (Red 100, White 150, Blue 200, Black 250)
+      const stakeSpecs = [
+        { z: -100, main: 0xef4444, stripe: 0xffffff },
+        { z: -150, main: 0xf8fafc, stripe: 0x0f172a },
+        { z: -200, main: 0x3b82f6, stripe: 0xffffff },
+        { z: -250, main: 0x18181b, stripe: 0xfacc15 }
+      ];
+      stakeSpecs.forEach(spec => {
+        [-FAIRWAY_HALF_W + 1.5, FAIRWAY_HALF_W - 1.5].forEach(sx => {
+          const stake = createYardageStake(spec.main, spec.stripe);
+          stake.position.set(sx, 0, spec.z);
+          sceneRange.add(stake);
+          yardagePoles.push({ mesh: stake, x: sx, z: spec.z });
         });
-
-        const poleGeo = new THREE.CylinderGeometry(0.08, 0.08, 5.5);
-        const poleMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
-        const pole = new THREE.Mesh(poleGeo, poleMat);
-        pole.position.set(0, 2.9, 0);
-        group.add(pole);
-
-        const flagGeo = new THREE.PlaneGeometry(1.8, 1.0);
-        const flagMat = new THREE.MeshBasicMaterial({ color: tierObj.color, side: THREE.DoubleSide });
-        const flag = new THREE.Mesh(flagGeo, flagMat);
-        flag.position.set(0.9, 5.0, 0);
-        group.add(flag);
-
-        group.position.set(0, 0, -tierObj.tier);
-        sceneRange.add(group);
-        targetMeshGroups.push(group);
       });
 
-      // Net Boundary Towers
-      [-75, 75].forEach(xSide => {
-        for (let zPos = 0; zPos >= -360; zPos -= 45) {
-          const towerGeo = new THREE.CylinderGeometry(0.4, 0.6, 32, 12);
-          const towerMat = new THREE.MeshBasicMaterial({ color: 0x27272a });
-          const tower = new THREE.Mesh(towerGeo, towerMat);
-          tower.position.set(xSide, 16, zPos);
-          sceneRange.add(tower);
+      // Shared Tree Geometries & Materials
+      const trunkMat = new THREE.MeshStandardMaterial({ color: 0x5c3a21, roughness: 0.9, flatShading: true });
+      const foliageMats = [0x14532d, 0x166534, 0x065f46, 0x15803d].map(
+        hex => new THREE.MeshStandardMaterial({ color: hex, roughness: 0.85, flatShading: true })
+      );
+      const treeConeGeos = [
+        new THREE.ConeGeometry(3.2, 4.5, 7),
+        new THREE.ConeGeometry(2.5, 3.8, 7),
+        new THREE.ConeGeometry(1.7, 3.0, 7)
+      ];
 
-          const lampGeo = new THREE.BoxGeometry(2.5, 1.2, 1.2);
-          const lampMat = new THREE.MeshBasicMaterial({ color: 0xfef08a });
-          const lamp = new THREE.Mesh(lampGeo, lampMat);
-          lamp.position.set(xSide > 0 ? xSide - 1 : xSide + 1, 31.5, zPos);
-          lamp.rotation.y = xSide > 0 ? -0.3 : 0.3;
-          sceneRange.add(lamp);
+      [-1, 1].forEach(side => {
+        for (let i = 0; i < 40; i++) {
+          const zPos = -12 - (i * 9.2) + (Math.random() * 4);
+          const xPos = side * (FAIRWAY_HALF_W + 6 + Math.random() * 28);
+          const scale = 0.85 + Math.random() * 0.75;
+          const tree = buildLowPolyTree(scale, trunkMat, foliageMats[i % foliageMats.length], treeConeGeos);
+          tree.position.set(xPos, getRawTerrainHeight(xPos, zPos) - 0.2, zPos);
+          sceneRange.add(tree);
         }
       });
 
-      // Golf Ball
-      const ballGeo = new THREE.SphereGeometry(0.24, 16, 16);
-      const ballMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
-      golfBallMesh = new THREE.Mesh(ballGeo, ballMat);
-      golfBallMesh.position.set(0, 0.24, 0);
+      // Rolling Low-Poly Backdrop Hills
+      const hillMats = [
+        new THREE.MeshStandardMaterial({ color: 0x15803d, roughness: 0.95, flatShading: true }),
+        new THREE.MeshStandardMaterial({ color: 0x166534, roughness: 0.95, flatShading: true })
+      ];
+      for (let hIdx = -5; hIdx <= 5; hIdx++) {
+        const hillRadius = 38 + Math.abs(hIdx % 3) * 14;
+        const hillHeight = 26 + ((hIdx + 5) % 4) * 9;
+        const hill = new THREE.Mesh(new THREE.ConeGeometry(hillRadius, hillHeight, 6), hillMats[Math.abs(hIdx) % 2]);
+        hill.position.set(hIdx * 36, hillHeight * 0.35 - 2, -385 - Math.abs(hIdx) * 4);
+        hill.rotation.y = hIdx * 0.6;
+        sceneRange.add(hill);
+      }
+
+      // Active Target Beacon Ring
+      const beaconGeo = new THREE.RingGeometry(1.02, 1.10, 40);
+      beaconGeo.rotateX(-Math.PI / 2);
+      activeBeaconRing = new THREE.Mesh(beaconGeo, new THREE.MeshBasicMaterial({ color: 0xfacc15, side: THREE.DoubleSide }));
+      sceneRange.add(activeBeaconRing);
+
+      // Shared Green Complex & Raked Sand Bunker Materials
+      const greenMat = new THREE.MeshStandardMaterial({ color: 0x22c55e, roughness: 0.72, flatShading: true });
+      const poleMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc });
+      const cupHoleMat = new THREE.MeshBasicMaterial({ color: 0x05080c });
+      const cupRimMat = new THREE.MeshBasicMaterial({ color: 0xf8fafc, side: THREE.DoubleSide });
+
+      const { map: sandMap, bumpMap: sandBump } = createRakedSandTextures();
+      const sandMat = new THREE.MeshStandardMaterial({
+        map: sandMap,
+        bumpMap: sandBump,
+        bumpScale: 0.04,
+        roughness: 0.92,
+        flatShading: true
+      });
+      const lipMat = new THREE.MeshStandardMaterial({ color: 0x16a34a, roughness: 0.88, flatShading: true });
+
+      targetTiers.forEach((tierObj, idx) => {
+        const greenGroup = buildShapedGreenComplex(tierObj, idx, greenMat, poleMat, cupHoleMat, cupRimMat);
+        sceneRange.add(greenGroup);
+        targetMeshGroups.push(greenGroup);
+
+        tierObj.bunkers.forEach(bSpec => {
+          const bunkerGroup = buildConformingBunker(tierObj, bSpec, sandMat, lipMat);
+          sceneRange.add(bunkerGroup);
+          bunkerGroupsList.push(bunkerGroup);
+        });
+      });
+
+      // Driving Range Boundary Poles
+      const towerGeo = new THREE.CylinderGeometry(0.28, 0.42, 26, 8);
+      const towerMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.7 });
+      [-FAIRWAY_HALF_W - 4, FAIRWAY_HALF_W + 4].forEach(xSide => {
+        for (let zPos = -10; zPos >= -340; zPos -= 55) {
+          const tower = new THREE.Mesh(towerGeo, towerMat);
+          tower.position.set(xSide, getRawTerrainHeight(xSide, zPos) + 13, zPos);
+          sceneRange.add(tower);
+        }
+      });
+
+      // Dimpled Golf Ball + Ground Contact Drop Shadow
+      const { map: ballMap, bumpMap: ballBump } = createDimpledBallTextures();
+      golfBallMesh = new THREE.Mesh(
+        new THREE.SphereGeometry(BALL_RADIUS, 24, 24),
+        new THREE.MeshStandardMaterial({ map: ballMap, bumpMap: ballBump, bumpScale: 0.025, roughness: 0.35, metalness: 0.05 })
+      );
+      golfBallMesh.position.set(0, BALL_RADIUS + 0.14, 0);
       sceneRange.add(golfBallMesh);
 
-      // Tracer
-      const tracerGeo = new THREE.BufferGeometry();
-      const tracerMat = new THREE.LineBasicMaterial({ color: 0x38bdf8, linewidth: 2.5 });
-      ballTracerLine = new THREE.Line(tracerGeo, tracerMat);
+      const shadowGeo = new THREE.CircleGeometry(BALL_RADIUS * 1.15, 16);
+      shadowGeo.rotateX(-Math.PI / 2);
+      ballShadowMesh = new THREE.Mesh(
+        shadowGeo,
+        new THREE.MeshBasicMaterial({ color: 0x051a0e, transparent: true, opacity: 0.45 })
+      );
+      ballShadowMesh.position.set(0, 0.05, 0);
+      sceneRange.add(ballShadowMesh);
+
+      // Luminous Flight Tracer
+      ballTracerLine = new THREE.Line(
+        new THREE.BufferGeometry(),
+        new THREE.LineBasicMaterial({ color: 0xffffff, linewidth: 2.5 })
+      );
       sceneRange.add(ballTracerLine);
 
-      // Aim Line
-      const aimGeo = new THREE.BufferGeometry();
-      const aimMat = new THREE.LineDashedMaterial({ color: 0xfacc15, dashSize: 2.0, gapSize: 1.0 });
-      aimGuideLine = new THREE.Line(aimGeo, aimMat);
+      // Extended Aim Guide Line
+      aimGuideLine = new THREE.Line(
+        new THREE.BufferGeometry(),
+        new THREE.LineDashedMaterial({ color: 0xfacc15, dashSize: 2.5, gapSize: 1.2 })
+      );
       sceneRange.add(aimGuideLine);
 
       // Distance to Pin Measure Line
-      const proxGeo = new THREE.BufferGeometry();
-      const proxMat = new THREE.LineDashedMaterial({ color: 0x34d399, dashSize: 1.0, gapSize: 0.6 });
-      proximityLineMesh = new THREE.Line(proxGeo, proxMat);
+      proximityLineMesh = new THREE.Line(
+        new THREE.BufferGeometry(),
+        new THREE.LineDashedMaterial({ color: 0xffffff, dashSize: 1.0, gapSize: 0.6 })
+      );
       proximityLineMesh.visible = false;
       sceneRange.add(proximityLineMesh);
 
-      setupActiveTarget(currentTierIdx);
+      for (let i = 0; i < targetTiers.length; i++) {
+        randomizeTargetCoords(i);
+      }
+      rebuildTerrainAndComplexes();
+      selectActiveTarget(getNextShuffledTier(-1), false);
       updateAimVisual();
-      generateRealisticWind();
+      generateOmnidirectionalWind();
     }
 
     function resetTeeCamera() {
-      cameraRange.position.set(0, 2.5, 6.0);
-      cameraRange.lookAt(0, 1.8, -60);
+      cameraRange.fov = 48;
+      cameraRange.updateProjectionMatrix();
+      cameraRange.position.set(0, 17.5, 18.0);
+      cameraRange.lookAt(0, 1.5, -145);
     }
 
-    function setupActiveTarget(tierIdx) {
+    function recommendBestClubForYardage(yardage) {
+      const effectiveYardage = yardage - windTailYardsTotal;
+      let bestKey = '7I';
+      let smallestDiff = Infinity;
+      for (const key of clubOrder) {
+        const diff = Math.abs(clubProfiles[key].maxCarry - effectiveYardage);
+        if (diff < smallestDiff) {
+          smallestDiff = diff;
+          bestKey = key;
+        }
+      }
+      return bestKey;
+    }
+
+    function selectActiveTarget(tierIdx, playSound = true) {
       currentTierIdx = tierIdx;
       const tierObj = targetTiers[tierIdx];
+      currentTargetX = tierObj.x;
+      currentTargetZ = tierObj.z;
 
-      const pick = tierObj.variations[Math.floor(Math.random() * tierObj.variations.length)];
-      currentTargetYardage = pick;
-
-      targetMeshGroups[tierIdx].position.set(0, 0, -currentTargetYardage);
-
-      document.getElementById('label-target-name').textContent = tierObj.name;
-      document.getElementById('label-target-distance').textContent = `${currentTargetYardage} YDS`;
-
-      let rec = '7I';
-      for (const [key, val] of Object.entries(clubProfiles)) {
-        if (val.recTier === tierObj.tier) rec = key;
+      const groundY = getSurfaceHeightAt(currentTargetX, currentTargetZ);
+      if (activeBeaconRing) {
+        updateBeaconGeometryForTier(tierObj);
+        activeBeaconRing.position.set(currentTargetX, groundY + 0.42, currentTargetZ);
+        activeBeaconRing.rotation.y = tierObj.rotY;
       }
+
+      flagMeshes.forEach((fMesh, idx) => {
+        const isForegroundBlocker = (tierObj.tier >= 200 && targetTiers[idx].tier < tierObj.tier);
+        fMesh.material.opacity = isForegroundBlocker ? 0.52 : 1.0;
+      });
+
+      currentTargetYardage = Math.round(Math.hypot(currentTargetX, currentTargetZ));
+
+      const sideTag = currentTargetX < -3 ? 'L' : (currentTargetX > 3 ? 'R' : 'C');
+      document.getElementById('label-target-name').textContent = tierObj.name;
+      document.getElementById('label-target-distance').textContent = `${currentTargetYardage} YDS (${sideTag})`;
+
+      const rec = recommendBestClubForYardage(currentTargetYardage);
       document.getElementById('label-rec-club').textContent = `${rec} (${clubProfiles[rec].name})`;
+
+      updateAimVisual();
+      if (playSound) audio.playClick();
     }
 
     function updateAimVisual() {
       if (!aimGuideLine) return;
       const rad = (aimAngleDeg * Math.PI) / 180;
-      const length = 55;
-      const targetX = Math.sin(rad) * length;
-      const targetZ = -Math.cos(rad) * length;
-
-      aimGuideLine.geometry.setFromPoints([
-        new THREE.Vector3(0, 0.15, 0),
-        new THREE.Vector3(targetX, 0.15, targetZ)
-      ]);
+      const maxLength = 165;
+      const pts = [];
+      for (let d = 0; d <= maxLength; d += 5) {
+        const px = Math.sin(rad) * d;
+        const pz = -Math.cos(rad) * d;
+        const surf = getSurfaceInfoAt(px, pz);
+        const py = getSurfaceHeightAt(px, pz) + surf.extraHeight + 0.14;
+        pts.push(new THREE.Vector3(px, py, pz));
+      }
+      aimGuideLine.geometry.setFromPoints(pts);
       aimGuideLine.computeLineDistances();
     }
 
     function adjustAim(delta) {
       if (ballInFlight) return;
-      aimAngleDeg = Math.max(-20, Math.min(20, aimAngleDeg + delta));
+      aimAngleDeg = Math.max(-36, Math.min(36, aimAngleDeg + delta));
       document.getElementById('label-aim').textContent = `${aimAngleDeg > 0 ? '+' : ''}${aimAngleDeg.toFixed(1)}°`;
       updateAimVisual();
       audio.playClick();
@@ -1861,27 +2572,65 @@
     document.getElementById('btn-aim-l').addEventListener('click', () => adjustAim(-1.5));
     document.getElementById('btn-aim-r').addEventListener('click', () => adjustAim(1.5));
 
-    function generateRealisticWind() {
-      windMph = Math.round((Math.random() * 8 + 3) * 10) / 10;
-      windAngleRad = Math.random() * Math.PI * 2;
+    document.getElementById('btn-next-pin').addEventListener('click', () => {
+      if (ballInFlight) return;
+      selectActiveTarget(getNextShuffledTier(currentTierIdx), true);
+    });
 
-      const crosswindComponent = Math.cos(windAngleRad);
-      const headTailComponent = Math.sin(windAngleRad);
+    const btnZoomPin = document.getElementById('btn-zoom-pin');
+    btnZoomPin.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      manualZoomHeld = true;
+      btnZoomPin.classList.add('zoom-active');
+      audio.playClick();
+    });
+    const releaseZoom = () => {
+      manualZoomHeld = false;
+      btnZoomPin.classList.remove('zoom-active');
+    };
+    btnZoomPin.addEventListener('pointerup', releaseZoom);
+    btnZoomPin.addEventListener('pointerleave', releaseZoom);
+    btnZoomPin.addEventListener('pointercancel', releaseZoom);
 
-      windLateralYardsTotal = (windMph / 10.0) * 2.0 * crosswindComponent;
-      windHeadTailMph = windMph * headTailComponent;
+    function generateOmnidirectionalWind() {
+      windMph = Math.round(Math.random() * 11 + 3);
+      const compassAngles = [0, 45, 90, 135, 180, 225, 270, 315];
+      const compassLabels = ['TAIL', 'TAIL-R', 'RIGHT', 'HEAD-R', 'HEAD', 'HEAD-L', 'LEFT', 'TAIL-L'];
+      const dirIdx = Math.floor(Math.random() * compassAngles.length);
 
-      const arrow = crosswindComponent > 0 ? '➔' : '⬅';
-      document.getElementById('label-wind').textContent = `${Math.round(windMph)} MPH ${arrow}`;
+      windAngleDeg = compassAngles[dirIdx];
+      const rad = (windAngleDeg * Math.PI) / 180;
+
+      windCrossYardsTotal = windMph * 0.40 * Math.sin(rad);
+      windTailYardsTotal = windMph * 0.65 * Math.cos(rad);
+
+      document.getElementById('label-wind-speed').textContent = `${windMph} MPH`;
+      const arrowEl = document.getElementById('wind-arrow-icon');
+      arrowEl.textContent = '⬆';
+      arrowEl.style.transform = `rotate(${windAngleDeg}deg)`;
+      document.getElementById('label-wind-dir').textContent = `(${compassLabels[dirIdx]})`;
+
+      const rec = recommendBestClubForYardage(currentTargetYardage);
+      document.getElementById('label-rec-club').textContent = `${rec} (${clubProfiles[rec].name})`;
     }
 
     function selectClub(clubKey) {
-      if (ballInFlight) return;
+      if (ballInFlight || !clubProfiles[clubKey]) return;
       activeClubKey = clubKey;
       document.querySelectorAll('.club-pill').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.club === clubKey);
+        const isActive = btn.dataset.club === clubKey;
+        btn.classList.toggle('active', isActive);
+        if (isActive) {
+          btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
       });
       audio.playClick();
+    }
+
+    function cycleClub(step) {
+      const idx = clubOrder.indexOf(activeClubKey);
+      const nextIdx = Math.max(0, Math.min(clubOrder.length - 1, idx + step));
+      selectClub(clubOrder[nextIdx]);
     }
 
     document.querySelectorAll('.club-pill').forEach(btn => {
@@ -1972,35 +2721,49 @@
       swingStage = 'flying';
       ballInFlight = true;
       ballResting = false;
+      ballHoledOut = false;
       hasPitched = false;
+      bounceCount = 0;
+      isRollingPhase = false;
       firstLandingCarry = 0;
+      landingSurfaceName = 'Fairway';
       lastShotShape = shapeLabel;
-      audio.playFullSwingStrike(quality);
+
+      audio.playFullSwingStrike(quality, activeClubKey, power);
+
+      cameraRange.fov = 48;
+      cameraRange.updateProjectionMatrix();
 
       const club = clubProfiles[activeClubKey];
-      const powerScalar = 0.75 + (power * 0.25);
-      const windCarryDelta = (windHeadTailMph * 0.25);
-      const targetCarry = Math.max(20, (club.maxCarry * powerScalar) + windCarryDelta);
+      const powerScalar = 0.70 + (power * 0.30);
+      const clubWindScale = 0.65 + (club.maxCarry / 250) * 0.65;
+
+      const targetCarry = Math.max(15, (club.maxCarry * powerScalar) + (windTailYardsTotal * clubWindScale));
       
       const totalFlightSeconds = club.flightTime;
-      const totalFrames = totalFlightSeconds * 60;
+      const totalFrames = Math.round(totalFlightSeconds * 60);
       const halfFlightFrames = totalFrames / 2;
 
-      const apexY = club.apex;
+      const apexY = club.apex * powerScalar;
       ballGravity = (2 * apexY) / (halfFlightFrames * halfFlightFrames);
-      const initialVy = ballGravity * halfFlightFrames;
+      const initialVy = ballGravity * (halfFlightFrames - 0.5);
 
       const forwardSpeed = targetCarry / totalFrames;
 
-      ballPos.set(0, 0.24, 0);
+      ballPos.set(0, BALL_RADIUS + 0.14, 0);
       golfBallMesh.position.copy(ballPos);
+      golfBallMesh.rotation.set(0, 0, 0);
 
       const aimRad = (aimAngleDeg * Math.PI) / 180;
+      const fwdX = Math.sin(aimRad);
+      const fwdZ = -Math.cos(aimRad);
+      const rightX = Math.cos(aimRad);
+      const rightZ = Math.sin(aimRad);
 
       ballVel.set(
-        Math.sin(aimRad) * forwardSpeed,
+        fwdX * forwardSpeed,
         initialVy,
-        -Math.cos(aimRad) * forwardSpeed
+        fwdZ * forwardSpeed
       );
 
       let totalCurveYards = 0;
@@ -2010,8 +2773,18 @@
         totalCurveYards = sign * (2.5 + (excess * 6.5));
       }
 
-      const totalLateralYards = windLateralYardsTotal + totalCurveYards;
-      frameLateralDrift = totalLateralYards / totalFrames;
+      const totalPerpYards = (windCrossYardsTotal * clubWindScale) + totalCurveYards;
+      frameWindDriftX = (rightX * totalPerpYards) / totalFrames;
+      frameWindDriftZ = (rightZ * totalPerpYards) / totalFrames;
+
+      const windRollMod = 1.0 + (windTailYardsTotal * 0.025);
+      const targetRollYards = Math.max(0.5, club.rollFactor * powerScalar * windRollMod);
+      const rollSpeed = targetRollYards * 0.048;
+      const totalHorizVx = ballVel.x + frameWindDriftX;
+      const totalHorizVz = ballVel.z + frameWindDriftZ;
+      const finalHorizLen = Math.hypot(totalHorizVx, totalHorizVz) || 1;
+      rollVelX = (totalHorizVx / finalHorizLen) * rollSpeed;
+      rollVelZ = (totalHorizVz / finalHorizLen) * rollSpeed;
 
       tracerPoints.length = 0;
       tracerPoints.push(ballPos.clone());
@@ -2022,8 +2795,45 @@
       btnSwing.style.color = "#71717a";
     }
 
+    function checkCupInteraction(horizSpeed) {
+      if (ballHoledOut) return true;
+      const distToCup = Math.hypot(ballPos.x - currentTargetX, ballPos.z - currentTargetZ);
+
+      if (distToCup <= CUP_RADIUS) {
+        if (horizSpeed <= 0.34) {
+          ballHoledOut = true;
+          ballInFlight = false;
+          ballResting = true;
+          ballPos.x = currentTargetX;
+          ballPos.z = currentTargetZ;
+          ballPos.y = getSurfaceHeightAt(currentTargetX, currentTargetZ) + 0.14;
+          golfBallMesh.position.copy(ballPos);
+          ballShadowMesh.visible = false;
+          audio.playHoleInOneFanfare();
+          concludeShotAndFocusLanding();
+          return true;
+        } else if (distToCup <= CUP_RADIUS * 0.85) {
+          const nx = (ballPos.x - currentTargetX) / (distToCup || 1);
+          const nz = (ballPos.z - currentTargetZ) / (distToCup || 1);
+          rollVelX = (rollVelX + nx * 0.12) * 0.65;
+          rollVelZ = (rollVelZ + nz * 0.12) * 0.65;
+          audio.playBounce(0.6);
+        }
+      }
+      return false;
+    }
+
     function updateRangePhysics() {
       const now = performance.now();
+
+      const flutter = Math.sin(now * 0.006) * 0.14;
+      for (let i = 0; i < flagMeshes.length; i++) {
+        flagMeshes[i].rotation.y = flutter;
+      }
+      if (activeBeaconRing) {
+        const pulse = 1.0 + Math.sin(now * 0.005) * 0.05;
+        activeBeaconRing.scale.set(pulse, 1, pulse);
+      }
 
       if (swingStage === 'power') {
         const elapsed = (now - powerStartTime) / 1000;
@@ -2036,86 +2846,202 @@
         meterSnapNeedle.style.left = `${(liveSnap + 1) / 2 * 100}%`;
       }
 
-      if (ballInFlight) {
-        ballPos.x += ballVel.x + frameLateralDrift;
-        ballPos.y += ballVel.y;
-        ballPos.z += ballVel.z;
-        ballVel.y -= ballGravity;
-
-        golfBallMesh.position.copy(ballPos);
-
-        tracerPoints.push(ballPos.clone());
-        ballTracerLine.geometry.setFromPoints(tracerPoints);
-
-        const aimRad = (aimAngleDeg * Math.PI) / 180;
-        const camDistanceBehind = 11.5;
-        const camTargetX = ballPos.x - Math.sin(aimRad) * camDistanceBehind;
-        const camTargetZ = ballPos.z + Math.cos(aimRad) * camDistanceBehind;
-        const camTargetY = Math.max(3.2, ballPos.y + 1.8);
-
-        cameraRange.position.lerp(new THREE.Vector3(camTargetX, camTargetY, camTargetZ), 0.14);
-        cameraRange.lookAt(ballPos.x, Math.max(0.5, ballPos.y * 0.65), ballPos.z - 16);
-
-        if (ballPos.y <= 0.24) {
-          ballPos.y = 0.24;
-
-          if (!hasPitched) {
-            hasPitched = true;
-            firstLandingCarry = Math.round(Math.sqrt(ballPos.x * ballPos.x + ballPos.z * ballPos.z));
-            audio.playBounce();
-          }
-
-          ballVel.y = Math.abs(ballVel.y) * 0.28;
-          ballVel.z *= 0.65;
-          ballVel.x *= 0.65;
-          frameLateralDrift *= 0.65;
-
-          if (ballVel.length() < 0.10 || ballVel.y < 0.06) {
-            ballInFlight = false;
-            ballResting = true;
-            ballVel.set(0, 0, 0);
-            frameLateralDrift = 0;
-            concludeShotAndFocusLanding();
-          }
+      if (!ballInFlight && !ballResting) {
+        if (manualZoomHeld) {
+          const grp = targetMeshGroups[currentTierIdx];
+          cameraRange.fov = THREE.MathUtils.lerp(cameraRange.fov, 20, 0.14);
+          cameraRange.updateProjectionMatrix();
+          cameraRange.position.lerp(new THREE.Vector3(grp.position.x * 0.35, 18.0, 14.0), 0.14);
+          cameraRange.lookAt(grp.position.x, grp.position.y + 1.8, grp.position.z);
+        } else {
+          cameraRange.fov = THREE.MathUtils.lerp(cameraRange.fov, 48, 0.14);
+          cameraRange.updateProjectionMatrix();
+          cameraRange.position.lerp(new THREE.Vector3(0, 17.5, 18.0), 0.12);
+          cameraRange.lookAt(0, 1.5, -145);
         }
       }
 
-      if (ballResting) {
-        const aimRad = (aimAngleDeg * Math.PI) / 180;
-        const elevatedCamX = ballPos.x - Math.sin(aimRad) * 16.0;
-        const elevatedCamZ = ballPos.z + Math.cos(aimRad) * 16.0;
-        const elevatedCamY = 8.0;
+      if (ballInFlight) {
+        const surfInfo = getSurfaceInfoAt(ballPos.x, ballPos.z);
+        const exactGroundY = getSurfaceHeightAt(ballPos.x, ballPos.z) + surfInfo.extraHeight;
 
-        cameraRange.position.lerp(new THREE.Vector3(elevatedCamX, elevatedCamY, elevatedCamZ), 0.06);
-        cameraRange.lookAt(ballPos.x, 0.4, ballPos.z - 4);
+        if (!isRollingPhase) {
+          ballPos.x += ballVel.x + frameWindDriftX;
+          ballPos.y += ballVel.y;
+          ballPos.z += ballVel.z + frameWindDriftZ;
+          ballVel.y -= ballGravity;
+
+          golfBallMesh.rotation.x -= 0.12;
+
+          const curSurf = getSurfaceInfoAt(ballPos.x, ballPos.z);
+          const floorY = getSurfaceHeightAt(ballPos.x, ballPos.z) + curSurf.extraHeight + BALL_RADIUS;
+
+          if (ballPos.y <= floorY) {
+            ballPos.y = floorY;
+
+            if (!hasPitched) {
+              hasPitched = true;
+              firstLandingCarry = Math.round(Math.sqrt(ballPos.x * ballPos.x + ballPos.z * ballPos.z));
+            }
+
+            if (curSurf.type === 'bunker') {
+              audio.playSandThud();
+              landingSurfaceName = 'Sand Bunker';
+              rollVelX *= 0.25;
+              rollVelZ *= 0.25;
+              isRollingPhase = true;
+            } else {
+              bounceCount++;
+              if (bounceCount <= 2) {
+                audio.playBounce(1.0 / bounceCount);
+                ballVel.y = Math.abs(ballVel.y) * 0.30;
+                ballVel.x *= 0.20;
+                ballVel.z *= 0.20;
+                frameWindDriftX *= 0.20;
+                frameWindDriftZ *= 0.20;
+              } else {
+                audio.playBounce(0.35);
+                isRollingPhase = true;
+              }
+            }
+          }
+
+          if (bounceCount === 0) {
+            tracerPoints.push(ballPos.clone());
+            ballTracerLine.geometry.setFromPoints(tracerPoints);
+          }
+        } else {
+          const curSurf = getSurfaceInfoAt(ballPos.x, ballPos.z);
+
+          if (curSurf.type === 'bunker') {
+            landingSurfaceName = 'Sand Bunker';
+            rollVelX *= 0.68;
+            rollVelZ *= 0.68;
+          } else if (curSurf.type === 'green') {
+            landingSurfaceName = 'Putting Green';
+            const tObj = targetTiers[curSurf.tierIdx];
+            // Gentle green contour break + realistic manicured turf friction so balls hold the green
+            rollVelX += tObj.greenSlopeX * 0.014;
+            rollVelZ += tObj.greenSlopeZ * 0.014;
+            rollVelX *= 0.958;
+            rollVelZ *= 0.958;
+          } else {
+            landingSurfaceName = curSurf.type === 'fairway' ? 'Fairway' : 'Rough';
+            const eps = 0.8;
+            const slopeX = (getSurfaceHeightAt(ballPos.x + eps, ballPos.z) - getSurfaceHeightAt(ballPos.x - eps, ballPos.z)) / (2 * eps);
+            const slopeZ = (getSurfaceHeightAt(ballPos.x, ballPos.z + eps) - getSurfaceHeightAt(ballPos.x, ballPos.z - eps)) / (2 * eps);
+            rollVelX -= slopeX * 0.012;
+            rollVelZ -= slopeZ * 0.012;
+
+            const drag = curSurf.type === 'fairway' ? 0.945 : 0.88;
+            rollVelX *= drag;
+            rollVelZ *= drag;
+          }
+
+          ballPos.x += rollVelX;
+          ballPos.z += rollVelZ;
+          const newSurf = getSurfaceInfoAt(ballPos.x, ballPos.z);
+          ballPos.y = getSurfaceHeightAt(ballPos.x, ballPos.z) + newSurf.extraHeight + BALL_RADIUS;
+
+          const stepDist = Math.hypot(rollVelX, rollVelZ);
+          if (stepDist > 0.0001) {
+            golfBallMesh.rotation.z -= (rollVelX / BALL_RADIUS);
+            golfBallMesh.rotation.x += (rollVelZ / BALL_RADIUS);
+          }
+
+          if (checkCupInteraction(stepDist)) return;
+
+          const stopThreshold = newSurf.type === 'green' ? 0.018 : 0.010;
+          if (stepDist < stopThreshold) {
+            ballInFlight = false;
+            ballResting = true;
+            rollVelX = 0;
+            rollVelZ = 0;
+            landingSurfaceName = newSurf.type === 'green' ? 'Putting Green' :
+                                 newSurf.type === 'bunker' ? 'Sand Bunker' :
+                                 newSurf.type === 'fairway' ? 'Fairway' : 'Rough';
+            concludeShotAndFocusLanding();
+          }
+        }
+
+        golfBallMesh.position.copy(ballPos);
+
+        if (ballShadowMesh && !ballHoledOut) {
+          ballShadowMesh.visible = true;
+          ballShadowMesh.position.set(ballPos.x, exactGroundY + 0.02, ballPos.z);
+          const heightAbove = Math.max(0, ballPos.y - exactGroundY - BALL_RADIUS);
+          const shadowScale = Math.max(0.35, 1.0 - heightAbove * 0.03);
+          ballShadowMesh.scale.set(shadowScale, shadowScale, 1);
+          ballShadowMesh.material.opacity = Math.max(0.12, 0.48 - heightAbove * 0.015);
+        }
+
+        const aimRad = (aimAngleDeg * Math.PI) / 180;
+        const camDistanceBehind = 16.0;
+        const camTargetX = ballPos.x - Math.sin(aimRad) * camDistanceBehind;
+        const camTargetZ = ballPos.z + Math.cos(aimRad) * camDistanceBehind;
+        const localGround = getSurfaceHeightAt(ballPos.x, ballPos.z);
+        const camTargetY = Math.max(localGround + 8.5, ballPos.y + 4.0);
+
+        cameraRange.position.lerp(new THREE.Vector3(camTargetX, camTargetY, camTargetZ), 0.14);
+        cameraRange.lookAt(ballPos.x, Math.max(localGround + 0.5, ballPos.y * 0.6), ballPos.z - 22);
+      }
+
+      if (ballResting) {
+        const midX = (ballPos.x + currentTargetX) * 0.5;
+        const midZ = (ballPos.z + currentTargetZ) * 0.5;
+        const midY = getSurfaceHeightAt(midX, midZ);
+
+        const separation = Math.hypot(ballPos.x - currentTargetX, ballPos.z - currentTargetZ);
+        const camOffsetZ = Math.max(22.0, separation * 0.95);
+        const camOffsetY = Math.max(20.0, separation * 0.85);
+
+        if (Math.abs(cameraRange.fov - 50) > 0.1) {
+          cameraRange.fov = THREE.MathUtils.lerp(cameraRange.fov, 50, 0.12);
+          cameraRange.updateProjectionMatrix();
+        }
+        cameraRange.position.lerp(new THREE.Vector3(midX, midY + camOffsetY, midZ + camOffsetZ), 0.08);
+        cameraRange.lookAt(midX, midY + 0.5, midZ);
       }
     }
 
     function concludeShotAndFocusLanding() {
       swingStage = 'landed';
 
-      const totalDistanceYards = Math.round(Math.sqrt(ballPos.x * ballPos.x + ballPos.z * ballPos.z));
+      const totalDistanceYards = ballHoledOut
+        ? currentTargetYardage
+        : Math.round(Math.sqrt(ballPos.x * ballPos.x + ballPos.z * ballPos.z));
       const rollYards = Math.max(0, totalDistanceYards - firstLandingCarry);
 
-      const distanceToPin = (new THREE.Vector2(ballPos.x, ballPos.z).distanceTo(new THREE.Vector2(0, -currentTargetYardage))).toFixed(1);
+      const distanceToPin = ballHoledOut
+        ? '0.0'
+        : (new THREE.Vector2(ballPos.x, ballPos.z).distanceTo(new THREE.Vector2(currentTargetX, currentTargetZ))).toFixed(1);
 
-      proximityLineMesh.geometry.setFromPoints([
-        new THREE.Vector3(ballPos.x, 0.25, ballPos.z),
-        new THREE.Vector3(0, 0.25, -currentTargetYardage)
-      ]);
-      proximityLineMesh.computeLineDistances();
-      proximityLineMesh.visible = true;
+      const targetGroundY = getSurfaceHeightAt(currentTargetX, currentTargetZ);
+      if (!ballHoledOut) {
+        proximityLineMesh.geometry.setFromPoints([
+          new THREE.Vector3(ballPos.x, ballPos.y + 0.1, ballPos.z),
+          new THREE.Vector3(currentTargetX, targetGroundY + 0.45, currentTargetZ)
+        ]);
+        proximityLineMesh.computeLineDistances();
+        proximityLineMesh.visible = true;
+      } else {
+        proximityLineMesh.visible = false;
+      }
 
       document.getElementById('res-quality').textContent = lastShotShape;
       document.getElementById('res-carry-hero').textContent = `${firstLandingCarry} YDS CARRY`;
       document.getElementById('res-total-val').textContent = `${totalDistanceYards} YDS`;
       document.getElementById('res-roll-val').textContent = `+${rollYards} YDS`;
-      document.getElementById('res-target-diff').textContent = `${distanceToPin} YDS`;
-      document.getElementById('res-specs').textContent = `Club: ${activeClubKey} • Target Pin: ${currentTargetYardage} YDS`;
+      document.getElementById('res-target-diff').textContent = ballHoledOut ? 'IN THE CUP!' : `${distanceToPin} YDS`;
+      document.getElementById('res-specs').textContent = `Club: ${activeClubKey} (${clubProfiles[activeClubKey].name}) • Lie: ${ballHoledOut ? 'Cup' : landingSurfaceName}`;
 
-      if (parseFloat(distanceToPin) <= 8.0) {
+      if (ballHoledOut) {
+        document.getElementById('res-badge').textContent = '🏆 ACE! HOLE IN ONE!';
+        document.getElementById('res-badge').style.background = '#78350f';
+        document.getElementById('res-badge').style.color = '#fde047';
+      } else if (landingSurfaceName === 'Putting Green') {
         audio.playPinChime();
-        document.getElementById('res-badge').textContent = '🎯 TARGET PIN HIT!';
+        document.getElementById('res-badge').textContent = '🎯 ON THE GREEN!';
         document.getElementById('res-badge').style.background = '#065f46';
         document.getElementById('res-badge').style.color = '#34d399';
       } else {
@@ -2132,29 +3058,33 @@
       btnSwing.style.color = "#064e3b";
 
       setTimeout(() => {
-        setupActiveTarget((currentTierIdx + 1) % targetTiers.length);
-      }, 500);
-
-      setTimeout(() => {
         if (swingStage === 'landed') {
           resetForNextShot();
         }
-      }, 4800);
+      }, 6000);
     }
 
     function resetForNextShot() {
+      const finishedTier = currentTierIdx;
+      const nextTier = getNextShuffledTier(finishedTier);
+
       swingStage = 'idle';
       ballResting = false;
       ballInFlight = false;
+      ballHoledOut = false;
       proximityLineMesh.visible = false;
+      if (ballShadowMesh) ballShadowMesh.visible = true;
 
       btnSwing.textContent = "START SWING";
       btnSwing.style.background = "#10b981";
       btnSwing.style.borderColor = "#a7f3d0";
       btnSwing.style.color = "#064e3b";
 
+      randomizeTargetCoords(finishedTier);
+      rebuildTerrainAndComplexes();
+      generateOmnidirectionalWind();
+      selectActiveTarget(nextTier, false);
       resetTeeCamera();
-      generateRealisticWind();
     }
 
     /* ==========================================================================
@@ -2176,13 +3106,23 @@
       } else if (currentActiveScene === 'range') {
         if (e.code === 'Space') {
           handleSwingStep(performance.now());
+        } else if (e.code === 'Tab') {
+          e.preventDefault();
+          if (!ballInFlight) selectActiveTarget(getNextShuffledTier(currentTierIdx), true);
         } else if (e.code === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
           adjustAim(-1.5);
         } else if (e.code === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
           adjustAim(1.5);
-        } else if (e.key >= '1' && e.key <= '6') {
-          const clubs = ['1W', '3W', '5I', '7I', '9I', 'PW'];
-          selectClub(clubs[parseInt(e.key) - 1]);
+        } else if (e.key === 'z' || e.key === 'Z') {
+          manualZoomHeld = true;
+          btnZoomPin.classList.add('zoom-active');
+        } else if (e.key === '[' || e.key === ',') {
+          cycleClub(-1);
+        } else if (e.key === ']' || e.key === '.') {
+          cycleClub(1);
+        } else if (e.key >= '1' && e.key <= '9') {
+          const idx = parseInt(e.key) - 1;
+          if (clubOrder[idx]) selectClub(clubOrder[idx]);
         }
       }
     });
@@ -2191,6 +3131,11 @@
       if (currentActiveScene === 'skate') {
         if (e.code === 'ArrowDown' || e.key === 's' || e.key === 'S') {
           stopDuck();
+        }
+      } else if (currentActiveScene === 'range') {
+        if (e.key === 'z' || e.key === 'Z') {
+          manualZoomHeld = false;
+          btnZoomPin.classList.remove('zoom-active');
         }
       }
     });
