@@ -833,7 +833,6 @@
         font-size: 0.72rem;
       }
 
-      /* Compact Shot Result Banner docked cleanly below Briefing Card */
       #shot-result-card {
         top: calc(max(10px, env(safe-area-inset-top)) + 150px);
         left: 12px;
@@ -1119,15 +1118,15 @@
 
     <div id="target-briefing-card">
       <div class="glass-card" style="border-color: rgba(16, 185, 129, 0.65);">
-        <!-- Daily 10-Shot Challenge & Free Practice Switcher -->
+        <!-- Free Practice & Daily 10-Shot Challenge Switcher -->
         <div class="challenge-strip">
           <div class="range-submode-toggle">
-            <button id="btn-submode-daily" class="submode-btn active">🏆 DAILY 10</button>
-            <button id="btn-submode-practice" class="submode-btn">🏌️ PRACTICE</button>
+            <button id="btn-submode-practice" class="submode-btn active">🏌️ PRACTICE</button>
+            <button id="btn-submode-daily" class="submode-btn">🏆 DAILY 10</button>
           </div>
-          <div id="daily-hud-status" class="daily-score-pill">
-            <span id="label-daily-progress">SHOT 1/10 • 0.0 YDS</span>
-            <button id="btn-open-board" class="board-mini-btn">BOARD</button>
+          <div class="daily-score-pill">
+            <span id="label-daily-progress" style="display: none;">SHOT 1/10 • 0.0 YDS</span>
+            <button id="btn-open-board" class="board-mini-btn">🏆 BOARD</button>
           </div>
         </div>
 
@@ -1254,7 +1253,7 @@
         </div>
 
         <button id="btn-replay-daily" class="arcade-btn" style="margin-top: 4px; width: 100%; padding: 12px; font-size: 0.95rem;">
-          REPLAY TODAY'S 10 SHOTS
+          PLAY / REPLAY TODAY'S 10 SHOTS
         </button>
       </div>
     </div>
@@ -1263,7 +1262,7 @@
   <!-- Firebase Modular SDK + Daily Challenge & Game Engine -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, collection, query, where, orderBy, limit, getDocs, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getFirestore, collection, query, where, getDocs, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     /* ==========================================================================
        0. FIREBASE & PWA HOME SCREEN APP SETUP
@@ -1282,7 +1281,7 @@
       const app = initializeApp(firebaseConfig);
       db = getFirestore(app);
     } catch (e) {
-      console.warn("Firebase offline fallback active:", e);
+      console.warn("Firebase initialization error:", e);
     }
 
     // Generate crisp Home Screen App Icon & Standalone PWA Manifest dynamically
@@ -1293,14 +1292,12 @@
         iconCanvas.height = 512;
         const g = iconCanvas.getContext('2d');
 
-        // Emerald & Dark Slate Gradient Background
         const bgGrad = g.createLinearGradient(0, 0, 512, 512);
         bgGrad.addColorStop(0, '#064e3b');
         bgGrad.addColorStop(1, '#030608');
         g.fillStyle = bgGrad;
         g.fillRect(0, 0, 512, 512);
 
-        // Stylized Putting Green & Flag Icon
         g.fillStyle = '#10b981';
         g.beginPath();
         g.ellipse(256, 365, 165, 58, 0, 0, Math.PI * 2);
@@ -1348,7 +1345,6 @@
           manifestEl.href = 'data:application/manifest+json,' + encodeURIComponent(JSON.stringify(manifestObj));
         }
 
-        // Register lightweight offline-ready Service Worker so Chrome triggers "Install App"
         if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
           const swCode = `
             self.addEventListener('install', e => self.skipWaiting());
@@ -2291,7 +2287,6 @@
       };
     }
 
-    // Generates the exact same 10-shot course (targets + wind) for everyone on today's date
     function generateDailyCourse(dateKey) {
       const rng = createSeededRng(`temp-greens-${dateKey}`);
       const compassAngles = [0, 45, 90, 135, 180, 225, 270, 315];
@@ -2321,11 +2316,11 @@
       return shots;
     }
 
-    let rangeSubmode = 'daily'; // 'daily' | 'practice'
+    let rangeSubmode = 'practice'; // Default to Free Practice on initial load
     const todayDateKey = getTodayDateKey();
     const dailyCourse = generateDailyCourse(todayDateKey);
     let dailyShotIndex = 0;
-    let dailyShotResults = []; // Array of { holeNum, tierName, distYds, ace }
+    let dailyShotResults = [];
     let dailyRoundComplete = false;
 
     function getLocalBestKey() {
@@ -2342,15 +2337,15 @@
     }
 
     function updateDailyHud() {
-      const statusEl = document.getElementById('daily-hud-status');
+      const progressEl = document.getElementById('label-daily-progress');
       if (rangeSubmode === 'practice') {
-        statusEl.style.display = 'none';
+        progressEl.style.display = 'none';
         return;
       }
-      statusEl.style.display = 'flex';
+      progressEl.style.display = 'inline';
       const totalYds = dailyShotResults.reduce((acc, r) => acc + r.distYds, 0);
       const displayShot = Math.min(10, dailyShotIndex + 1);
-      document.getElementById('label-daily-progress').textContent = dailyRoundComplete
+      progressEl.textContent = dailyRoundComplete
         ? `DONE • ${totalYds.toFixed(1)} YDS`
         : `SHOT ${displayShot}/10 • ${totalYds.toFixed(1)}Y`;
     }
@@ -3188,8 +3183,8 @@
       proximityLineMesh.visible = false;
       sceneRange.add(proximityLineMesh);
 
-      // Start in Daily 10-Shot Challenge Mode
-      startDailyChallengeRound();
+      // Default to Free Practice Mode on startup
+      switchToPracticeMode();
       updateAimVisual();
     }
 
@@ -3198,6 +3193,45 @@
       cameraRange.updateProjectionMatrix();
       cameraRange.position.set(0, 17.5, 18.0);
       cameraRange.lookAt(0, 1.5, -145);
+    }
+
+    // Unified clean reset of ball, swing UI, and camera whenever switching modes or advancing shots
+    function resetShotState() {
+      swingStage = 'idle';
+      ballResting = false;
+      ballInFlight = false;
+      ballHoledOut = false;
+      hasPitched = false;
+      bounceCount = 0;
+      isRollingPhase = false;
+      manualZoomHeld = false;
+
+      shotResultCard.style.display = 'none';
+      proximityLineMesh.visible = false;
+      btnZoomPin.classList.remove('zoom-active');
+
+      ballPos.set(0, BALL_RADIUS + 0.14, 0);
+      if (golfBallMesh) {
+        golfBallMesh.position.copy(ballPos);
+        golfBallMesh.rotation.set(0, 0, 0);
+      }
+      if (ballShadowMesh) {
+        ballShadowMesh.visible = true;
+        ballShadowMesh.position.set(0, 0.05, 0);
+        ballShadowMesh.scale.set(1, 1, 1);
+        ballShadowMesh.material.opacity = 0.45;
+      }
+      if (ballTracerLine) {
+        tracerPoints.length = 0;
+        ballTracerLine.geometry.setFromPoints([]);
+      }
+
+      btnSwing.textContent = "START SWING";
+      btnSwing.style.background = "#10b981";
+      btnSwing.style.borderColor = "#a7f3d0";
+      btnSwing.style.color = "#064e3b";
+
+      resetTeeCamera();
     }
 
     function recommendBestClubForYardage(yardage) {
@@ -3272,6 +3306,7 @@
       dailyShotIndex = 0;
       dailyShotResults = [];
       dailyRoundComplete = false;
+      resetShotState();
       loadDailyHole(0);
     }
 
@@ -3283,6 +3318,7 @@
       document.getElementById('btn-next-pin').title = 'Switch Target Pin';
       updateDailyHud();
 
+      resetShotState();
       for (let i = 0; i < targetTiers.length; i++) {
         randomizeTargetCoords(i);
       }
@@ -3295,14 +3331,12 @@
       if (ballInFlight) return;
       audio.playClick();
       startDailyChallengeRound();
-      resetTeeCamera();
     });
 
     document.getElementById('btn-submode-practice').addEventListener('click', () => {
       if (ballInFlight) return;
       audio.playClick();
       switchToPracticeMode();
-      resetTeeCamera();
     });
 
     function updateAimVisual() {
@@ -3378,7 +3412,6 @@
       setWindByIndex(speed, dirIdx);
     }
 
-    // Center active pill inside #club-strip ONLY (prevents viewport horizontal shift bug on mobile)
     function selectClub(clubKey) {
       if (ballInFlight || !clubProfiles[clubKey]) return;
       activeClubKey = clubKey;
@@ -3404,7 +3437,7 @@
       btn.addEventListener('click', () => selectClub(btn.dataset.club));
     });
 
-    // Two-Stage Swing Gauge Engine (Sharper Snap Difficulty & Curvature)
+    // Two-Stage Swing Gauge Engine
     let swingStage = 'idle';
     let powerStartTime = 0;
     let snapStartTime = 0;
@@ -3513,7 +3546,6 @@
       const powerScalar = 0.70 + (power * 0.30);
       const clubWindScale = 0.65 + (club.maxCarry / 250) * 0.65;
 
-      // Heavy slices/hooks lose ~4% carry distance
       const mishitCarryPenalty = (quality === 'slice' || quality === 'hook') ? 0.96 : 1.0;
       const targetCarry = Math.max(15, (club.maxCarry * powerScalar * mishitCarryPenalty) + (windTailYardsTotal * clubWindScale));
       
@@ -3546,15 +3578,13 @@
         fwdZ * forwardSpeed
       );
 
-      // Pronounced fade/slice & draw/hook curvature scaled by club length
       const clubCurveScale = 0.65 + (club.maxCarry / 270) * 0.75;
       const absSnap = Math.abs(snap);
       if (absSnap <= 0.22) {
         curveTotalPerpYards = 0;
       } else {
-        const excess = (absSnap - 0.22) / 0.78; // 0..1
+        const excess = (absSnap - 0.22) / 0.78;
         const sign = snap > 0 ? 1 : -1;
-        // Gentle draw/fade: 4..10y | Hook/Slice: 11..22y
         const baseCurve = absSnap <= 0.58
           ? (4.0 + (excess / 0.46) * 6.0)
           : (11.0 + ((excess - 0.46) / 0.54) * 11.0);
@@ -3663,7 +3693,6 @@
         if (!isRollingPhase) {
           flightProgressFrames++;
           const tNorm = Math.min(1.3, flightProgressFrames / flightTotalFrames);
-          // Progressive aerodynamic curve: starts on target line, bends smoothly in mid-to-late flight
           const curveStep = (curveTotalPerpYards * 1.6 * Math.pow(tNorm, 0.6)) / flightTotalFrames;
           const bounceDamp = bounceCount === 0 ? 1.0 : 0.20;
 
@@ -3852,7 +3881,6 @@
 
       shotResultCard.style.display = 'block';
 
-      // Record Daily 10-Shot Challenge progress
       if (rangeSubmode === 'daily' && !dailyRoundComplete) {
         dailyShotResults.push({
           holeNum: dailyShotIndex + 1,
@@ -3869,7 +3897,9 @@
           btnSwing.textContent = "VIEW SCORECARD";
           const totalYds = parseFloat(dailyShotResults.reduce((acc, r) => acc + r.distYds, 0).toFixed(1));
           saveBestDailyScoreLocally(totalYds);
-          setTimeout(() => openDailyModal(true), 1400);
+          setTimeout(() => {
+            if (rangeSubmode === 'daily' && dailyRoundComplete) openDailyModal(true);
+          }, 1400);
           return;
         }
       }
@@ -3879,58 +3909,33 @@
       btnSwing.style.borderColor = "#a7f3d0";
       btnSwing.style.color = "#064e3b";
 
+      const scheduledSubmode = rangeSubmode;
       setTimeout(() => {
-        if (swingStage === 'landed' && !dailyRoundComplete) {
+        if (swingStage === 'landed' && rangeSubmode === scheduledSubmode && !dailyRoundComplete) {
           resetForNextShot();
         }
       }, 4800);
     }
 
     function resetForNextShot() {
-      // Automatically dismiss shot result card when next shot is ready
-      shotResultCard.style.display = 'none';
-      proximityLineMesh.visible = false;
-
       if (rangeSubmode === 'daily') {
         if (dailyRoundComplete) {
           openDailyModal(true);
           return;
         }
-        swingStage = 'idle';
-        ballResting = false;
-        ballInFlight = false;
-        ballHoledOut = false;
-        if (ballShadowMesh) ballShadowMesh.visible = true;
-
-        btnSwing.textContent = "START SWING";
-        btnSwing.style.background = "#10b981";
-        btnSwing.style.borderColor = "#a7f3d0";
-        btnSwing.style.color = "#064e3b";
-
+        resetShotState();
         loadDailyHole(dailyShotIndex);
-        resetTeeCamera();
         return;
       }
 
       const finishedTier = currentTierIdx;
       const nextTier = getNextShuffledTier(finishedTier);
 
-      swingStage = 'idle';
-      ballResting = false;
-      ballInFlight = false;
-      ballHoledOut = false;
-      if (ballShadowMesh) ballShadowMesh.visible = true;
-
-      btnSwing.textContent = "START SWING";
-      btnSwing.style.background = "#10b981";
-      btnSwing.style.borderColor = "#a7f3d0";
-      btnSwing.style.color = "#064e3b";
-
+      resetShotState();
       randomizeTargetCoords(finishedTier);
       rebuildTerrainAndComplexes();
       generateOmnidirectionalWind();
       selectActiveTarget(nextTier, false);
-      resetTeeCamera();
     }
 
     /* ==========================================================================
@@ -3953,28 +3958,32 @@
       listEl.innerHTML = '<div class="lb-row"><span>Fetching today\'s scores...</span></div>';
 
       const myId = getPlayerId();
+      const myDocId = `${todayDateKey}_${myId}`;
       let entries = [];
+      let firestoreErrorMsg = '';
 
       if (db) {
         try {
+          // Single-field where query avoids missing composite index errors across devices
           const q = query(
             collection(db, "daily_scores"),
-            where("dateKey", "==", todayDateKey),
-            orderBy("totalYards", "asc"),
-            limit(10)
+            where("dateKey", "==", todayDateKey)
           );
           const snap = await getDocs(q);
           snap.forEach(docSnap => {
-            entries.push({ id: docSnap.id, ...docSnap.data() });
+            const data = docSnap.data();
+            if (typeof data.totalYards === 'number') {
+              entries.push({ id: docSnap.id, ...data });
+            }
           });
         } catch (err) {
-          console.warn("Firestore read fallback:", err);
+          console.error("Firestore read error:", err);
+          firestoreErrorMsg = err.message || 'Check Firestore rules';
         }
       }
 
-      // Include local best if offline or not yet ranked in top 10
+      // Include local best if offline or not yet returned by Firestore
       const localBest = localStorage.getItem(getLocalBestKey());
-      const myDocId = `${todayDateKey}_${myId}`;
       if (localBest !== null && !entries.some(e => e.id === myDocId)) {
         entries.push({
           id: myDocId,
@@ -3982,12 +3991,14 @@
           totalYards: parseFloat(localBest),
           aces: dailyShotResults.filter(r => r.ace).length
         });
-        entries.sort((a, b) => a.totalYards - b.totalYards);
-        entries = entries.slice(0, 10);
       }
 
+      entries.sort((a, b) => a.totalYards - b.totalYards);
+      entries = entries.slice(0, 10);
+
       if (entries.length === 0) {
-        listEl.innerHTML = '<div class="lb-row"><span style="color:#9ca3af;">No scores posted yet today. Be #1!</span></div>';
+        const note = firestoreErrorMsg ? ` (${escapeHtml(firestoreErrorMsg)})` : '';
+        listEl.innerHTML = `<div class="lb-row"><span style="color:#9ca3af;">No scores posted yet today. Be #1!${note}</span></div>`;
         return;
       }
 
@@ -4026,7 +4037,6 @@
           const docRef = doc(db, "daily_scores", docId);
           const existing = await getDoc(docRef);
 
-          // Only overwrite if this attempt is better (lower yards) than their previous best today
           if (!existing.exists() || totalYds <= existing.data().totalYards) {
             await setDoc(docRef, {
               dateKey: todayDateKey,
@@ -4040,7 +4050,8 @@
             statusEl.textContent = `Best today remains ${existing.data().totalYards.toFixed(1)} YDS (this round: ${totalYds.toFixed(1)} YDS).`;
           }
         } catch (err) {
-          statusEl.textContent = `Saved locally (${totalYds.toFixed(1)} YDS). Check Firestore rules if online sync failed.`;
+          console.error("Firestore write error:", err);
+          statusEl.textContent = `⚠️ Cloud sync error: ${err.message || 'Check Firestore rules'}. Saved locally (${totalYds.toFixed(1)} YDS).`;
         }
       } else {
         statusEl.textContent = `Saved locally (${totalYds.toFixed(1)} YDS).`;
@@ -4102,21 +4113,7 @@
 
     document.getElementById('btn-replay-daily').addEventListener('click', () => {
       dailyModalOverlay.style.display = 'none';
-      shotResultCard.style.display = 'none';
-      proximityLineMesh.visible = false;
-      swingStage = 'idle';
-      ballResting = false;
-      ballInFlight = false;
-      ballHoledOut = false;
-      if (ballShadowMesh) ballShadowMesh.visible = true;
-
-      btnSwing.textContent = "START SWING";
-      btnSwing.style.background = "#10b981";
-      btnSwing.style.borderColor = "#a7f3d0";
-      btnSwing.style.color = "#064e3b";
-
       startDailyChallengeRound();
-      resetTeeCamera();
       audio.playClick();
     });
 
