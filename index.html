@@ -6,8 +6,10 @@
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Temp Greens" />
   <meta name="theme-color" content="#030608" />
-  <link rel="manifest" href='data:application/manifest+json,{"name":"Temporary Greens","short_name":"Temp Greens","display":"standalone","orientation":"any","background_color":"#030608","theme_color":"#030608"}' />
+  <link id="pwa-manifest" rel="manifest" href="" />
+  <link id="apple-touch-icon" rel="apple-touch-icon" href="" />
   <title>Temporary Greens</title>
   
   <!-- Three.js (r128) -->
@@ -27,41 +29,28 @@
       top: 0;
       left: 0;
       width: 100%;
+      max-width: 100vw;
       height: 100%;
       height: 100dvh;
       overflow: hidden;
+      overscroll-behavior: none;
+      touch-action: manipulation;
       background-color: #030608;
       color: #ffffff;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
-    /* Top Universal Header with Mode Switcher */
+    /* Centered Top Universal Header with Mode Switcher */
     #universal-header {
       position: absolute;
       top: max(10px, env(safe-area-inset-top));
-      left: max(14px, env(safe-area-inset-left));
-      right: max(14px, env(safe-area-inset-right));
+      left: max(12px, env(safe-area-inset-left));
+      right: max(12px, env(safe-area-inset-right));
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
       z-index: 50;
       pointer-events: none;
-      gap: 8px;
-    }
-
-    .brand-title {
-      font-weight: 900;
-      font-style: italic;
-      color: #34d399;
-      background: rgba(10, 15, 20, 0.88);
-      padding: 6px 14px;
-      border-radius: 10px;
-      border: 1px solid rgba(52, 211, 153, 0.4);
-      font-size: 1.05rem;
-      letter-spacing: 0.05em;
-      pointer-events: auto;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
-      white-space: nowrap;
     }
 
     .mode-switcher {
@@ -245,7 +234,7 @@
     }
 
     /* ==========================================================================
-       SCENE 2: DRIVING RANGE CSS (Desktop Default + Mobile Portrait & Landscape)
+       SCENE 2: DRIVING RANGE CSS (Desktop + Mobile Portrait & Landscape)
        ========================================================================== */
     #scene-range-container {
       position: absolute;
@@ -266,15 +255,15 @@
 
     #target-briefing-card {
       position: absolute;
-      top: 58px;
+      top: 56px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
       flex-direction: column;
       align-items: center;
       width: 94%;
-      max-width: 500px;
-      z-index: 10;
+      max-width: 520px;
+      z-index: 15;
       pointer-events: none;
     }
 
@@ -284,9 +273,69 @@
       -webkit-backdrop-filter: blur(8px);
       border: 1px solid #27272a;
       border-radius: 12px;
-      padding: 11px 16px;
+      padding: 10px 14px;
       width: 100%;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    }
+
+    /* Daily 10-Shot Challenge Status Strip inside Briefing Card */
+    .challenge-strip {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #1f2937;
+      padding-bottom: 6px;
+      margin-bottom: 6px;
+      gap: 6px;
+      pointer-events: auto;
+    }
+
+    .range-submode-toggle {
+      display: inline-flex;
+      background: #18181b;
+      border: 1px solid #3f3f46;
+      border-radius: 7px;
+      padding: 2px;
+      gap: 2px;
+    }
+    .submode-btn {
+      background: transparent;
+      border: none;
+      color: #9ca3af;
+      font-family: monospace;
+      font-size: 0.70rem;
+      font-weight: 800;
+      padding: 3px 7px;
+      border-radius: 5px;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+    .submode-btn.active {
+      background: #f59e0b;
+      color: #451a03;
+    }
+
+    .daily-score-pill {
+      font-family: monospace;
+      font-size: 0.74rem;
+      font-weight: 800;
+      color: #fde047;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .board-mini-btn {
+      background: rgba(245, 158, 11, 0.16);
+      border: 1px solid rgba(245, 158, 11, 0.55);
+      color: #fbbf24;
+      font-family: monospace;
+      font-size: 0.70rem;
+      font-weight: 900;
+      padding: 3px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      touch-action: manipulation;
     }
 
     .target-primary {
@@ -294,8 +343,8 @@
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid #1f2937;
-      padding-bottom: 7px;
-      margin-bottom: 7px;
+      padding-bottom: 6px;
+      margin-bottom: 6px;
       gap: 8px;
     }
 
@@ -304,7 +353,7 @@
       justify-content: space-between;
       align-items: center;
       font-family: monospace;
-      font-size: 0.80rem;
+      font-size: 0.78rem;
       color: #cbd5e1;
       gap: 6px;
     }
@@ -327,12 +376,14 @@
       transition: transform 0.25s ease;
     }
 
+    /* Compact Auto-Hiding Shot Result Banner */
     #shot-result-card {
       position: absolute;
-      top: 60px;
+      top: 58px;
       left: 16px;
       z-index: 25;
-      width: 295px;
+      width: 265px;
+      padding: 8px 12px;
       display: none;
       cursor: pointer;
     }
@@ -341,32 +392,36 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
+    }
+
+    .stat-hero-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 5px;
     }
 
     .stat-hero-number {
-      font-size: 1.5rem;
+      font-size: 1.18rem;
       font-weight: 900;
       color: #ffffff;
       line-height: 1.1;
     }
 
-    .stat-breakdown-row {
-      display: flex;
-      gap: 14px;
+    .stat-sub-inline {
       font-family: monospace;
-      font-size: 0.84rem;
+      font-size: 0.74rem;
       color: #cbd5e1;
-      margin: 5px 0 9px 0;
     }
 
     .stat-pin-highlight {
       background: rgba(16, 185, 129, 0.16);
       border: 1px solid rgba(16, 185, 129, 0.5);
-      border-radius: 8px;
-      padding: 7px 11px;
+      border-radius: 7px;
+      padding: 5px 9px;
       font-family: monospace;
-      font-size: 0.88rem;
+      font-size: 0.80rem;
       font-weight: bold;
       color: #34d399;
       display: flex;
@@ -557,9 +612,9 @@
     }
     .snap-pure-zone {
       position: absolute;
-      width: 54px;
+      width: 34px;
       height: 100%;
-      background: rgba(16, 185, 129, 0.40);
+      background: rgba(16, 185, 129, 0.42);
       border-left: 1px solid #10b981;
       border-right: 1px solid #10b981;
     }
@@ -611,10 +666,143 @@
       color: #ffffff;
     }
 
+    /* ==========================================================================
+       DAILY 10-SHOT CHALLENGE & FIREBASE LEADERBOARD MODAL
+       ========================================================================== */
+    #daily-modal-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(3, 6, 8, 0.88);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 80;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+    }
+
+    .daily-modal-box {
+      background: #0b1117;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 440px;
+      max-height: 88dvh;
+      overflow-y: auto;
+      padding: 16px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .daily-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #1e293b;
+      padding-bottom: 8px;
+    }
+
+    .daily-close-btn {
+      background: #1e293b;
+      color: #cbd5e1;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 5px 10px;
+      font-family: monospace;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .hole-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 5px;
+    }
+
+    .hole-cell {
+      background: #111827;
+      border: 1px solid #1f2937;
+      border-radius: 7px;
+      padding: 5px 4px;
+      text-align: center;
+      font-family: monospace;
+    }
+    .hole-cell.played {
+      border-color: rgba(16, 185, 129, 0.45);
+      background: rgba(16, 185, 129, 0.08);
+    }
+    .hole-cell.ace {
+      border-color: #facc15;
+      background: rgba(250, 204, 21, 0.14);
+    }
+
+    .submit-score-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .player-name-input {
+      flex: 1;
+      background: #090d16;
+      border: 1px solid #334155;
+      border-radius: 9px;
+      padding: 9px 11px;
+      color: #ffffff;
+      font-family: monospace;
+      font-size: 0.90rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      -webkit-user-select: text;
+      user-select: text;
+    }
+    .player-name-input:focus {
+      outline: none;
+      border-color: #10b981;
+    }
+
+    .submit-score-btn {
+      background: #10b981;
+      color: #022c22;
+      border: 1px solid #a7f3d0;
+      border-radius: 9px;
+      padding: 9px 14px;
+      font-family: monospace;
+      font-size: 0.84rem;
+      font-weight: 900;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .leaderboard-list {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .lb-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #111827;
+      border: 1px solid #1f2937;
+      border-radius: 8px;
+      padding: 7px 10px;
+      font-family: monospace;
+      font-size: 0.80rem;
+    }
+    .lb-row.me {
+      border-color: #f59e0b;
+      background: rgba(245, 158, 11, 0.12);
+    }
+
     @media (min-width: 921px) and (max-width: 1180px) {
       #shot-result-card {
-        top: 132px;
-        width: 265px;
+        top: 158px;
+        width: 260px;
       }
     }
 
@@ -622,14 +810,9 @@
        MOBILE PORTRAIT OPTIMIZATION
        ========================================================================== */
     @media (max-width: 920px) and (orientation: portrait) {
-      .brand-title {
-        font-size: 0.82rem;
-        padding: 6px 10px;
-      }
       .mode-btn {
-        font-size: 0.72rem;
-        padding: 6px 9px;
-        gap: 4px;
+        font-size: 0.76rem;
+        padding: 6px 12px;
       }
 
       #target-briefing-card {
@@ -638,35 +821,35 @@
         max-width: none;
       }
       #target-briefing-card .glass-card {
-        padding: 8px 12px;
+        padding: 8px 11px;
       }
       #label-target-name {
-        font-size: 0.90rem !important;
+        font-size: 0.88rem !important;
       }
       #label-rec-club {
-        font-size: 0.82rem !important;
+        font-size: 0.80rem !important;
       }
       .telemetry-row {
-        font-size: 0.74rem;
+        font-size: 0.72rem;
       }
 
+      /* Compact Shot Result Banner docked cleanly below Briefing Card */
       #shot-result-card {
-        top: calc(max(10px, env(safe-area-inset-top)) + 124px);
+        top: calc(max(10px, env(safe-area-inset-top)) + 150px);
         left: 12px;
         right: 12px;
         width: auto;
-        padding: 10px 14px;
+        padding: 7px 11px;
       }
       .stat-hero-number {
-        font-size: 1.32rem;
+        font-size: 1.05rem;
       }
-      .stat-breakdown-row {
-        font-size: 0.78rem;
-        margin: 3px 0 6px 0;
+      .stat-sub-inline {
+        font-size: 0.70rem;
       }
       .stat-pin-highlight {
-        padding: 5px 10px;
-        font-size: 0.82rem;
+        padding: 4px 8px;
+        font-size: 0.76rem;
       }
 
       #swing-system {
@@ -744,27 +927,25 @@
     @media (max-height: 520px) and (orientation: landscape) {
       #universal-header {
         top: 6px;
-        left: max(10px, env(safe-area-inset-left));
-        right: max(10px, env(safe-area-inset-right));
-      }
-      .brand-title {
-        font-size: 0.78rem;
-        padding: 4px 10px;
       }
       .mode-btn {
-        font-size: 0.70rem;
-        padding: 4px 10px;
+        font-size: 0.72rem;
+        padding: 4px 11px;
       }
 
       #target-briefing-card {
         top: 38px;
         width: auto;
-        min-width: 340px;
-        max-width: 58%;
+        min-width: 360px;
+        max-width: 62%;
       }
       #target-briefing-card .glass-card {
         padding: 5px 10px;
         border-radius: 10px;
+      }
+      .challenge-strip {
+        padding-bottom: 3px;
+        margin-bottom: 3px;
       }
       .target-primary {
         padding-bottom: 3px;
@@ -774,10 +955,10 @@
         display: none;
       }
       #label-target-name {
-        font-size: 0.80rem !important;
+        font-size: 0.78rem !important;
       }
       #label-rec-club {
-        font-size: 0.76rem !important;
+        font-size: 0.74rem !important;
       }
       .telemetry-row {
         font-size: 0.68rem;
@@ -786,25 +967,18 @@
       #shot-result-card {
         top: 38px;
         left: max(10px, env(safe-area-inset-left));
-        width: 225px;
-        padding: 7px 10px;
+        width: 215px;
+        padding: 6px 9px;
       }
       .stat-hero-number {
-        font-size: 1.12rem;
+        font-size: 1.0rem;
       }
-      .stat-breakdown-row {
-        font-size: 0.70rem;
-        margin: 2px 0 5px 0;
-        gap: 8px;
+      .stat-sub-inline {
+        font-size: 0.66rem;
       }
       .stat-pin-highlight {
-        padding: 4px 8px;
-        font-size: 0.74rem;
-      }
-      #res-specs {
-        font-size: 0.64rem !important;
-        margin-top: 4px !important;
-        padding-top: 4px !important;
+        padding: 4px 7px;
+        font-size: 0.72rem;
       }
 
       #aim-controls {
@@ -874,9 +1048,8 @@
 </head>
 <body>
 
-  <!-- Top Universal Header with Mode Switcher -->
+  <!-- Centered Top Mode Switcher -->
   <header id="universal-header">
-    <div class="brand-title">TEMPORARY GREENS</div>
     <div class="mode-switcher">
       <button id="toggle-skate" class="mode-btn active">🛹 SKATE COMMUTE</button>
       <button id="toggle-range" class="mode-btn">⛳ DRIVING RANGE</button>
@@ -946,40 +1119,49 @@
 
     <div id="target-briefing-card">
       <div class="glass-card" style="border-color: rgba(16, 185, 129, 0.65);">
+        <!-- Daily 10-Shot Challenge & Free Practice Switcher -->
+        <div class="challenge-strip">
+          <div class="range-submode-toggle">
+            <button id="btn-submode-daily" class="submode-btn active">🏆 DAILY 10</button>
+            <button id="btn-submode-practice" class="submode-btn">🏌️ PRACTICE</button>
+          </div>
+          <div id="daily-hud-status" class="daily-score-pill">
+            <span id="label-daily-progress">SHOT 1/10 • 0.0 YDS</span>
+            <button id="btn-open-board" class="board-mini-btn">BOARD</button>
+          </div>
+        </div>
+
         <div class="target-primary">
           <div>
-            <div style="font-size: 0.68rem; color: #9ca3af; font-family: monospace;">CURRENT TARGET OBJECTIVE</div>
-            <div id="label-target-name" style="font-size: 1.05rem; font-weight: 900; color: #34d399;">150 YD ISLAND GREEN</div>
+            <div style="font-size: 0.64rem; color: #9ca3af; font-family: monospace;">CURRENT TARGET</div>
+            <div id="label-target-name" style="font-size: 1.0rem; font-weight: 900; color: #34d399;">150 YD TEARDROP GREEN</div>
           </div>
           <div style="text-align: right;">
-            <div style="font-size: 0.68rem; color: #9ca3af; font-family: monospace;">RECOMMENDED</div>
-            <div id="label-rec-club" style="font-size: 0.95rem; font-weight: 800; color: #f59e0b; font-family: monospace;">7I (7-Iron)</div>
+            <div style="font-size: 0.64rem; color: #9ca3af; font-family: monospace;">RECOMMENDED</div>
+            <div id="label-rec-club" style="font-size: 0.90rem; font-weight: 800; color: #f59e0b; font-family: monospace;">7I (7-Iron)</div>
           </div>
         </div>
         <div class="telemetry-row">
           <div>PIN: <span id="label-target-distance" class="telemetry-val" style="color: #34d399;">153 YDS (L)</span></div>
-          <div>WIND: <span class="wind-pill"><span id="label-wind-speed">6 MPH</span> <span id="wind-arrow-icon">➔</span> <span id="label-wind-dir" style="font-size: 0.72rem; color: #7dd3fc;">(R)</span></span></div>
+          <div>WIND: <span class="wind-pill"><span id="label-wind-speed">6 MPH</span> <span id="wind-arrow-icon">➔</span> <span id="label-wind-dir" style="font-size: 0.70rem; color: #7dd3fc;">(R)</span></span></div>
           <div>AIM: <span id="label-aim" class="telemetry-val" style="color: #facc15;">0.0°</span></div>
         </div>
       </div>
     </div>
 
+    <!-- Compact Auto-Hiding Shot Result Card -->
     <div id="shot-result-card" class="glass-card" style="border-color: #34d399;" title="Tap to dismiss">
       <div class="stat-badge-row">
-        <span id="res-badge" style="font-size: 0.72rem; font-family: monospace; font-weight: 800; color: #34d399; background: #064e3b; padding: 3px 8px; border-radius: 4px;">SHOT REGISTERED</span>
-        <span id="res-quality" style="font-size: 0.75rem; font-family: monospace; font-weight: 800; color: #38bdf8;">PURE STRAIGHT</span>
+        <span id="res-badge" style="font-size: 0.68rem; font-family: monospace; font-weight: 800; color: #34d399; background: #064e3b; padding: 2px 7px; border-radius: 4px;">SHOT REGISTERED</span>
+        <span id="res-quality" style="font-size: 0.70rem; font-family: monospace; font-weight: 800; color: #38bdf8;">PURE STRAIGHT</span>
       </div>
-      <div id="res-carry-hero" class="stat-hero-number">157 YDS CARRY</div>
-      <div class="stat-breakdown-row">
-        <span>Total: <strong id="res-total-val" style="color: #ffffff;">162 YDS</strong></span>
-        <span>Rollout: <strong id="res-roll-val" style="color: #cbd5e1;">+5 YDS</strong></span>
+      <div class="stat-hero-row">
+        <div id="res-carry-hero" class="stat-hero-number">157Y CARRY</div>
+        <div class="stat-sub-inline">Tot: <strong id="res-total-val" style="color: #fff;">162Y</strong> (<span id="res-roll-val">+5Y</span>)</div>
       </div>
       <div class="stat-pin-highlight">
-        <span>DIST TO PIN:</span>
-        <span id="res-target-diff" style="font-size: 0.95rem; font-weight: 900;">4.8 YDS</span>
-      </div>
-      <div id="res-specs" style="font-size: 0.74rem; font-family: monospace; color: #cbd5e1; margin-top: 7px; border-top: 1px solid #1f2937; padding-top: 6px;">
-        Club: 7I • Lie: Green
+        <span id="res-lie-label">PUTTING GREEN</span>
+        <span id="res-target-diff" style="font-size: 0.88rem; font-weight: 900;">4.8 YDS TO PIN</span>
       </div>
     </div>
 
@@ -1039,12 +1221,146 @@
         <kbd>A</kbd>/<kbd>D</kbd> Aim • <kbd>[</kbd>/<kbd>]</kbd> Club • <kbd>TAB</kbd> Pin • <kbd>Z</kbd> Zoom • <kbd>SPACE</kbd> Swing
       </div>
     </div>
+
+    <!-- Daily 10-Shot Challenge Scorecard & Firebase Leaderboard Modal -->
+    <div id="daily-modal-overlay">
+      <div class="daily-modal-box">
+        <div class="daily-modal-header">
+          <div>
+            <div id="modal-daily-date" style="font-family: monospace; font-size: 0.72rem; color: #f59e0b; font-weight: 800;">DAILY 10-SHOT CHALLENGE</div>
+            <div style="font-size: 1.05rem; font-weight: 900; color: #ffffff;">SCORECARD & LEADERBOARD</div>
+          </div>
+          <button id="btn-close-daily-modal" class="daily-close-btn">✕</button>
+        </div>
+
+        <div id="daily-hole-grid" class="hole-grid"></div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; background: #111827; padding: 8px 12px; border-radius: 10px; border: 1px solid #1f2937; font-family: monospace;">
+          <span style="color: #9ca3af; font-size: 0.80rem;">TOTAL CUMULATIVE DIST:</span>
+          <span id="modal-total-yards" style="color: #34d399; font-size: 1.05rem; font-weight: 900;">0.0 YDS</span>
+        </div>
+
+        <div id="daily-submit-section" class="submit-score-row" style="display: none;">
+          <input id="input-player-name" class="player-name-input" type="text" maxlength="12" placeholder="YOUR NAME / INITIALS" />
+          <button id="btn-submit-daily" class="submit-score-btn">POST SCORE</button>
+        </div>
+        <div id="daily-submit-status" style="font-family: monospace; font-size: 0.72rem; color: #38bdf8; display: none;"></div>
+
+        <div style="font-family: monospace; font-size: 0.75rem; font-weight: 800; color: #9ca3af; margin-top: 2px;">
+          TODAY'S TOP 10 (LOWEST YARDS WINS)
+        </div>
+        <div id="daily-leaderboard-list" class="leaderboard-list">
+          <div class="lb-row"><span>Loading today's leaderboard...</span></div>
+        </div>
+
+        <button id="btn-replay-daily" class="arcade-btn" style="margin-top: 4px; width: 100%; padding: 12px; font-size: 0.95rem;">
+          REPLAY TODAY'S 10 SHOTS
+        </button>
+      </div>
+    </div>
   </div>
 
-  <script>
+  <!-- Firebase Modular SDK + Daily Challenge & Game Engine -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, query, where, orderBy, limit, getDocs, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
     /* ==========================================================================
-       0. MOBILE FULLSCREEN HELPER
+       0. FIREBASE & PWA HOME SCREEN APP SETUP
        ========================================================================== */
+    const firebaseConfig = {
+      apiKey: "AIzaSyDj9CbpwYu8v0xdLpZgN-4Ukw-8kZuYFbM",
+      authDomain: "temporary-greens.firebaseapp.com",
+      projectId: "temporary-greens",
+      storageBucket: "temporary-greens.firebasestorage.app",
+      messagingSenderId: "846223905301",
+      appId: "1:846223905301:web:930c8da82eeed02d1cf41c"
+    };
+
+    let db = null;
+    try {
+      const app = initializeApp(firebaseConfig);
+      db = getFirestore(app);
+    } catch (e) {
+      console.warn("Firebase offline fallback active:", e);
+    }
+
+    // Generate crisp Home Screen App Icon & Standalone PWA Manifest dynamically
+    (function setupHomeScreenPWA() {
+      try {
+        const iconCanvas = document.createElement('canvas');
+        iconCanvas.width = 512;
+        iconCanvas.height = 512;
+        const g = iconCanvas.getContext('2d');
+
+        // Emerald & Dark Slate Gradient Background
+        const bgGrad = g.createLinearGradient(0, 0, 512, 512);
+        bgGrad.addColorStop(0, '#064e3b');
+        bgGrad.addColorStop(1, '#030608');
+        g.fillStyle = bgGrad;
+        g.fillRect(0, 0, 512, 512);
+
+        // Stylized Putting Green & Flag Icon
+        g.fillStyle = '#10b981';
+        g.beginPath();
+        g.ellipse(256, 365, 165, 58, 0, 0, Math.PI * 2);
+        g.fill();
+
+        g.fillStyle = '#030608';
+        g.beginPath();
+        g.ellipse(245, 365, 22, 9, 0, 0, Math.PI * 2);
+        g.fill();
+
+        g.strokeStyle = '#ffffff';
+        g.lineWidth = 14;
+        g.lineCap = 'round';
+        g.beginPath();
+        g.moveTo(245, 362);
+        g.lineTo(245, 130);
+        g.stroke();
+
+        g.fillStyle = '#facc15';
+        g.beginPath();
+        g.moveTo(252, 132);
+        g.lineTo(385, 178);
+        g.lineTo(252, 224);
+        g.closePath();
+        g.fill();
+
+        const iconDataUrl = iconCanvas.toDataURL('image/png');
+        const appleIcon = document.getElementById('apple-touch-icon');
+        if (appleIcon) appleIcon.href = iconDataUrl;
+
+        const manifestObj = {
+          name: "Temporary Greens",
+          short_name: "Temp Greens",
+          start_url: ".",
+          display: "standalone",
+          orientation: "any",
+          background_color: "#030608",
+          theme_color: "#030608",
+          icons: [
+            { src: iconDataUrl, sizes: "512x512", type: "image/png", purpose: "any maskable" }
+          ]
+        };
+        const manifestEl = document.getElementById('pwa-manifest');
+        if (manifestEl) {
+          manifestEl.href = 'data:application/manifest+json,' + encodeURIComponent(JSON.stringify(manifestObj));
+        }
+
+        // Register lightweight offline-ready Service Worker so Chrome triggers "Install App"
+        if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+          const swCode = `
+            self.addEventListener('install', e => self.skipWaiting());
+            self.addEventListener('activate', e => self.clients.claim());
+            self.addEventListener('fetch', e => {});
+          `;
+          const swBlob = new Blob([swCode], { type: 'application/javascript' });
+          navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => {});
+        }
+      } catch (e) {}
+    })();
+
     const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
     function requestMobileFullscreen() {
       if (!isTouchDevice) return;
@@ -1166,7 +1482,6 @@
         const isWedge = (clubKey === 'PW' || clubKey === 'GW' || clubKey === 'SW' || clubKey === 'LW');
         const pScale = 0.78 + power * 0.22;
 
-        // 1. Warm Low-Pass Air Whoosh
         const swooshDur = isWood ? 0.21 : (isLongIron ? 0.19 : (isWedge ? 0.14 : 0.17));
         const swooshSamples = Math.floor(this.ctx.sampleRate * swooshDur);
         const swooshBuf = this.ctx.createBuffer(1, swooshSamples, this.ctx.sampleRate);
@@ -1195,7 +1510,6 @@
         swooshGain.connect(this.ctx.destination);
         swooshSrc.start(now);
 
-        // 2. Percussive Clubface Compression Crack
         const strikeOffset = swooshDur * 0.76;
         const strikeTime = now + strikeOffset;
         const snapDur = isWood ? 0.024 : 0.018;
@@ -1224,7 +1538,6 @@
         snapGain.connect(this.ctx.destination);
         snapSrc.start(strikeTime);
 
-        // 3. Clubhead Acoustic Body
         if (isWood) {
           const woodBodyFreq = clubKey === '1W' ? 235 : (clubKey === '3W' ? 265 : 295);
           this.playTone('sine', woodBodyFreq, woodBodyFreq * 0.65, 0.085, 0.42 * pScale, strikeOffset);
@@ -1955,7 +2268,95 @@
     }
 
     /* ==========================================================================
-       4. SCENE 2: DAYLIGHT LOW-POLY DRIVING RANGE
+       4. DAILY 10-SHOT CHALLENGE & DETERMINISTIC SEED GENERATOR
+       ========================================================================== */
+    function getTodayDateKey() {
+      const d = new Date();
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      return `${yyyy}-${mm}-${dd}`;
+    }
+
+    function createSeededRng(seedStr) {
+      let h = 1779033703 ^ seedStr.length;
+      for (let i = 0; i < seedStr.length; i++) {
+        h = Math.imul(h ^ seedStr.charCodeAt(i), 3432918353);
+        h = (h << 13) | (h >>> 19);
+      }
+      return function() {
+        h = Math.imul(h ^ (h >>> 16), 2246822507);
+        h = Math.imul(h ^ (h >>> 13), 3266489909);
+        return ((h ^= h >>> 16) >>> 0) / 4294967296;
+      };
+    }
+
+    // Generates the exact same 10-shot course (targets + wind) for everyone on today's date
+    function generateDailyCourse(dateKey) {
+      const rng = createSeededRng(`temp-greens-${dateKey}`);
+      const compassAngles = [0, 45, 90, 135, 180, 225, 270, 315];
+      const shots = [];
+      let prevTier = -1;
+
+      for (let s = 0; s < 10; s++) {
+        let tierIdx = Math.floor(rng() * 6);
+        if (tierIdx === prevTier) tierIdx = (tierIdx + 1) % 6;
+        prevTier = tierIdx;
+
+        const zOffset = Math.floor(rng() * 21) - 10;
+        const xSpread = tierIdx === 0 ? 4 : 6;
+        const xOffset = Math.floor(rng() * (xSpread * 2 + 1)) - xSpread;
+        const windSpeed = Math.round(rng() * 11 + 3);
+        const windDirIdx = Math.floor(rng() * compassAngles.length);
+
+        shots.push({
+          holeNum: s + 1,
+          tierIdx,
+          zOffset,
+          xOffset,
+          windMph: windSpeed,
+          windDirIdx
+        });
+      }
+      return shots;
+    }
+
+    let rangeSubmode = 'daily'; // 'daily' | 'practice'
+    const todayDateKey = getTodayDateKey();
+    const dailyCourse = generateDailyCourse(todayDateKey);
+    let dailyShotIndex = 0;
+    let dailyShotResults = []; // Array of { holeNum, tierName, distYds, ace }
+    let dailyRoundComplete = false;
+
+    function getLocalBestKey() {
+      return `tg_daily_best_${todayDateKey}`;
+    }
+
+    function getPlayerId() {
+      let pid = localStorage.getItem('tg_player_id');
+      if (!pid) {
+        pid = 'p_' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+        localStorage.setItem('tg_player_id', pid);
+      }
+      return pid;
+    }
+
+    function updateDailyHud() {
+      const statusEl = document.getElementById('daily-hud-status');
+      if (rangeSubmode === 'practice') {
+        statusEl.style.display = 'none';
+        return;
+      }
+      statusEl.style.display = 'flex';
+      const totalYds = dailyShotResults.reduce((acc, r) => acc + r.distYds, 0);
+      const displayShot = Math.min(10, dailyShotIndex + 1);
+      document.getElementById('label-daily-progress').textContent = dailyRoundComplete
+        ? `DONE • ${totalYds.toFixed(1)} YDS`
+        : `SHOT ${displayShot}/10 • ${totalYds.toFixed(1)}Y`;
+    }
+
+    /* ==========================================================================
+       5. SCENE 2: DAYLIGHT LOW-POLY DRIVING RANGE
        ========================================================================== */
     const clubOrder = ['1W', '3W', '3H', '4I', '5I', '6I', '7I', '8I', '9I', 'PW', 'GW', 'SW', 'LW'];
     const clubProfiles = {
@@ -2084,8 +2485,14 @@
     const ballVel = new THREE.Vector3(0, 0, 0);
     let ballGravity = 0.5;
 
-    let frameWindDriftX = 0;
-    let frameWindDriftZ = 0;
+    let flightProgressFrames = 0;
+    let flightTotalFrames = 300;
+    let windDriftPerFrameX = 0;
+    let windDriftPerFrameZ = 0;
+    let curveTotalPerpYards = 0;
+    let curveRightX = 1;
+    let curveRightZ = 0;
+
     let firstLandingCarry = 0;
     let hasPitched = false;
     let bounceCount = 0;
@@ -2100,7 +2507,6 @@
       return 48;
     }
 
-    // Crisp 3D Low-Poly Downward Target Arrow hovering above the active pin
     function buildOverheadTargetArrow() {
       const arrow = new THREE.Group();
 
@@ -2119,14 +2525,12 @@
         flatShading: true
       });
 
-      // Downward-pointing faceted cone tip
       const headGeo = new THREE.ConeGeometry(1.85, 3.4, 6);
       headGeo.rotateX(Math.PI);
       const head = new THREE.Mesh(headGeo, headMat);
       head.position.y = 1.7;
       arrow.add(head);
 
-      // Vertical arrow shaft
       const shaftGeo = new THREE.CylinderGeometry(0.68, 0.68, 3.0, 6);
       const shaft = new THREE.Mesh(shaftGeo, shaftMat);
       shaft.position.y = 4.6;
@@ -2553,20 +2957,22 @@
       });
     }
 
-    function randomizeTargetCoords(tierIdx) {
+    function applyTargetOffsets(tierIdx, xOffset, zOffset) {
       const tierObj = targetTiers[tierIdx];
-      const zOffset = Math.floor(Math.random() * 21) - 10;
-      const xSpread = tierObj.tier <= 75 ? 4 : 6;
-      const xOffset = Math.floor(Math.random() * (xSpread * 2 + 1)) - xSpread;
-
       const maxLat = tierObj.tier <= 75 ? 14 : 32;
       tierObj.x = Math.max(-maxLat, Math.min(maxLat, tierObj.baseX + xOffset));
       let candidateZ = -Math.max(60, Math.min(302, tierObj.tier + zOffset));
-
       while (Math.hypot(tierObj.x, candidateZ) < 60) {
         candidateZ -= 1;
       }
       tierObj.z = candidateZ;
+    }
+
+    function randomizeTargetCoords(tierIdx) {
+      const zOffset = Math.floor(Math.random() * 21) - 10;
+      const xSpread = targetTiers[tierIdx].tier <= 75 ? 4 : 6;
+      const xOffset = Math.floor(Math.random() * (xSpread * 2 + 1)) - xSpread;
+      applyTargetOffsets(tierIdx, xOffset, zOffset);
     }
 
     function initRangeScene() {
@@ -2702,7 +3108,7 @@
         sceneRange.add(hill);
       }
 
-      // 3D Overhead Target Arrow (replaces pulsing ground ring)
+      // 3D Overhead Target Arrow
       targetArrowGroup = buildOverheadTargetArrow();
       sceneRange.add(targetArrowGroup);
 
@@ -2763,21 +3169,18 @@
       ballShadowMesh.position.set(0, 0.05, 0);
       sceneRange.add(ballShadowMesh);
 
-      // Luminous Flight Tracer
       ballTracerLine = new THREE.Line(
         new THREE.BufferGeometry(),
         new THREE.LineBasicMaterial({ color: 0xffffff, linewidth: 2.5 })
       );
       sceneRange.add(ballTracerLine);
 
-      // Extended Aim Guide Line
       aimGuideLine = new THREE.Line(
         new THREE.BufferGeometry(),
         new THREE.LineDashedMaterial({ color: 0xfacc15, dashSize: 2.5, gapSize: 1.2 })
       );
       sceneRange.add(aimGuideLine);
 
-      // Distance to Pin Measure Line
       proximityLineMesh = new THREE.Line(
         new THREE.BufferGeometry(),
         new THREE.LineDashedMaterial({ color: 0xffffff, dashSize: 1.0, gapSize: 0.6 })
@@ -2785,13 +3188,9 @@
       proximityLineMesh.visible = false;
       sceneRange.add(proximityLineMesh);
 
-      for (let i = 0; i < targetTiers.length; i++) {
-        randomizeTargetCoords(i);
-      }
-      rebuildTerrainAndComplexes();
-      selectActiveTarget(getNextShuffledTier(-1), false);
+      // Start in Daily 10-Shot Challenge Mode
+      startDailyChallengeRound();
       updateAimVisual();
-      generateOmnidirectionalWind();
     }
 
     function resetTeeCamera() {
@@ -2848,6 +3247,64 @@
       if (playSound) audio.playClick();
     }
 
+    function loadDailyHole(shotIdx) {
+      const spec = dailyCourse[shotIdx];
+      for (let i = 0; i < targetTiers.length; i++) {
+        if (i === spec.tierIdx) {
+          applyTargetOffsets(i, spec.xOffset, spec.zOffset);
+        } else {
+          applyTargetOffsets(i, 0, 0);
+        }
+      }
+      rebuildTerrainAndComplexes();
+      setWindByIndex(spec.windMph, spec.windDirIdx);
+      selectActiveTarget(spec.tierIdx, false);
+      updateDailyHud();
+    }
+
+    function startDailyChallengeRound() {
+      rangeSubmode = 'daily';
+      document.getElementById('btn-submode-daily').classList.add('active');
+      document.getElementById('btn-submode-practice').classList.remove('active');
+      document.getElementById('btn-next-pin').style.opacity = '0.45';
+      document.getElementById('btn-next-pin').title = 'Locked during Daily 10-Shot Challenge';
+
+      dailyShotIndex = 0;
+      dailyShotResults = [];
+      dailyRoundComplete = false;
+      loadDailyHole(0);
+    }
+
+    function switchToPracticeMode() {
+      rangeSubmode = 'practice';
+      document.getElementById('btn-submode-practice').classList.add('active');
+      document.getElementById('btn-submode-daily').classList.remove('active');
+      document.getElementById('btn-next-pin').style.opacity = '1.0';
+      document.getElementById('btn-next-pin').title = 'Switch Target Pin';
+      updateDailyHud();
+
+      for (let i = 0; i < targetTiers.length; i++) {
+        randomizeTargetCoords(i);
+      }
+      rebuildTerrainAndComplexes();
+      generateOmnidirectionalWind();
+      selectActiveTarget(getNextShuffledTier(-1), false);
+    }
+
+    document.getElementById('btn-submode-daily').addEventListener('click', () => {
+      if (ballInFlight) return;
+      audio.playClick();
+      startDailyChallengeRound();
+      resetTeeCamera();
+    });
+
+    document.getElementById('btn-submode-practice').addEventListener('click', () => {
+      if (ballInFlight) return;
+      audio.playClick();
+      switchToPracticeMode();
+      resetTeeCamera();
+    });
+
     function updateAimVisual() {
       if (!aimGuideLine) return;
       const rad = (aimAngleDeg * Math.PI) / 180;
@@ -2876,7 +3333,7 @@
     document.getElementById('btn-aim-r').addEventListener('click', () => adjustAim(1.5));
 
     document.getElementById('btn-next-pin').addEventListener('click', () => {
-      if (ballInFlight) return;
+      if (ballInFlight || rangeSubmode === 'daily') return;
       selectActiveTarget(getNextShuffledTier(currentTierIdx), true);
     });
 
@@ -2895,12 +3352,10 @@
     btnZoomPin.addEventListener('pointerleave', releaseZoom);
     btnZoomPin.addEventListener('pointercancel', releaseZoom);
 
-    function generateOmnidirectionalWind() {
-      windMph = Math.round(Math.random() * 11 + 3);
+    function setWindByIndex(speedMph, dirIdx) {
       const compassAngles = [0, 45, 90, 135, 180, 225, 270, 315];
       const compassLabels = ['TAIL', 'TAIL-R', 'RIGHT', 'HEAD-R', 'HEAD', 'HEAD-L', 'LEFT', 'TAIL-L'];
-      const dirIdx = Math.floor(Math.random() * compassAngles.length);
-
+      windMph = speedMph;
       windAngleDeg = compassAngles[dirIdx];
       const rad = (windAngleDeg * Math.PI) / 180;
 
@@ -2917,14 +3372,23 @@
       document.getElementById('label-rec-club').textContent = `${rec} (${clubProfiles[rec].name})`;
     }
 
+    function generateOmnidirectionalWind() {
+      const speed = Math.round(Math.random() * 11 + 3);
+      const dirIdx = Math.floor(Math.random() * 8);
+      setWindByIndex(speed, dirIdx);
+    }
+
+    // Center active pill inside #club-strip ONLY (prevents viewport horizontal shift bug on mobile)
     function selectClub(clubKey) {
       if (ballInFlight || !clubProfiles[clubKey]) return;
       activeClubKey = clubKey;
+      const strip = document.getElementById('club-strip');
       document.querySelectorAll('.club-pill').forEach(btn => {
         const isActive = btn.dataset.club === clubKey;
         btn.classList.toggle('active', isActive);
-        if (isActive) {
-          btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        if (isActive && strip) {
+          const targetScrollLeft = btn.offsetLeft - (strip.clientWidth / 2) + (btn.offsetWidth / 2);
+          strip.scrollTo({ left: Math.max(0, targetScrollLeft), behavior: 'smooth' });
         }
       });
       audio.playClick();
@@ -2940,7 +3404,7 @@
       btn.addEventListener('click', () => selectClub(btn.dataset.club));
     });
 
-    // Two-Stage Swing Gauge Engine
+    // Two-Stage Swing Gauge Engine (Sharper Snap Difficulty & Curvature)
     let swingStage = 'idle';
     let powerStartTime = 0;
     let snapStartTime = 0;
@@ -2997,20 +3461,21 @@
 
       } else if (swingStage === 'snap') {
         const elapsed = (timestamp - snapStartTime) / 1000;
-        lockedSnap = Math.sin(elapsed * 4.0);
+        lockedSnap = Math.sin(elapsed * 4.75);
 
         let quality = 'pure';
         let shapeLabel = "PURE STRAIGHT";
-        
-        if (Math.abs(lockedSnap) <= 0.35) {
+        const absSnap = Math.abs(lockedSnap);
+
+        if (absSnap <= 0.22) {
           shapeLabel = "PURE STRAIGHT";
           quality = 'pure';
         } else if (lockedSnap < 0) {
-          shapeLabel = Math.abs(lockedSnap) > 0.70 ? "HOOK ↩" : "GENTLE DRAW ↩";
-          quality = Math.abs(lockedSnap) > 0.70 ? 'hook' : 'draw';
+          shapeLabel = absSnap > 0.58 ? "HOOK ↩" : "GENTLE DRAW ↩";
+          quality = absSnap > 0.58 ? 'hook' : 'draw';
         } else {
-          shapeLabel = Math.abs(lockedSnap) > 0.70 ? "SLICE ↪" : "SLIGHT FADE ↪";
-          quality = Math.abs(lockedSnap) > 0.70 ? 'slice' : 'fade';
+          shapeLabel = absSnap > 0.58 ? "SLICE ↪" : "SLIGHT FADE ↪";
+          quality = absSnap > 0.58 ? 'slice' : 'fade';
         }
         meterSnapVal.textContent = shapeLabel;
 
@@ -3037,7 +3502,6 @@
       landingSurfaceName = 'Fairway';
       lastShotShape = shapeLabel;
 
-      // Hide the overhead target arrow once the shot is struck
       if (targetArrowGroup) targetArrowGroup.visible = false;
 
       audio.playFullSwingStrike(quality, activeClubKey, power);
@@ -3049,11 +3513,16 @@
       const powerScalar = 0.70 + (power * 0.30);
       const clubWindScale = 0.65 + (club.maxCarry / 250) * 0.65;
 
-      const targetCarry = Math.max(15, (club.maxCarry * powerScalar) + (windTailYardsTotal * clubWindScale));
+      // Heavy slices/hooks lose ~4% carry distance
+      const mishitCarryPenalty = (quality === 'slice' || quality === 'hook') ? 0.96 : 1.0;
+      const targetCarry = Math.max(15, (club.maxCarry * powerScalar * mishitCarryPenalty) + (windTailYardsTotal * clubWindScale));
       
       const totalFlightSeconds = club.flightTime;
       const totalFrames = Math.round(totalFlightSeconds * 60);
       const halfFlightFrames = totalFrames / 2;
+
+      flightProgressFrames = 0;
+      flightTotalFrames = totalFrames;
 
       const apexY = club.apex * powerScalar;
       ballGravity = (2 * apexY) / (halfFlightFrames * halfFlightFrames);
@@ -3068,8 +3537,8 @@
       const aimRad = (aimAngleDeg * Math.PI) / 180;
       const fwdX = Math.sin(aimRad);
       const fwdZ = -Math.cos(aimRad);
-      const rightX = Math.cos(aimRad);
-      const rightZ = Math.sin(aimRad);
+      curveRightX = Math.cos(aimRad);
+      curveRightZ = Math.sin(aimRad);
 
       ballVel.set(
         fwdX * forwardSpeed,
@@ -3077,22 +3546,32 @@
         fwdZ * forwardSpeed
       );
 
-      let totalCurveYards = 0;
-      if (Math.abs(snap) > 0.35) {
-        const excess = (Math.abs(snap) - 0.35) / 0.65;
+      // Pronounced fade/slice & draw/hook curvature scaled by club length
+      const clubCurveScale = 0.65 + (club.maxCarry / 270) * 0.75;
+      const absSnap = Math.abs(snap);
+      if (absSnap <= 0.22) {
+        curveTotalPerpYards = 0;
+      } else {
+        const excess = (absSnap - 0.22) / 0.78; // 0..1
         const sign = snap > 0 ? 1 : -1;
-        totalCurveYards = sign * (2.5 + (excess * 6.5));
+        // Gentle draw/fade: 4..10y | Hook/Slice: 11..22y
+        const baseCurve = absSnap <= 0.58
+          ? (4.0 + (excess / 0.46) * 6.0)
+          : (11.0 + ((excess - 0.46) / 0.54) * 11.0);
+        curveTotalPerpYards = sign * baseCurve * clubCurveScale;
       }
 
-      const totalPerpYards = (windCrossYardsTotal * clubWindScale) + totalCurveYards;
-      frameWindDriftX = (rightX * totalPerpYards) / totalFrames;
-      frameWindDriftZ = (rightZ * totalPerpYards) / totalFrames;
+      const windPerpYards = windCrossYardsTotal * clubWindScale;
+      windDriftPerFrameX = (curveRightX * windPerpYards) / totalFrames;
+      windDriftPerFrameZ = (curveRightZ * windPerpYards) / totalFrames;
 
       const windRollMod = 1.0 + (windTailYardsTotal * 0.025);
       const targetRollYards = Math.max(0.5, club.rollFactor * powerScalar * windRollMod);
       const rollSpeed = targetRollYards * 0.048;
-      const totalHorizVx = ballVel.x + frameWindDriftX;
-      const totalHorizVz = ballVel.z + frameWindDriftZ;
+
+      const finalPerpPerFrame = ((windPerpYards + curveTotalPerpYards * 1.45) / totalFrames);
+      const totalHorizVx = ballVel.x + curveRightX * finalPerpPerFrame;
+      const totalHorizVz = ballVel.z + curveRightZ * finalPerpPerFrame;
       const finalHorizLen = Math.hypot(totalHorizVx, totalHorizVz) || 1;
       rollVelX = (totalHorizVx / finalHorizLen) * rollSpeed;
       rollVelZ = (totalHorizVz / finalHorizLen) * rollSpeed;
@@ -3142,7 +3621,6 @@
         flagMeshes[i].rotation.y = flutter;
       }
 
-      // Gentle vertical bob & slow spin on the 3D overhead target arrow
       if (targetArrowGroup && targetArrowGroup.visible) {
         const tierObj = targetTiers[currentTierIdx];
         const groundY = getSurfaceHeightAt(currentTargetX, currentTargetZ);
@@ -3158,7 +3636,7 @@
         meterPowerFill.style.width = `${livePower * 100}%`;
       } else if (swingStage === 'snap') {
         const elapsed = (now - snapStartTime) / 1000;
-        const liveSnap = Math.sin(elapsed * 4.0);
+        const liveSnap = Math.sin(elapsed * 4.75);
         meterSnapNeedle.style.left = `${(liveSnap + 1) / 2 * 100}%`;
       }
 
@@ -3183,9 +3661,18 @@
         const exactGroundY = getSurfaceHeightAt(ballPos.x, ballPos.z) + surfInfo.extraHeight;
 
         if (!isRollingPhase) {
-          ballPos.x += ballVel.x + frameWindDriftX;
+          flightProgressFrames++;
+          const tNorm = Math.min(1.3, flightProgressFrames / flightTotalFrames);
+          // Progressive aerodynamic curve: starts on target line, bends smoothly in mid-to-late flight
+          const curveStep = (curveTotalPerpYards * 1.6 * Math.pow(tNorm, 0.6)) / flightTotalFrames;
+          const bounceDamp = bounceCount === 0 ? 1.0 : 0.20;
+
+          const frameDx = (ballVel.x + windDriftPerFrameX + curveRightX * curveStep) * bounceDamp;
+          const frameDz = (ballVel.z + windDriftPerFrameZ + curveRightZ * curveStep) * bounceDamp;
+
+          ballPos.x += frameDx;
           ballPos.y += ballVel.y;
-          ballPos.z += ballVel.z + frameWindDriftZ;
+          ballPos.z += frameDz;
           ballVel.y -= ballGravity;
 
           golfBallMesh.rotation.x -= 0.12;
@@ -3212,10 +3699,6 @@
               if (bounceCount <= 2) {
                 audio.playBounce(1.0 / bounceCount);
                 ballVel.y = Math.abs(ballVel.y) * 0.30;
-                ballVel.x *= 0.20;
-                ballVel.z *= 0.20;
-                frameWindDriftX *= 0.20;
-                frameWindDriftZ *= 0.20;
               } else {
                 audio.playBounce(0.35);
                 isRollingPhase = true;
@@ -3329,9 +3812,9 @@
         : Math.round(Math.sqrt(ballPos.x * ballPos.x + ballPos.z * ballPos.z));
       const rollYards = Math.max(0, totalDistanceYards - firstLandingCarry);
 
-      const distanceToPin = ballHoledOut
-        ? '0.0'
-        : (new THREE.Vector2(ballPos.x, ballPos.z).distanceTo(new THREE.Vector2(currentTargetX, currentTargetZ))).toFixed(1);
+      const numericDistToPin = ballHoledOut
+        ? 0.0
+        : parseFloat((new THREE.Vector2(ballPos.x, ballPos.z).distanceTo(new THREE.Vector2(currentTargetX, currentTargetZ))).toFixed(1));
 
       const targetGroundY = getSurfaceHeightAt(currentTargetX, currentTargetZ);
       if (!ballHoledOut) {
@@ -3346,28 +3829,50 @@
       }
 
       document.getElementById('res-quality').textContent = lastShotShape;
-      document.getElementById('res-carry-hero').textContent = `${firstLandingCarry} YDS CARRY`;
-      document.getElementById('res-total-val').textContent = `${totalDistanceYards} YDS`;
-      document.getElementById('res-roll-val').textContent = `+${rollYards} YDS`;
-      document.getElementById('res-target-diff').textContent = ballHoledOut ? 'IN THE CUP!' : `${distanceToPin} YDS`;
-      document.getElementById('res-specs').textContent = `Club: ${activeClubKey} (${clubProfiles[activeClubKey].name}) • Lie: ${ballHoledOut ? 'Cup' : landingSurfaceName}`;
+      document.getElementById('res-carry-hero').textContent = `${firstLandingCarry}Y CARRY`;
+      document.getElementById('res-total-val').textContent = `${totalDistanceYards}Y`;
+      document.getElementById('res-roll-val').textContent = `+${rollYards}Y`;
+      document.getElementById('res-lie-label').textContent = (ballHoledOut ? 'HOLE IN ONE!' : landingSurfaceName).toUpperCase();
+      document.getElementById('res-target-diff').textContent = ballHoledOut ? '0.0 YDS!' : `${numericDistToPin.toFixed(1)} YDS TO PIN`;
 
       if (ballHoledOut) {
-        document.getElementById('res-badge').textContent = '🏆 ACE! HOLE IN ONE!';
+        document.getElementById('res-badge').textContent = '🏆 ACE!';
         document.getElementById('res-badge').style.background = '#78350f';
         document.getElementById('res-badge').style.color = '#fde047';
       } else if (landingSurfaceName === 'Putting Green') {
         audio.playPinChime();
-        document.getElementById('res-badge').textContent = '🎯 ON THE GREEN!';
+        document.getElementById('res-badge').textContent = '🎯 ON GREEN';
         document.getElementById('res-badge').style.background = '#065f46';
         document.getElementById('res-badge').style.color = '#34d399';
       } else {
-        document.getElementById('res-badge').textContent = 'SHOT REGISTERED';
+        document.getElementById('res-badge').textContent = `${activeClubKey} RESULT`;
         document.getElementById('res-badge').style.background = '#064e3b';
         document.getElementById('res-badge').style.color = '#a7f3d0';
       }
 
       shotResultCard.style.display = 'block';
+
+      // Record Daily 10-Shot Challenge progress
+      if (rangeSubmode === 'daily' && !dailyRoundComplete) {
+        dailyShotResults.push({
+          holeNum: dailyShotIndex + 1,
+          tierName: targetTiers[currentTierIdx].name,
+          distYds: numericDistToPin,
+          ace: ballHoledOut
+        });
+        dailyShotIndex++;
+        updateDailyHud();
+
+        if (dailyShotIndex >= 10) {
+          dailyRoundComplete = true;
+          updateDailyHud();
+          btnSwing.textContent = "VIEW SCORECARD";
+          const totalYds = parseFloat(dailyShotResults.reduce((acc, r) => acc + r.distYds, 0).toFixed(1));
+          saveBestDailyScoreLocally(totalYds);
+          setTimeout(() => openDailyModal(true), 1400);
+          return;
+        }
+      }
 
       btnSwing.textContent = "NEXT SHOT ➔";
       btnSwing.style.background = "#10b981";
@@ -3375,13 +3880,38 @@
       btnSwing.style.color = "#064e3b";
 
       setTimeout(() => {
-        if (swingStage === 'landed') {
+        if (swingStage === 'landed' && !dailyRoundComplete) {
           resetForNextShot();
         }
-      }, 6000);
+      }, 4800);
     }
 
     function resetForNextShot() {
+      // Automatically dismiss shot result card when next shot is ready
+      shotResultCard.style.display = 'none';
+      proximityLineMesh.visible = false;
+
+      if (rangeSubmode === 'daily') {
+        if (dailyRoundComplete) {
+          openDailyModal(true);
+          return;
+        }
+        swingStage = 'idle';
+        ballResting = false;
+        ballInFlight = false;
+        ballHoledOut = false;
+        if (ballShadowMesh) ballShadowMesh.visible = true;
+
+        btnSwing.textContent = "START SWING";
+        btnSwing.style.background = "#10b981";
+        btnSwing.style.borderColor = "#a7f3d0";
+        btnSwing.style.color = "#064e3b";
+
+        loadDailyHole(dailyShotIndex);
+        resetTeeCamera();
+        return;
+      }
+
       const finishedTier = currentTierIdx;
       const nextTier = getNextShuffledTier(finishedTier);
 
@@ -3389,7 +3919,6 @@
       ballResting = false;
       ballInFlight = false;
       ballHoledOut = false;
-      proximityLineMesh.visible = false;
       if (ballShadowMesh) ballShadowMesh.visible = true;
 
       btnSwing.textContent = "START SWING";
@@ -3405,9 +3934,198 @@
     }
 
     /* ==========================================================================
-       5. UNIFIED EVENT ROUTER & MAIN ANIMATION LOOP
+       6. DAILY 10-SHOT CHALLENGE SCORECARD & FIREBASE LEADERBOARD
+       ========================================================================== */
+    const dailyModalOverlay = document.getElementById('daily-modal-overlay');
+    const inputPlayerName = document.getElementById('input-player-name');
+    const savedName = localStorage.getItem('tg_player_name');
+    if (savedName) inputPlayerName.value = savedName;
+
+    function saveBestDailyScoreLocally(totalYds) {
+      const prev = localStorage.getItem(getLocalBestKey());
+      if (prev === null || totalYds < parseFloat(prev)) {
+        localStorage.setItem(getLocalBestKey(), String(totalYds));
+      }
+    }
+
+    async function fetchTodayLeaderboard() {
+      const listEl = document.getElementById('daily-leaderboard-list');
+      listEl.innerHTML = '<div class="lb-row"><span>Fetching today\'s scores...</span></div>';
+
+      const myId = getPlayerId();
+      let entries = [];
+
+      if (db) {
+        try {
+          const q = query(
+            collection(db, "daily_scores"),
+            where("dateKey", "==", todayDateKey),
+            orderBy("totalYards", "asc"),
+            limit(10)
+          );
+          const snap = await getDocs(q);
+          snap.forEach(docSnap => {
+            entries.push({ id: docSnap.id, ...docSnap.data() });
+          });
+        } catch (err) {
+          console.warn("Firestore read fallback:", err);
+        }
+      }
+
+      // Include local best if offline or not yet ranked in top 10
+      const localBest = localStorage.getItem(getLocalBestKey());
+      const myDocId = `${todayDateKey}_${myId}`;
+      if (localBest !== null && !entries.some(e => e.id === myDocId)) {
+        entries.push({
+          id: myDocId,
+          name: (localStorage.getItem('tg_player_name') || 'YOU').toUpperCase(),
+          totalYards: parseFloat(localBest),
+          aces: dailyShotResults.filter(r => r.ace).length
+        });
+        entries.sort((a, b) => a.totalYards - b.totalYards);
+        entries = entries.slice(0, 10);
+      }
+
+      if (entries.length === 0) {
+        listEl.innerHTML = '<div class="lb-row"><span style="color:#9ca3af;">No scores posted yet today. Be #1!</span></div>';
+        return;
+      }
+
+      listEl.innerHTML = entries.map((entry, idx) => {
+        const isMe = entry.id === myDocId;
+        const medal = idx === 0 ? '🥇' : (idx === 1 ? '🥈' : (idx === 2 ? '🥉' : `#${idx + 1}`));
+        const aceBadge = entry.aces > 0 ? ` 🏆×${entry.aces}` : '';
+        return `
+          <div class="lb-row ${isMe ? 'me' : ''}">
+            <span><strong>${medal}</strong> ${escapeHtml(entry.name || 'GOLFER')}${aceBadge}</span>
+            <span style="color:#34d399; font-weight:900;">${Number(entry.totalYards).toFixed(1)} YDS</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s]));
+    }
+
+    async function submitDailyScoreToFirebase() {
+      const rawName = (inputPlayerName.value || '').trim().toUpperCase() || 'GOLFER';
+      localStorage.setItem('tg_player_name', rawName);
+
+      const totalYds = parseFloat(dailyShotResults.reduce((acc, r) => acc + r.distYds, 0).toFixed(1));
+      const acesCount = dailyShotResults.filter(r => r.ace).length;
+      const statusEl = document.getElementById('daily-submit-status');
+      statusEl.style.display = 'block';
+      statusEl.textContent = 'Posting score to leaderboard...';
+
+      saveBestDailyScoreLocally(totalYds);
+
+      if (db) {
+        try {
+          const docId = `${todayDateKey}_${getPlayerId()}`;
+          const docRef = doc(db, "daily_scores", docId);
+          const existing = await getDoc(docRef);
+
+          // Only overwrite if this attempt is better (lower yards) than their previous best today
+          if (!existing.exists() || totalYds <= existing.data().totalYards) {
+            await setDoc(docRef, {
+              dateKey: todayDateKey,
+              name: rawName,
+              totalYards: totalYds,
+              aces: acesCount,
+              updatedAt: Date.now()
+            });
+            statusEl.textContent = `✅ Posted ${totalYds.toFixed(1)} YDS for ${rawName}!`;
+          } else {
+            statusEl.textContent = `Best today remains ${existing.data().totalYards.toFixed(1)} YDS (this round: ${totalYds.toFixed(1)} YDS).`;
+          }
+        } catch (err) {
+          statusEl.textContent = `Saved locally (${totalYds.toFixed(1)} YDS). Check Firestore rules if online sync failed.`;
+        }
+      } else {
+        statusEl.textContent = `Saved locally (${totalYds.toFixed(1)} YDS).`;
+      }
+
+      await fetchTodayLeaderboard();
+    }
+
+    function openDailyModal(showSubmit = false) {
+      document.getElementById('modal-daily-date').textContent = `DAILY 10-SHOT CHALLENGE • ${todayDateKey}`;
+      const gridEl = document.getElementById('daily-hole-grid');
+      let html = '';
+      for (let i = 0; i < 10; i++) {
+        const res = dailyShotResults[i];
+        if (res) {
+          html += `
+            <div class="hole-cell played ${res.ace ? 'ace' : ''}">
+              <div style="font-size:0.62rem;color:#9ca3af;">#${i + 1}</div>
+              <div style="font-size:0.78rem;font-weight:900;color:${res.ace ? '#facc15' : '#34d399'};">${res.ace ? 'ACE' : res.distYds.toFixed(1) + 'y'}</div>
+            </div>
+          `;
+        } else {
+          html += `
+            <div class="hole-cell">
+              <div style="font-size:0.62rem;color:#64748b;">#${i + 1}</div>
+              <div style="font-size:0.78rem;color:#475569;">—</div>
+            </div>
+          `;
+        }
+      }
+      gridEl.innerHTML = html;
+
+      const totalYds = dailyShotResults.reduce((acc, r) => acc + r.distYds, 0);
+      document.getElementById('modal-total-yards').textContent = `${totalYds.toFixed(1)} YDS`;
+
+      const submitSection = document.getElementById('daily-submit-section');
+      submitSection.style.display = (showSubmit && dailyRoundComplete) ? 'flex' : 'none';
+      document.getElementById('daily-submit-status').style.display = 'none';
+
+      dailyModalOverlay.style.display = 'flex';
+      fetchTodayLeaderboard();
+    }
+
+    document.getElementById('btn-open-board').addEventListener('click', (e) => {
+      e.stopPropagation();
+      audio.playClick();
+      openDailyModal(dailyRoundComplete);
+    });
+
+    document.getElementById('btn-close-daily-modal').addEventListener('click', () => {
+      dailyModalOverlay.style.display = 'none';
+      audio.playClick();
+    });
+
+    document.getElementById('btn-submit-daily').addEventListener('click', () => {
+      audio.playClick();
+      submitDailyScoreToFirebase();
+    });
+
+    document.getElementById('btn-replay-daily').addEventListener('click', () => {
+      dailyModalOverlay.style.display = 'none';
+      shotResultCard.style.display = 'none';
+      proximityLineMesh.visible = false;
+      swingStage = 'idle';
+      ballResting = false;
+      ballInFlight = false;
+      ballHoledOut = false;
+      if (ballShadowMesh) ballShadowMesh.visible = true;
+
+      btnSwing.textContent = "START SWING";
+      btnSwing.style.background = "#10b981";
+      btnSwing.style.borderColor = "#a7f3d0";
+      btnSwing.style.color = "#064e3b";
+
+      startDailyChallengeRound();
+      resetTeeCamera();
+      audio.playClick();
+    });
+
+    /* ==========================================================================
+       7. UNIFIED EVENT ROUTER & MAIN ANIMATION LOOP
        ========================================================================== */
     window.addEventListener('keydown', (e) => {
+      if (document.activeElement === inputPlayerName) return;
+
       if (currentActiveScene === 'skate') {
         if (!skateGameActive || isWipeout) {
           if (e.code === 'Space' || e.code === 'Enter') startCommute();
@@ -3425,7 +4143,7 @@
           handleSwingStep(performance.now());
         } else if (e.code === 'Tab') {
           e.preventDefault();
-          if (!ballInFlight) selectActiveTarget(getNextShuffledTier(currentTierIdx), true);
+          if (!ballInFlight && rangeSubmode !== 'daily') selectActiveTarget(getNextShuffledTier(currentTierIdx), true);
         } else if (e.code === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
           adjustAim(-1.5);
         } else if (e.code === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
